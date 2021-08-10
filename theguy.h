@@ -24,6 +24,8 @@ public:
     float getAy() const {return Ay;}
     bool getMoveX() const {return mMoveX;}
     bool getMoveY() const {return mMoveY;}
+    QTimer *getSpown() const {return Spown;}
+    QTimer *getDeath() const {return Death;}
 
 
     void setPosX(float value) {posX = value;}
@@ -34,16 +36,13 @@ public:
     void setAy(float value) {Ay = value;}
     void setMoveX(bool moveX) {mMoveX = moveX;}
     void setMoveY(bool moveY) {mMoveY = moveY;}
-
-
-    QTimer *getSpown() const;
-
-    QTimer *getDeath() const;
+    void setKeys(short value) {keys = value;}
 
 public slots:
 
     void updateSpown();
     void updateDeath();
+    void jump();
 
 private:
 
@@ -59,11 +58,13 @@ private:
 
     QTimer *Spown;
     QTimer *Death;
+    QTimer *Jump;
 
     float posX, posY, Vx, Vy, Ax, Ay;
-    short mMove[9];
-    bool mCurrentImag[9], mMoveX, mMoveY;
-    int mPastImage = -1, mVidas;
+    short mMove[9], keys = 'a';
+    char l;
+    bool mCurrentImag[9], mMoveX, mMoveY, mJump, mDeath, ban;
+    unsigned int mVidas;
 
 
 
