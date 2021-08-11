@@ -6,6 +6,10 @@
 #include <QGraphicsScene>
 #include <QString>
 #include <QTimer>
+#include <stdlib.h>
+
+const float T = 0.1;
+const float g = 9.8;
 
 class theguy: public QObject, public QGraphicsPixmapItem
 {
@@ -15,6 +19,7 @@ public:
 
     theguy();
     void walkPlayer(short a);
+    void cinematica();
 
     float getPosX() const {return posX;}
     float getPosY() const {return posY;}
@@ -24,6 +29,7 @@ public:
     float getAy() const {return Ay;}
     bool getMoveX() const {return mMoveX;}
     bool getMoveY() const {return mMoveY;}
+    bool getJump() const {return mJump;}
     QTimer *getSpown() const {return Spown;}
     QTimer *getDeath() const {return Death;}
 
@@ -37,6 +43,7 @@ public:
     void setMoveX(bool moveX) {mMoveX = moveX;}
     void setMoveY(bool moveY) {mMoveY = moveY;}
     void setKeys(short value) {keys = value;}
+
 
 public slots:
 
@@ -60,10 +67,11 @@ private:
     QTimer *Death;
     QTimer *Jump;
 
-    float posX, posY, Vx, Vy, Ax, Ay;
-    short mMove[9], keys = 'a';
-    char l;
+    float posX, posY, Vx, Vy, Ax, Ay, _Y;
+    short mMove[9], keys = 'a', cont = 0;
+    char l, ant;
     bool mCurrentImag[9], mMoveX, mMoveY, mJump, mDeath, ban;
+    bool mJumpUp, mJumpDown;
     unsigned int mVidas;
 
 

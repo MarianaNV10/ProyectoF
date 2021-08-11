@@ -4,22 +4,22 @@ theguy::theguy()
 {
     Spown = new QTimer(this);
     Death = new QTimer(this);
-    Jump = new QTimer(this);
 
     Spown->stop();
     Death->stop();
-    Jump->stop();
 
     mMoveX = false;
     mMoveY = false;
     mDeath = false;
-    mJump = false; //Cuando el personaje salte no cambie las imagenes a mostar sino que solo muestre la de salto
+    mJump = false;
+    mJumpUp = false;
+    mJumpDown = false;
     ban = false; //Para saber cuando puede empezar a moverse
 
-    Vx = 0;
+    Vx = 20;
     Vy = 0;
     Ax = 0;
-    Ay = 0;
+    Ay = 10;
 
     for(int f = 0; f < 9; f++){
         mMove[f] = 0;
@@ -33,117 +33,73 @@ theguy::theguy()
 void theguy::walkPlayer(short a)
 {
     if(ban){
-        if(keys == 'L'){
+        switch(a){
 
-            switch(a){
+        case 'W':
 
-            case 'W':
-
-                if(mJump == false){
-                    mJump = true;
-                    connect(Jump,SIGNAL(timeout()),this, SLOT(jump()));
-                    Jump->start(100);
-                }
-
-                break;
-
-            case 'A':
-
-                l = 'A';
-                if(mJump == false){
-                    if(mMove[1] == 2){
-                        mCurrentImag[1] = false;
-                    }
-                    else if(mMove[1] == 0){
-                        mCurrentImag[1] = true;
-                    }
-                    mMove[1] += (2*mCurrentImag[1])-1;
-                    setPixmap(QPixmap(mMoveLeft[mMove[1]]).scaled(50,50));
-                }
-                break;
-
-            case 'D':
-
-                l = 'D';
-                if(mJump == false){
-                    if(mMove[0] == 2){
-                        mCurrentImag[0] = false;
-                    }
-                    else if(mMove[0] == 0){
-                        mCurrentImag[0] = true;
-                    }
-                    mMove[0] += (2*mCurrentImag[0])-1;
-                    setPixmap(QPixmap(mMoveRight[mMove[0]]).scaled(50,50));
-                }
-                break;
-            }
-        }
-        else if(keys == 'R'){ //Organizar la parte cuando salta
-
-            switch(a){
-
-            case 'I':
-
+            if(mJump == false){
                 mJump = true;
 
-                if(l == 'I'){
+                Jump = new QTimer(this);
+                connect(Jump,SIGNAL(timeout()),this,SLOT(jump()));
+                Jump->start(100);
+            }
 
-                    if(mMove[6] == 1){
-                        mCurrentImag[6] = false;
-                    }
-                    else if(mMove[6] == 0){
-                        mCurrentImag[6] = true;
-                    }
+            break;
 
-                    mMove[6] += (2*mCurrentImag[6])-1;
-                    setPixmap(QPixmap(mJumpRight[mMove[6]]).scaled(50,50));
-                }
-                else if(l == 'J'){
+        case 'A':
 
-                    if(mMove[7] == 1){
-                        mCurrentImag[7] = false;
-                    }
-                    else if(mMove[7] == 0){
-                        mCurrentImag[7] = true;
-                    }
+            l = 'A';
 
-                    mMove[7] += (2*mCurrentImag[7])-1;
-                    setPixmap(QPixmap(mJumpLeft[mMove[7]]).scaled(50,50));
-                }
-
-                break;
-
-            case 'J':
-
-                l = 'J';
+            if(mJump == false){
                 if(mMove[1] == 2){
                     mCurrentImag[1] = false;
                 }
                 else if(mMove[1] == 0){
                     mCurrentImag[1] = true;
                 }
-
                 mMove[1] += (2*mCurrentImag[1])-1;
                 setPixmap(QPixmap(mMoveLeft[mMove[1]]).scaled(50,50));
+            }
+            break;
 
-                break;
+        case 'D':
 
-            case 'L':
+            l = 'D';
 
-                l = 'L';
+            if(mJump == false){
                 if(mMove[0] == 2){
                     mCurrentImag[0] = false;
                 }
                 else if(mMove[0] == 0){
                     mCurrentImag[0] = true;
                 }
-
                 mMove[0] += (2*mCurrentImag[0])-1;
                 setPixmap(QPixmap(mMoveRight[mMove[0]]).scaled(50,50));
-                break;
             }
+            break;
         }
     }
+}
+
+void theguy::cinematica()
+{
+       if(mJump){
+           if(Ay >= -10){
+               posY -= (Ay*abs(Ay))*0.5;
+               Ay -= 1;
+           }
+           else{
+               Ay = 10;
+               mJump = false;
+               Jump->stop();
+               delete Jump;
+           }
+       }
+       if(l == 'D') posX += Vx;
+       if(l == 'A') posX -= Vx;
+
+       setPos(posX,posY);
 }
 
 void theguy::updateSpown()
@@ -183,29 +139,27 @@ void theguy::updateDeath()
 
 void theguy::jump() //Revisar bien esta parte
 {
-    if(keys == 'L'){
-
-        if(l == 'D'){
-            if(mMove[6] == 1){
-                mMove[6] = 0;
-                mJump = false;
-                Jump->stop();
-            }
-
-            setPixmap(QPixmap(mJumpRight[mMove[6]]).scaled(50,50));
-            mMove[6] += (2*mCurrentImag[6])-1;
+    if(l == 'D'){
+        if(Ay > 0 && mJumpUp == false){
+            setPixmap(QPixmap(mJumpRight[1]).scaled(50,50));
+            mJumpUp = true;
         }
-        else if(l == 'A'){
-            if(mMove[7] == 1){
-                mMove[7] = 0;
-                mJump = false;
-                Jump->stop();
-            }
-            setPixmap(QPixmap(mJumpLeft[mMove[7]]).scaled(50,50));
-            mMove[7] += (2*mCurrentImag[7])-1;
+
+        if(Ay < 0 && mJumpDown == false){
+            setPixmap(QPixmap(mJumpRight[0]).scaled(50,50));
+            mJumpDown = true;
         }
     }
-    else if(keys == 'R'){
 
+    if(l == 'A'){
+        if(Ay > 0 && mJumpUp == false){
+            setPixmap(QPixmap(mJumpLeft[1]).scaled(50,50));
+            mJumpUp = true;
+        }
+        if(Ay < 0 && mJumpDown == false){
+            setPixmap(QPixmap(mJumpLeft[0]).scaled(50,50));
+        }
     }
+
+    cinematica();
 }
