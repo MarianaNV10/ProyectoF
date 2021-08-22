@@ -5,21 +5,17 @@ theguy::theguy()
     Spown = new QTimer(this);
     Death = new QTimer(this);
 
-    Spown->stop();
-    Death->stop();
-
     mMoveX = false;
     mMoveY = false;
     mDeath = false;
     mJump = false;
     mJumpUp = false;
     mJumpDown = false;
-    ban = false; //Para saber cuando puede empezar a moverse
+    ban = false; //Para saber si el personaje se puede mover o no
 
     Vx = 20;
-    Vy = 0;
-    Ax = 0;
-    Ay = 10;
+    Vy = 20;
+    Ay = 11;
 
     for(int f = 0; f < 9; f++){
         mMove[f] = 0;
@@ -39,7 +35,6 @@ void theguy::walkPlayer(short a)
 
             if(mJump == false){
                 mJump = true;
-
                 Jump = new QTimer(this);
                 connect(Jump,SIGNAL(timeout()),this,SLOT(jump()));
                 Jump->start(100);
@@ -61,6 +56,8 @@ void theguy::walkPlayer(short a)
                 mMove[1] += (2*mCurrentImag[1])-1;
                 setPixmap(QPixmap(mMoveLeft[mMove[1]]).scaled(50,50));
             }
+            else mJumpP = true;
+
             break;
 
         case 'D':
@@ -77,6 +74,7 @@ void theguy::walkPlayer(short a)
                 mMove[0] += (2*mCurrentImag[0])-1;
                 setPixmap(QPixmap(mMoveRight[mMove[0]]).scaled(50,50));
             }
+            else mJumpP = true;
             break;
         }
     }
@@ -85,19 +83,24 @@ void theguy::walkPlayer(short a)
 void theguy::cinematica()
 {
        if(mJump){
-           if(Ay >= -10){
+           if(Ay > -1){
                posY -= (Ay*abs(Ay))*0.5;
                Ay -= 1;
            }
            else{
-               Ay = 10;
-               mJump = false;
-               Jump->stop();
-               delete Jump;
+               posY += (Vy*g*T)*0.5;
+//               posY -= (Ay*abs(Ay))*0.5;
+//               Ay  -= 1;
            }
+
+
+           if(l == 'D' && mJumpP == true) posX += 12;
+           if(l == 'A' && mJumpP == true) posX -= 12;
        }
-       if(l == 'D') posX += Vx;
-       if(l == 'A') posX -= Vx;
+       else{
+           if(l == 'D') posX += Vx;
+           if(l == 'A') posX -= Vx;
+       }
 
        setPos(posX,posY);
 }
@@ -148,7 +151,9 @@ void theguy::jump() //Revisar bien esta parte
         if(Ay < 0 && mJumpDown == false){
             setPixmap(QPixmap(mJumpRight[0]).scaled(50,50));
             mJumpDown = true;
+            mJumpUp = false;
         }
+
     }
 
     if(l == 'A'){
@@ -158,8 +163,10 @@ void theguy::jump() //Revisar bien esta parte
         }
         if(Ay < 0 && mJumpDown == false){
             setPixmap(QPixmap(mJumpLeft[0]).scaled(50,50));
+            mJumpDown = true;
+            mJumpUp = false;
         }
     }
-
     cinematica();
 }
+

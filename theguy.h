@@ -4,12 +4,15 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
+#include <QGraphicsLineItem>
 #include <QString>
 #include <QTimer>
 #include <stdlib.h>
+#include <math.h>
+#include <qdebug.h>
 
-const float T = 0.1;
-const float g = 9.8;
+static constexpr float T = 0.2;
+static constexpr float g = 10;
 
 class theguy: public QObject, public QGraphicsPixmapItem
 {
@@ -24,26 +27,24 @@ public:
     float getPosX() const {return posX;}
     float getPosY() const {return posY;}
     float getVx() const {return Vx;}
-    float getVy() const {return Vy;}
-    float getAx() const {return Ax;}
     float getAy() const {return Ay;}
-    bool getMoveX() const {return mMoveX;}
-    bool getMoveY() const {return mMoveY;}
+    bool getJumpUp() const {return mJumpUp;}
+    bool getJumpDown() const {return mJumpDown;}
     bool getJump() const {return mJump;}
     QTimer *getSpown() const {return Spown;}
     QTimer *getDeath() const {return Death;}
+    QTimer *getLeap() const {return Jump;}
 
 
     void setPosX(float value) {posX = value;}
     void setPosY(float value) {posY = value;}
     void setVx(float value) {Vx = value;}
-    void setVy(float value) {Vy = value;}
-    void setAx(float value) {Ax = value;}
     void setAy(float value) {Ay = value;}
-    void setMoveX(bool moveX) {mMoveX = moveX;}
-    void setMoveY(bool moveY) {mMoveY = moveY;}
     void setKeys(short value) {keys = value;}
-
+    void setJump(bool jump) {mJump = jump;}
+    void setJumpUp(bool jumpUp) {mJumpUp = jumpUp;}
+    void setJumpDown(bool jumpDown) {mJumpDown = jumpDown;}
+    void setJumpP(bool jumpP) {mJumpP = jumpP;}
 
 public slots:
 
@@ -67,11 +68,11 @@ private:
     QTimer *Death;
     QTimer *Jump;
 
-    float posX, posY, Vx, Vy, Ax, Ay, _Y;
+    float posX, posY, Vx, Ay, Vy;
     short mMove[9], keys = 'a', cont = 0;
     char l, ant;
     bool mCurrentImag[9], mMoveX, mMoveY, mJump, mDeath, ban;
-    bool mJumpUp, mJumpDown;
+    bool mJumpUp, mJumpDown, mJumpP;
     unsigned int mVidas;
 
 
