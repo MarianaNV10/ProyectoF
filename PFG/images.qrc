@@ -88,10 +88,6 @@
         <file>Imagenes/Steven Sprites/Salto/salto_izquierda3.png</file>
         <file>Imagenes/Steven Sprites/Salto/salto_izquierda4.png</file>
         <file>Imagenes/Steven Sprites/Salto/salto_izquierda5.png</file>
-        <file>Imagenes/The guy sprites/Ataque/Ataque1-removebg-preview.png</file>
-        <file>Imagenes/The guy sprites/Ataque/Ataque2-removebg-preview.png</file>
-        <file>Imagenes/The guy sprites/Ataque/Ataque3-removebg-preview.png</file>
-        <file>Imagenes/The guy sprites/Ataque/Ataque4-removebg-preview.png</file>
         <file>Imagenes/The guy sprites/Ataque/Ataque_derecha1.png</file>
         <file>Imagenes/The guy sprites/Ataque/Ataque_derecha2.png</file>
         <file>Imagenes/The guy sprites/Ataque/Ataque_izquierda1.png</file>
@@ -127,5 +123,9 @@
         <file>Imagenes/The guy sprites/Spown/Spown5.png</file>
         <file>Imagenes/The guy sprites/Spown/Spown6.png</file>
         <file>Imagenes/The guy sprites/the_guy.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque1.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque2.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque3.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque4.png</file>
     </qresource>
 </RCC>

@@ -8,11 +8,13 @@
 #include <QKeyEvent>
 #include <QString>
 #include <QPalette>
+#include <vector>
 #include <qdebug.h>
 #include "levels.h"
 #include "platform.h"
 #include "spike.h"
 #include "theguy.h"
+#include "guyattack.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,12 +39,15 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
+
     QGraphicsScene *scene;
     theguy *player1;
     QGraphicsLineItem *lineUp,*lineDown,*lineRight,*lineLeft;
 
     QList<platform*> walls;
     QList<spike*> spikes;
+    QList<guyattack*> ataque;
+
 
     QString posx,posy,width, height, WallType;
     QStringList list;

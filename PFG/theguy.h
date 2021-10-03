@@ -37,7 +37,8 @@ private:
     QTimer *Death;
     QTimer *Jump;
 
-    float posX, posY, Vx, Ay, Vy;
+    float Vx, Ay, Vy;
+    int pX,pY;
     unsigned int tam = 50;
     short mMove[9], keys = 'a', cont = 0;
     char l, ant;
@@ -59,8 +60,8 @@ public:
 //    QRectF boundingRect() const;
 //    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    float getPosX() const {return posX;}
-    float getPosY() const {return posY;}
+    int getPX() const {return pX;}
+    int getPY() const {return pY;}
     float getVx() const {return Vx;}
     float getAy() const {return Ay;}
     bool getJumpUp() const {return mJumpUp;}
@@ -70,10 +71,10 @@ public:
     QTimer *getSpown() const {return Spown;}
     QTimer *getDeath() const {return Death;}
     QTimer *getLeap() const {return Jump;}
+    char getLado() const {return l;}
 
-
-    void setPosX(float value) {posX = value;}
-    void setPosY(float value) {posY = value;}
+    void setPX(int value) {pX = value;}
+    void setPY(int value) {pY = value;}
     void setVx(float value) {Vx = value;}
     void setAy(float value) {Ay = value;}
     void setKeys(short value) {keys = value;}

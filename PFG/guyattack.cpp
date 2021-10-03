@@ -1,28 +1,41 @@
 #include "guyattack.h"
 
-guyattack::guyattack(int _x, int _y)
+guyattack::guyattack(int _x, int _y, char lado)
 {
     aguy = new QTimer(this);
 
-    px = _x;
-    py = _y;
-    setPos(px+tam,py+tam-5);
+    side = lado;
+    px = _x+tam;
+    py = _y+tam-5;
     spt = 0;
     pos = true;
+    ban = false;
     connect(aguy,SIGNAL(timeout()),this,SLOT(sprites()));
-}
-
-QTimer *guyattack::getAguy() const
-{
-    return aguy;
 }
 
 void guyattack::sprites()
 {
-    if(spt == 3) pos = false;
-    if(spt == 0) pos = true;
-    setPixmap(QPixmap(Attack[spt]).scaled(tam,tam));
-    spt += (2*pos)-1;
+    if(cont < range){
+        if(spt == 3) pos = false;
+        if(spt == 0) pos = true;
+
+        if(side == 'D'){
+            setPixmap(QPixmap(Attack[spt]).scaled(tam,tam));
+            setPos(px,py);
+            px += vel;
+        }
+
+        if(side == 'A'){
+            QTransform rm;
+            rm.rotate(180,Qt::YAxis);
+            setPixmap(QPixmap(Attack[spt]).scaled(tam,tam).transformed(rm,Qt::SmoothTransformation));
+            setPos(px,py);
+            px -= vel;
+        }
+
+        spt += (2*pos)-1;
+        cont++;
+    }
 }
 
 guyattack::~guyattack()

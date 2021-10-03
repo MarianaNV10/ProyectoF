@@ -36,7 +36,7 @@ void theguy::walkPlayer(short a)
                 mJump = true;
                 Jump = new QTimer(this);
                 connect(Jump,SIGNAL(timeout()),this,SLOT(jump()));
-                Jump->start(100);
+                Jump->start(80); //cambiar el tiempo
             }
 
             break;
@@ -99,32 +99,24 @@ void theguy::cinematica()
 {
        if(mJump){
            if(Ay > -1){
-               posY -= (Ay*abs(Ay))*0.5;
+               pY -= (Ay*abs(Ay))*0.5;
                Ay -= 1;
            }
            else{
-               posY += (Vy*g*T)*0.5;
-//               posY -= (Ay*abs(Ay))*0.5;
-//               Ay  -= 1;
+               pY += (Vy*g*T)*0.5;
+               //pY -= (Ay*abs(Ay))*0.5;
+               //Ay  -= 1;
            }
 
-
-           if(l == 'D' && mJumpP == true) posX += 12;
-           if(l == 'A' && mJumpP == true) posX -= 12;
+           if(l == 'D' && mJumpP == true) pX += 12;
+           if(l == 'A' && mJumpP == true) pX -= 12;
        }
        else{
-           if(l == 'D') posX += Vx;
-           if(l == 'A') posX -= Vx;
+           if(l == 'D') pX += Vx;
+           if(l == 'A') pX -= Vx;
        }
 
-       setPos(posX,posY);
-}
-
-theguy::~theguy()
-{
-    delete Spown;
-    delete Death;
-    delete Jump;
+       setPos(pX,pY);
 }
 
 void theguy::updateSpown()
@@ -190,6 +182,13 @@ void theguy::jump()
         }
     }
     cinematica();
+}
+
+theguy::~theguy()
+{
+    delete Spown;
+    delete Death;
+    delete Jump;
 }
 
 //QRectF theguy::boundingRect() const

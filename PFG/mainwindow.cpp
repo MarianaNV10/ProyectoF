@@ -25,7 +25,7 @@ void MainWindow::setup_resorces()
 {
     scene = new QGraphicsScene(this);
 
-    scene->setSceneRect(W,0,1280-3,H);
+    scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
     ui->graphicsView->setScene(scene);
 
     setWindowTitle("Gehrin");
@@ -46,7 +46,13 @@ void MainWindow::limpiar_niveles()
 {
     for(int m = 0; m < walls.size(); m++){
         scene->removeItem(walls.at(m));
-        scene->removeItem(spikes.at(m));
+        walls.erase(walls.begin()+m);
+        m -= 1;
+    }
+    for(int f = 0; f < spikes.size(); f++){
+        scene->removeItem(spikes.at(f));
+        spikes.erase(spikes.begin()+f);
+        f -= 1;
     }
     walls.clear();
     spikes.clear();
@@ -63,13 +69,13 @@ void MainWindow::cargar_niveles(int Nivel)
         scene->setBackgroundBrush(QPixmap(":/Imagenes/Fondos/Nivel1.jpeg"));
 
         //establece las posiciones del jugador dentro del nivel
-        player1->setPosX(0);
-        player1->setPosY(622);
-        player1->setPos(0,622);
+        player1->setPX(0);
+        player1->setPY(623);
+        player1->setPos(0,623);
         scene->addItem(player1);
 
         //Aparición del jugador en la escena
-        player1->getSpown()->start(300);
+        player1->getSpown()->start(250);
 
         nivel = LOne();
 
@@ -188,36 +194,59 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
         }
         player1->walkPlayer('A');
     }
+
+    if(i->key() == Qt::Key_Space){
+        ataque.push_back(new guyattack(player1->getPX(), player1->getPY(), player1->getLado()));
+        scene->addItem(ataque.at(ataque.size()-1));
+        ataque.at(ataque.size()-1)->getAguy()->start(75);
+    }
 }
 
 void MainWindow::detectC()
 {
-    if(player1->getJump()){
-        for(int m = 0; m < walls.size(); m++){
-            if(player1->getJumpDown()){ //organizar esta parte cuando el personaje va subiendo y choca con una plataforma
-                if(player1->collidesWithItem(walls.at(m)) && player1->getPosY()){
-                    player1->getLeap()->stop();
-                    player1->setPosY(walls.at(m)->getPosY()-48);
-                    player1->setPos(player1->getPosX(),player1->getPosY());
-                    player1->setAy(11);
-                    player1->setJump(false);
-                    player1->setJumpUp(false);
-                    player1->setJumpDown(false);
-                    player1->setJumpP(false);
-                    delete player1->getLeap();
+    if(!ataque.empty()){
+        for(int it = 0; it < ataque.size(); it++){
+            for(int p = 0; p < walls.size(); p++){
+                if((ataque.at(it)->collidesWithItem(walls.at(p))) || (ataque.at(it)->collidesWithItem(lineLeft)) || (ataque.at(it)->collidesWithItem(lineRight))){
+                    ataque.at(it)->getAguy()->stop();
+                    if(ataque.at(it)->scene() == scene){
+                        scene->removeItem(ataque.at(it));
+                    }
+                    ataque.erase(ataque.begin()+it);
                     break;
                 }
             }
-            else{
-                if(player1->collidesWithItem(lineUp)){
-                    player1->setAy(-1);
-                }
+        }
 
-                if(player1->getJumpUp() && player1->collidesWithItem(walls.at(m))){
+    }
+
+    if(player1->getJump()){
+        for(int m = 0; m < walls.size(); m++){
+
+            if(player1->getJumpUp() && player1->collidesWithItem(walls.at(m))){ //Revisar esta parte
+//                player1->setPY(player1->getPY()+15);
+//                player1->setPos(player1->getPX(),player1->getPY());
+                player1->setAy(-2);
 //                    qDebug() << "Muro: " << walls.at(m)->getPosY()+walls.at(m)->getHeight() << endl;
-//                    qDebug() << "Jugador: " << player1->getPosY()+50
-                    player1->setAy(-1);
-                }
+//                    qDebug() << "Jugador: " << 21+player1->getPY() << endl;
+
+            }
+
+            if(player1->getJumpDown() && player1->collidesWithItem(walls.at(m))){ //organizar esta parte cuando el personaje va subiendo y choca con una plataforma
+                player1->getLeap()->stop();
+                player1->setPY(walls.at(m)->getPosY()-49);
+                player1->setPos(player1->getPX(),player1->getPY());
+                player1->setAy(11);
+                player1->setJump(false);
+                player1->setJumpUp(false);
+                player1->setJumpDown(false);
+                player1->setJumpP(false);
+                delete player1->getLeap();
+                break;
+            }
+
+            if(player1->collidesWithItem(lineUp)){
+                player1->setAy(-2);
             }
         }
 
@@ -226,10 +255,10 @@ void MainWindow::detectC()
         }
 
         if(player1->collidesWithItem(lineDown)){
-            //Cuando toque está linea colocar al jugardor en una posición adecuada según el nivel
-            player1->setPosX(0);
-            player1->setPosY(624);
-            player1->setPos(0,624);
+            //Cuando toque está linea colocar al jugador en una posición adecuada según el nivel
+            player1->setPX(0);
+            player1->setPY(622); //ORGANIZAR ESTA PARTE EN UNA POSICION ADECUADA A DONDE SE ENCUENTRE EL JUGADOR
+            player1->setPos(0,622);
             player1->getLeap()->stop();
             player1->setAy(11);
             player1->setJump(false);
@@ -253,10 +282,10 @@ void MainWindow::detectC()
         }
 
         if(player1->collidesWithItem(lineRight)){
-            if(W < 5120){
+            if(W+1280 < 5120){
                 W += 1280;
                 //qDebug() << W;
-                scene->setSceneRect(W,0,1280-3,H);
+                scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
                 lineRight->setLine(W+1280,0,W+1280,708);
                 lineLeft->setLine(W,0,W,708);
             }
@@ -268,5 +297,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete scene;
+    delete player1;
+    delete collisions;
+    limpiar_niveles();
 }
 
