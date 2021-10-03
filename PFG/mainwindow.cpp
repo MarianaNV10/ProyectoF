@@ -196,6 +196,7 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
     }
 
     if(i->key() == Qt::Key_Space){
+        player1->walkPlayer('T');
         ataque.push_back(new guyattack(player1->getPX(), player1->getPY(), player1->getLado()));
         scene->addItem(ataque.at(ataque.size()-1));
         ataque.at(ataque.size()-1)->getAguy()->start(75);

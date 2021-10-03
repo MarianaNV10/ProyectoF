@@ -91,6 +91,12 @@ void theguy::walkPlayer(short a)
             }
             else if(mJumpP == false) mJumpP = true;
             break;
+
+        case 'T':
+            Attack = new QTimer(this);
+            connect(Attack, SIGNAL(timeout()), this, SLOT(updateAttack()));
+            Attack->start(100);
+            break;
         }
     }
 }
@@ -154,6 +160,29 @@ void theguy::updateDeath()
     }
 }
 
+void theguy::updateAttack()
+{
+    if(l == 'D'){
+        setPixmap(QPixmap(mAttackRight[mMove[2]]).scaled(tam,tam));
+        mMove[2] += (2*mCurrentImag[2])-1;
+        if(mMove[2] == 2){
+            Attack->stop();
+            mMove[2] = 0;
+            delete Attack;
+        }
+    }
+
+    if(l == 'A'){
+        setPixmap(QPixmap(mAttackLeft[mMove[3]]).scaled(tam,tam));
+        mMove[3] += (2*mCurrentImag[3])-1;
+        if(mMove[3] == 2){
+            Attack->stop();
+            mMove[3] = 0;
+            delete Attack;
+        }
+    }
+}
+
 void theguy::jump()
 {
     if(l == 'D'){
@@ -191,13 +220,3 @@ theguy::~theguy()
     delete Jump;
 }
 
-//QRectF theguy::boundingRect() const
-//{
-//    return QRectF(posX,posY,tam,tam);
-//}
-
-//void theguy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-//{
-//    painter->setPen(QColor(208,117,37));
-//    painter->drawRect(boundingRect());
-//}
