@@ -13,7 +13,7 @@
 #include "levels.h"
 #include "platform.h"
 #include "spike.h"
-#include "theguy.h"
+#include "player.h"
 #include "guyattack.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,7 +28,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     void setup_resorces();
     void cargar_niveles(int Nivel);
-    void limpiar_niveles();
+    void validateAttackGuy();
+    void validatePlayerMove();
+    void clean_levels();
     void personaje(int p);
     void keyPressEvent(QKeyEvent *i);
     ~MainWindow();
@@ -41,7 +43,7 @@ private:
     Ui::MainWindow *ui;
 
     QGraphicsScene *scene;
-    theguy *player1;
+    player *player1;
     QGraphicsLineItem *lineUp,*lineDown,*lineRight,*lineLeft;
 
     QList<platform*> walls;
