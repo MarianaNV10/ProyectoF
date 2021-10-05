@@ -15,6 +15,7 @@
 #include "spike.h"
 #include "player.h"
 #include "guyattack.h"
+#include "huesos.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -44,6 +45,7 @@ private:
 
     QGraphicsScene *scene;
     player *player1;
+    huesos *enemigoH;
     QGraphicsLineItem *lineUp,*lineDown,*lineRight,*lineLeft;
 
     QList<platform*> walls;

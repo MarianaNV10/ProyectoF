@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     W = 0;
 
     setup_resorces();
-    player1 = new player('s');
+    player1 = new player('g');
+    //player1 = new player('s');
 
     numNivel = 1;
     cargar_niveles(numNivel);
@@ -79,8 +80,17 @@ void MainWindow::cargar_niveles(int Nivel)
         scene->addItem(player1);
 
         //Aparición del jugador en la escena
-        //player1->getSpown()->start(250);
-        player1->stevenA();
+        player1->getSpown()->start(250);
+        //player1->stevenA();
+
+        //Enemigo a Escena
+        enemigoH = new huesos(150,607);
+        enemigoH->setPos(150,607);
+        scene->addItem(enemigoH);
+
+        enemigoH->setIdle(new QTimer);
+        connect(enemigoH->getIdle(), SIGNAL(timeout()), enemigoH, SLOT(HuesosIdle()));
+        enemigoH->getIdle()->start(500);
 
         nivel = LOne();
 
@@ -197,13 +207,13 @@ void MainWindow::validatePlayerMove()
             if(player1->getJumpUp() && player1->collidesWithItem(walls.at(m))){ //Revisar esta parte
 //                player1->setPY(player1->getPY()+15);
 //                player1->setPos(player1->getPX(),player1->getPY());
-                player1->setAy(-2);
+                player1->setAy(-1);
 //                    qDebug() << "Muro: " << walls.at(m)->getPosY()+walls.at(m)->getHeight() << endl;
 //                    qDebug() << "Jugador: " << 21+player1->getPY() << endl;
 
             }
 
-            if(player1->getJumpDown() && player1->collidesWithItem(walls.at(m))){ //organizar esta parte cuando el personaje va subiendo y choca con una plataforma
+            if(player1->getJumpDown() && player1->collidesWithItem(walls.at(m))){
                 player1->getLeap()->stop();
                 player1->setPY(walls.at(m)->getPosY()-49);
                 player1->setPos(player1->getPX(),player1->getPY());
@@ -212,12 +222,12 @@ void MainWindow::validatePlayerMove()
                 player1->setJumpUp(false);
                 player1->setJumpDown(false);
                 player1->setJumpP(false);
-                delete player1->getLeap();
+                //delete player1->getLeap();
                 break;
             }
 
             if(player1->collidesWithItem(lineUp)){
-                player1->setAy(-2);
+                player1->setAy(-1);
             }
         }
 
@@ -228,8 +238,8 @@ void MainWindow::validatePlayerMove()
         if(player1->collidesWithItem(lineDown)){
             //Cuando toque está linea colocar al jugador en una posición adecuada según el nivel
             player1->setPX(0);
-            player1->setPY(622); //ORGANIZAR ESTA PARTE EN UNA POSICION ADECUADA A DONDE SE ENCUENTRE EL JUGADOR
-            player1->setPos(0,622);
+            player1->setPY(623); //ORGANIZAR ESTA PARTE EN UNA POSICION ADECUADA A DONDE SE ENCUENTRE EL JUGADOR
+            player1->setPos(0,623);
             player1->getLeap()->stop();
             player1->setAy(11);
             player1->setJump(false);
@@ -268,36 +278,37 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
 
     if(i->key() == Qt::Key_W || i->key() == Qt::Key_I){
         if(player1->getJump() == false){
-            //player1->walkPlayer('W');
-            player1->walkPlayer('I');
+            player1->walkPlayer('W');
+            //player1->walkPlayer('I');
         }
     }
 
     if(i->key() == Qt::Key_D || i->key() == Qt::Key_L){
-        player1->walkPlayer('L');
         for(int i = 0; i < walls.size(); i++){
             if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
                 player1->cinematica();
                 break;
             }
         }
-        //player1->walkPlayer('D');
+        player1->walkPlayer('D');
+        //player1->walkPlayer('L');
     }
 
     if(i->key() == Qt::Key_A || i->key() == Qt::Key_J){
-        player1->walkPlayer('J');
         for(int i = 0; i < walls.size(); i++){
             if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
                 player1->cinematica();
                 break;
             }
         }
-        //player1->walkPlayer('A');
+        player1->walkPlayer('A');
+        //player1->walkPlayer('J');
     }
 
     if(i->key() == Qt::Key_Space){
         player1->walkPlayer('T');
-        ataque.push_back(new guyattack(player1->getPX(), player1->getPY(), player1->getLado()));
+        ataque.push_back(new guyattack(player1->getPX(), player1->getPY(), player1->getLado(),'g'));
+        //ataque.push_back(new guyattack(player1->getPX(), player1->getPY(), player1->getLado(),'s'));
         scene->addItem(ataque.at(ataque.size()-1));
         ataque.at(ataque.size()-1)->getAguy()->start(75);
     }
@@ -315,6 +326,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete scene;
     delete player1;
+    delete enemigoH;
     delete collisions;
 }
 

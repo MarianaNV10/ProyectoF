@@ -1,5 +1,5 @@
-#ifndef GUY_H
-#define GUY_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <QObject>
 #include <QGraphicsPixmapItem>
@@ -94,4 +94,4 @@ public:
     void setVidas(unsigned int vidas) {mVidas = vidas;}
 };
 
-#endif // GUY_H
+#endif // PLAYER_H

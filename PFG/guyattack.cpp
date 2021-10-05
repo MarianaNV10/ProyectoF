@@ -1,9 +1,10 @@
 #include "guyattack.h"
 
-guyattack::guyattack(int _x, int _y, char lado)
+guyattack::guyattack(int _x, int _y, char lado, char k)
 {
     aguy = new QTimer(this);
 
+    keyplayer = k;
     side = lado;
     px = _x+tam;
     py = _y+tam-5;
@@ -16,25 +17,48 @@ guyattack::guyattack(int _x, int _y, char lado)
 void guyattack::sprites()
 {
     if(cont < range){
-        if(spt == 3) pos = false;
-        if(spt == 0) pos = true;
+        if(keyplayer == 'g'){
+            if(spt == 3) pos = false;
+            if(spt == 0) pos = true;
 
-        if(side == 'D'){
-            setPixmap(QPixmap(Attack[spt]).scaled(tam,tam));
-            setPos(px,py);
-            px += vel;
+            if(side == 'D'){
+                setPixmap(QPixmap(Attack[spt]).scaled(tam,tam));
+                setPos(px,py);
+                px += vel;
+            }
+
+            if(side == 'A'){
+                QTransform rm;
+                rm.rotate(180,Qt::YAxis);
+                setPixmap(QPixmap(Attack[spt]).scaled(tam,tam).transformed(rm,Qt::SmoothTransformation));
+                setPos(px,py);
+                px -= vel;
+            }
+
+            spt += (2*pos)-1;
+            cont++;
         }
+        else{
+            if(spt == 2) pos = false;
+            if(spt == 0) pos = true;
 
-        if(side == 'A'){
-            QTransform rm;
-            rm.rotate(180,Qt::YAxis);
-            setPixmap(QPixmap(Attack[spt]).scaled(tam,tam).transformed(rm,Qt::SmoothTransformation));
-            setPos(px,py);
-            px -= vel;
+            if(side == 'L'){
+                setPixmap(QPixmap(AttackS[spt]).scaled(tam,tam));
+                setPos(px,py);
+                px += vel;
+            }
+
+            if(side == 'J'){
+                QTransform rm;
+                rm.rotate(180,Qt::YAxis);
+                setPixmap(QPixmap(AttackS[spt]).scaled(tam,tam).transformed(rm,Qt::SmoothTransformation));
+                setPos(px,py);
+                px -= vel;
+            }
+
+            spt += (2*pos)-1;
+            cont++;
         }
-
-        spt += (2*pos)-1;
-        cont++;
     }
 }
 

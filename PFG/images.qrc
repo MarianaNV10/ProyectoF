@@ -127,5 +127,30 @@
         <file>Imagenes/The guy sprites/Ataque/Ataque2.png</file>
         <file>Imagenes/The guy sprites/Ataque/Ataque3.png</file>
         <file>Imagenes/The guy sprites/Ataque/Ataque4.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der1.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der2.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der3.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der5.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der6.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der7.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der8.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der9.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der1.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der2.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der3.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der4.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der5.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der6.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der7.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der8.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq2.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq3.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq4.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq5.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq6.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq7.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq8.png</file>
     </qresource>
 </RCC>

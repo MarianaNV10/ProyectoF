@@ -23,7 +23,7 @@ player::player(char k)
         Spown = new QTimer(this);
         connect(Spown, SIGNAL(timeout()), this, SLOT(updateSpown()));
     }
-    else{ //keyplayer = 's'
+    else if(keyplayer == 's'){ //keyplayer = 's'
         for(int f = 0; f < 8; f++){
             mMoveS[f] = 0;
             mPosS[f] = true;
@@ -38,7 +38,7 @@ void player::walkPlayer(short a)
     if(keyplayer == 'g'){
         walkGuy(a);
     }
-    else{
+    else if(keyplayer == 's'){
         walkSteven(a);
     }
 }
@@ -121,7 +121,6 @@ void player::walkGuy(short a) //se va a mover con W,A,D -> salta con C (modifica
 
 void player::walkSteven(short a) //Va a moverse con I,J,L -> salta con B
 {
-    qDebug() << "walkSteven" << endl;
     switch(a){
 
     case 'I':
@@ -163,7 +162,6 @@ void player::walkSteven(short a) //Va a moverse con I,J,L -> salta con B
 
     case 'L':
 
-        qDebug() << "Evalua L" << endl;
         if(l == 'J'){
             ant = l;
             if(mJump){
@@ -181,7 +179,6 @@ void player::walkSteven(short a) //Va a moverse con I,J,L -> salta con B
             else if(mMoveS[0] == 0){
                 mPosS[0] = true;
             }
-            qDebug() << "A punto de poner los sprites" << endl;
             mMoveS[0] += (2*mPosS[0])-1;
             setPixmap(QPixmap(mSMoveRight[mMoveS[0]]).scaled(tam,tam));
         }
@@ -213,11 +210,12 @@ void player::cinematica()
                //pY -= (Ay*abs(Ay))*0.5;
                //Ay  -= 1;
            }
+
            if(keyplayer == 'g'){
                if(l == 'D' && mJumpP == true) pX += 12;
                if(l == 'A' && mJumpP == true) pX -= 12;
            }
-           else{
+           else if(keyplayer == 's'){
                if(l == 'L' && mJumpP == true) pX += 12;
                if(l == 'J' && mJumpP == true) pX -= 12;
            }
@@ -227,7 +225,7 @@ void player::cinematica()
                if(l == 'D') pX += Vx;
                if(l == 'A') pX -= Vx;
            }
-           else{
+           else if(keyplayer == 's'){
                if(l == 'L') pX += Vx;
                if(l == 'J') pX -= Vx;
            }
@@ -401,7 +399,7 @@ void player::jump()
 
         }
 
-        if(l == 'I'){
+        if(l == 'J'){
             if(Ay > 0 && mJumpUp == false){
                 setPixmap(QPixmap(mSJumpLeft[1]).scaled(tam,tam));
                 mJumpUp = true;
