@@ -14,14 +14,31 @@ huesos::huesos(int x, int y)
 
 void huesos::ataque()
 {
-    Attack = new QTimer(this);
-    connect(Attack, SIGNAL(timeout()), this, SLOT(HuesosAttack()));
-    Attack->start(200);
+//    Attack = new QTimer(this);
+//    connect(Attack, SIGNAL(timeout()), this, SLOT(HuesosAttack()));
+//    Attack->start(200);
+    Move = new QTimer(this);
+    connect(Move,SIGNAL(timeout()), this, SLOT(movimiento()));
+    Move->start(400);
 }
 
 void huesos::movimiento() //Se debe de mover hacia donde se encuentre el jugador
 {
-
+    if(move == 'D'){
+        setPixmap(QPixmap(Right[sprite[0]]).scaled(tam,tam));
+        px += Vx;
+        if(sprite[0] == 4) pos[0] = false;
+        if(sprite[0] == 0) pos[0] = true;
+        sprite[0] += (2*pos[0])-1;
+    }
+    else if(move == 'A'){
+        setPixmap(QPixmap(Left[sprite[1]]).scaled(tam,tam));
+        px -= Vx;
+        if(sprite[1] == 4) pos[1] = false;
+        if(sprite[1] == 0) pos[1] = true;
+        sprite[1] += (2*pos[1])-1;
+    }
+    setPos(px,py);
 }
 
 void huesos::HuesosIdle() //Se podría tener en cuenta un tiempo para que se quede quieto
@@ -32,7 +49,7 @@ void huesos::HuesosIdle() //Se podría tener en cuenta un tiempo para que se que
 
     if(sprite[5] == 3){
         sprite[5] = 0;
-        move = 'D';
+        move = 'A';
         ataque();
         delete Idle;
     }
