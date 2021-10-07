@@ -27,9 +27,9 @@ private:
     QTimer *Move, *Idle, *Attack, *HuesosD, *HuesosW;
 
     unsigned int Vidas = 0, tam = 65;
-    int px, py, Vx;
+    int px, py, Vx, rango = 50, At = 0, Id = 0;
     short sprite[8];
-    bool pos[8];
+    bool pos[8], banMove, banIdle, banAttack;
     char move = 'n';
 
 public slots:
@@ -37,16 +37,26 @@ public slots:
     void movimiento();
     void HuesosIdle();
     void HuesosAttack();
+    //void HuesosWin();
+    //void HuesosDeath();
 
 public:
     huesos(int x, int y);
     void ataque();
+    void mover();
+    void idle();
+    //void validarespacio();
     //~huesos();
 
     int getPx() const {return px;}
     int getPy() const {return py;}
     int getVx() const {return Vx;}
+    int getRango() const {return rango;}
     unsigned int getVidas() const {return Vidas;}
+    char getmMove() const {return move;}
+    bool getBanMove() const {return banMove;}
+    bool getBanIdle() const {return banIdle;}
+    bool getBanAttack() const {return banAttack;}
     QTimer *getMove() const {return Move;}
     QTimer *getIdle() const {return Idle;}
     QTimer *getAttack() const {return Attack;}
@@ -58,6 +68,10 @@ public:
     void setVx(int value) {Vx = value;}
     void setVidas(unsigned int value) {Vidas = value;}
     void setIdle(QTimer *value) {Idle = value;}
+    void setMove(char value) {move = value;}
+    void setBanMove(bool value) {banMove = value;}
+    void setBanIdle(bool value) {banIdle = value;}
+    void setBanAttack(bool value) {banAttack = value;}
 };
 
 #endif // HUESOS_H
