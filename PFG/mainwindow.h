@@ -10,6 +10,7 @@
 #include <QPalette>
 #include <vector>
 #include <qdebug.h>
+#include <math.h>
 #include "levels.h"
 #include "platform.h"
 #include "spike.h"
@@ -32,7 +33,7 @@ public:
     void validateAttackGuy();
     void validatePlayerMove();
     void clean_levels();
-    void personaje(int p);
+    void CollisionEnemy();
     void keyPressEvent(QKeyEvent *i);
     ~MainWindow();
 

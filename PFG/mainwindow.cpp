@@ -80,17 +80,15 @@ void MainWindow::cargar_niveles(int Nivel)
         scene->addItem(player1);
 
         //Aparición del jugador en la escena
-        player1->getSpown()->start(250);
+        player1->getSpown()->start(250); //The Guy
         //player1->stevenA();
 
         //Enemigo a Escena
-        enemigoH = new huesos(150,607);
-        enemigoH->setPos(150,607);
+        enemigoH = new huesos(150,609);
+        enemigoH->setPos(150,609);
         scene->addItem(enemigoH);
 
-        enemigoH->setIdle(new QTimer);
-        connect(enemigoH->getIdle(), SIGNAL(timeout()), enemigoH, SLOT(HuesosIdle()));
-        enemigoH->getIdle()->start(500);
+        enemigoH->idle();
 
         nivel = LOne();
 
@@ -180,6 +178,79 @@ void MainWindow::cargar_niveles(int Nivel)
 
     }
 }
+
+void MainWindow::CollisionEnemy()
+{
+    for(int i = 0; i < walls.size(); i++){
+        if(player1->collidesWithItem(walls.at(i)) && enemigoH->collidesWithItem(walls.at(i))){
+            if(enemigoH->getBanIdle()){
+                enemigoH->setBanIdle(false);
+                delete enemigoH->getIdle();
+            }
+            if(abs(player1->getPX()-enemigoH->getPx()) <= enemigoH->getRango()){
+//                if(enemigoH->getBanMove()){
+//                    enemigoH->setBanMove(false);
+//                    delete enemigoH->getMove();
+//                }
+                if(enemigoH->getBanAttack() == false){
+                    enemigoH->setBanAttack(true);
+                    enemigoH->ataque();
+                }
+            }
+            else{
+//                if(enemigoH->getBanAttack()){
+//                    enemigoH->setBanAttack(false);
+//                    delete enemigoH->getAttack();
+//                }
+
+                if(player1->getPX() < enemigoH->getPx()){
+                    enemigoH->setMove('A');
+                    if(enemigoH->getBanMove() == false){
+                        enemigoH->setBanMove(true);
+                        enemigoH->mover();
+                    }
+                }
+                else if(player1->getPX() > enemigoH->getPx()){
+                    enemigoH->setMove('D');
+                    if(enemigoH->getBanMove() == false){
+                        enemigoH->setBanMove(true);
+                        enemigoH->mover();
+                    }
+                    //qDebug() << "El enemigo se mueve a la derecha" << endl;
+                }
+            }
+        }
+        else{
+            if((player1->collidesWithItem(walls.at(i)) || enemigoH->collidesWithItem(walls.at(i))) && (enemigoH->getBanMove() && enemigoH->getBanAttack() == false)){
+//                if(enemigoH->getBanMove()){
+//                    enemigoH->setBanMove(false);
+//                    enemigoH->getMove()->stop();
+//                    delete enemigoH->getMove();
+//                }
+
+                if(enemigoH->collidesWithItem(walls.at(i))){
+                    if((enemigoH->getBanMove()) && (enemigoH->getPx()+65 >= walls.at(i)->getPosX()+walls.at(i)->getWidth())){
+                        enemigoH->setMove('A');
+                    }
+
+                    if(enemigoH->getPx() <= walls.at(i)->getPosX()){
+                        enemigoH->setMove('D');
+                    }
+                }
+
+
+//                if(enemigoH->getAttack()){
+//                    enemigoH->setBanAttack(false);
+//                    enemigoH->getAttack()->stop();
+//                    delete enemigoH->getAttack();
+//                }
+
+
+            }
+        }
+    }
+}
+
 
 void MainWindow::validateAttackGuy()
 {
@@ -273,6 +344,13 @@ void MainWindow::validatePlayerMove()
     }
 }
 
+void MainWindow::detectC()
+{
+    validateAttackGuy();
+    validatePlayerMove();
+    CollisionEnemy();
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *i)
 {
 
@@ -285,7 +363,7 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
 
     if(i->key() == Qt::Key_D || i->key() == Qt::Key_L){
         for(int i = 0; i < walls.size(); i++){
-            if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
+            if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigoH) == false){
                 player1->cinematica();
                 break;
             }
@@ -296,7 +374,7 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
 
     if(i->key() == Qt::Key_A || i->key() == Qt::Key_J){
         for(int i = 0; i < walls.size(); i++){
-            if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
+            if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigoH) == false){
                 player1->cinematica();
                 break;
             }
@@ -312,12 +390,6 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
         scene->addItem(ataque.at(ataque.size()-1));
         ataque.at(ataque.size()-1)->getAguy()->start(75);
     }
-}
-
-void MainWindow::detectC()
-{
-    validateAttackGuy();
-    validatePlayerMove();
 }
 
 MainWindow::~MainWindow()
