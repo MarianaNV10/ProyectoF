@@ -105,3 +105,9 @@ QVector<QString> LTwo()
 
     return level2;
 }
+
+
+QVector<QString> LThree(){
+    QVector<QString> level3 = {{"0,656,1280,52,F"}};
+    return level3;
+}
