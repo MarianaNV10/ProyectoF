@@ -25,8 +25,8 @@ int object::rebote(int X, float V1, float V1p, char D)
 void object::parabolico(int *X, int *Y, char d)
 {
     if(d == 'A'){
-        *X = (Xo+V*cont*T);
-        *X = Xo-*X;
+        *X = (Xo-V*cont*T);
+        //*X = Xo-*X;
     }
     else if(d == 'D'){
         *X = Xo+V*cont*T;
