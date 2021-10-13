@@ -1,14 +1,14 @@
 #include "player.h"
 
 player::player(char k)
-{
+{   
     keyplayer = k;
-
     mDeath = false;
     mJump = false;
     mJumpUp = false;
     mJumpDown = false;
     ban = false; //Para saber si el personaje se puede mover o no
+    banAttack = false;
 
     Vx = 20;
     Vy = 20;
@@ -29,6 +29,8 @@ player::player(char k)
             mPosS[f] = true;
         }
     }
+
+    objeto = new object(Vx,0,0);
     Death = new QTimer(this);
     connect(Death,SIGNAL(timeout()),this,SLOT(updateDeath()));
 }
@@ -111,9 +113,12 @@ void player::walkGuy(short a) //se va a mover con W,A,D -> salta con C (modifica
             break;
 
         case 'T':
-            Attack = new QTimer(this);
-            connect(Attack, SIGNAL(timeout()), this, SLOT(updateAttack()));
-            Attack->start(100);
+            if(banAttack == false){
+                this->banAttack = true;
+                Attack = new QTimer(this);
+                connect(Attack, SIGNAL(timeout()), this, SLOT(updateAttack()));
+                Attack->start(100);
+            }
             break;
         }
     }
@@ -127,7 +132,7 @@ void player::walkSteven(short a) //Va a moverse con I,J,L -> salta con B
 
         if(mJump == false){
             mJump = true;
-            Jump = new QTimer(this);
+            Jump = new QTimer();
             connect(Jump,SIGNAL(timeout()),this,SLOT(jump()));
             Jump->start(80); //cambiar el tiempo
         }
@@ -186,9 +191,12 @@ void player::walkSteven(short a) //Va a moverse con I,J,L -> salta con B
         break;
 
     case 'T':
-        Attack = new QTimer(this);
-        connect(Attack, SIGNAL(timeout()), this, SLOT(updateAttack()));
-        Attack->start(100);
+        if(this->banAttack == false){
+            this->banAttack = true;
+            Attack = new QTimer(this);
+            connect(Attack, SIGNAL(timeout()), this, SLOT(updateAttack()));
+            Attack->start(100);
+        }
         break;
     }
 }
@@ -232,6 +240,22 @@ void player::cinematica()
        }
 
        setPos(pX,pY);
+}
+
+void player::rebote(float V1x, float V1xp) //Terminarlo
+{
+    float V2xp = 0;
+    V2xp = Vx-(V1xp-k*(V1x-Vx));
+    //V2xp = 10;
+    if(this->l == 'D' || this->l == 'L'){
+        this->pX -= abs(V2xp);
+    }
+
+    if(this->l == 'A' || this->l == 'J'){
+        this->pX += abs(V2xp);
+    }
+
+    setPos(pX,pY);
 }
 
 void player::updateSpown()
@@ -310,6 +334,7 @@ void player::updateAttack()
             if(mMoveG[2] == 2){
                 Attack->stop();
                 mMoveG[2] = 0;
+                this->banAttack = false;
                 delete Attack;
             }
         }
@@ -320,6 +345,7 @@ void player::updateAttack()
             if(mMoveG[3] == 2){
                 Attack->stop();
                 mMoveG[3] = 0;
+                this->banAttack = false;
                 delete Attack;
             }
         }
@@ -333,6 +359,7 @@ void player::updateAttack()
             if(mMoveS[2] == 3){
                 Attack->stop();
                 mMoveS[2] = 0;
+                this->banAttack = false;
                 delete Attack;
             }
         }
@@ -343,6 +370,7 @@ void player::updateAttack()
             if(mMoveS[3] == 3){
                 Attack->stop();
                 mMoveS[3] = 0;
+                this->banAttack = false;
                 delete Attack;
             }
         }
@@ -420,6 +448,7 @@ player::~player()
 {
     //delete Spown; //quitarlo de aqui
     delete Death;
-    delete Jump;
+    //delete Jump;
+    delete objeto;
 }
 

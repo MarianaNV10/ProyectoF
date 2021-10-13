@@ -10,8 +10,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <qdebug.h>
-#include <QPainter>
-#include <QPen>
+#include "object.h"
 
 static constexpr float T = 0.2;
 static constexpr float g = 10;
@@ -46,12 +45,14 @@ private:
 
     QTimer *Spown, *Death, *Jump, *Attack;
 
-    float Vx, Ay, Vy;
+    object *objeto;
+
+    float Vx, Ay, Vy, k = 0.7;
     int pX,pY;
-    unsigned int mVidas;
+    unsigned int mVidas = 0;
     short mMoveG[9], mMoveS[8], cont = 0;
     char l = 'n', ant, keyplayer = 'n';
-    bool mPosG[9], mPosS[8], mJump, mDeath, ban;
+    bool mPosG[9], mPosS[8], mJump, mDeath, ban, banAttack;
     bool mJumpUp, mJumpDown, mJumpP;
 
 public slots:
@@ -68,6 +69,7 @@ public:
     void walkSteven(short a);
     void stevenA();
     void cinematica();
+    void rebote(float V1x, float V1xp);
     ~player();
 
     int getPX() const {return pX;}
@@ -78,10 +80,12 @@ public:
     bool getJumpDown() const {return mJumpDown;}
     bool getJump() const {return mJump;}
     unsigned int getVidas() const {return mVidas;}
+    char getLado() const {return l;}
     QTimer *getSpown() const {return Spown;}
     QTimer *getDeath() const {return Death;}
     QTimer *getLeap() const {return Jump;}
-    char getLado() const {return l;}
+    object *getObjeto() const {return objeto;}
+
 
     void setPX(int value) {pX = value;}
     void setPY(int value) {pY = value;}
