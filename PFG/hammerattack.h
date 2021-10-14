@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
+#include <QTransform>
 #include <qdebug.h>
 #include "object.h"
 
@@ -17,7 +18,7 @@ private:
     QString martillo = ":/Imagenes/Hammer/Ataque/martillo.png";
     QTimer *tiro;
     object *objeto;
-    int damage = 0;
+    int damage = 0, angulo = 0, enemigo = 0;
     int px, py, tam = 32, vel = 0;
     char side;
 
@@ -32,7 +33,9 @@ public:
     int getDamage() const {return damage;}
     QTimer *getTiro() const {return tiro;}
     char getSide() const {return side;}
+    int getEnemigo() const {return enemigo;}
     void setSide(char value) {side = value;}
+    void setEnemigo(int value) {enemigo = value;}
 };
 
 #endif // HAMMERATTACK_H

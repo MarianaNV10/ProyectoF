@@ -31,7 +31,21 @@ void object::parabolico(int *X, int *Y, char d)
     else if(d == 'D'){
         *X = Xo+V*cont*T;
     }
-    *Y = Yo+cont*T*(V-0.5*g*cont*T);
-    *Y = 708-(*Y);
-    cont ++;
+    *Y = Yo-cont*T*(V-0.5*g*cont*T);
+    cont += 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

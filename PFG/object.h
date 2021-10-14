@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include <math.h>
+#include <QDebug>
 
 class object
 {
@@ -11,7 +12,7 @@ private:
     float e = 0.7; //constante de restitución
     float V, g = 9.8, T = 0.1;
     int Xo, Yo;
-    unsigned int cont = 1;
+    unsigned int cont = 0;
 
 public:
     object(int v, int x, int y);

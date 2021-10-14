@@ -18,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-    collisions->start(25);
+    collisions->start(1);
+    setup_enemies();
 }
 
 void MainWindow::setup_resorces()
@@ -42,6 +43,26 @@ void MainWindow::setup_resorces()
     lineLeft = new QGraphicsLineItem(0,0,0,708);
 }
 
+void MainWindow::setup_enemies()
+{
+    //organizarlo por niveles
+    for(int p = 0; p < walls.size(); p++){
+        if(walls.at(p)->getPosX() != 0){
+            if(walls.at(p)->getWidth() > 100){
+                enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+0.5*walls.at(p)->getWidth(),walls.at(p)->getPosY()-64,'m'));
+                scene->addItem(enemigosH.at(enemigosH.size()-1));
+                if(enemigosH.at(enemigosH.size()-1)->getType() == 'b') enemigosH.at(enemigosH.size()-1)->idle();
+                else{
+                    enemigosH.at(enemigosH.size()-1)->setMove('D');
+                    enemigosH.at(enemigosH.size()-1)->setBanMove(true);
+                    enemigosH.at(enemigosH.size()-1)->mover();
+                    enemigosH.at(enemigosH.size()-1)->setBanD(true);
+                }
+            }
+        }
+    }
+}
+
 void MainWindow::clean_levels()
 {
     for(int m = 0; m < walls.size(); m++){
@@ -57,6 +78,14 @@ void MainWindow::clean_levels()
     for(int b = 0; b < ataque.size(); b++){
         ataque.erase(ataque.begin()+b);
         b--;
+    }
+    for(int h = 0; h < enemigosH.size(); h++){
+        enemigosH.erase(enemigosH.begin()+h);
+        h--;
+    }
+    for(int hm = 0; hm < ataqueHammer.size();hm++){
+        ataqueHammer.erase(ataqueHammer.begin()+hm);
+        hm--;
     }
     walls.clear();
     spikes.clear();
@@ -83,12 +112,10 @@ void MainWindow::cargar_niveles(int Nivel)
         player1->getSpown()->start(250); //The Guy
         //player1->stevenA();
 
-        //Enemigo a Escena
-        enemigoH = new huesos(150,609);
-        enemigoH->setPos(150,609);
-        scene->addItem(enemigoH);
-
-        enemigoH->idle();
+        //Jefe final nivel 1
+        jefe1 = new bills(370,414);
+        scene->addItem(jefe1);
+        jefe1->movement();
 
         nivel = LOne();
 
@@ -181,80 +208,112 @@ void MainWindow::cargar_niveles(int Nivel)
 
 void MainWindow::CollisionEnemy()
 {
-    for(int i = 0; i < walls.size(); i++){
-        if(player1->collidesWithItem(walls.at(i)) && enemigoH->collidesWithItem(walls.at(i))){
-            if(enemigoH->getBanIdle()){
-                enemigoH->setBanIdle(false);
-                delete enemigoH->getIdle();
-            }
-            if(abs(player1->getPX()-enemigoH->getPx()) <= enemigoH->getRango()){
-//                if(enemigoH->getBanMove()){
-//                    enemigoH->setBanMove(false);
-//                    delete enemigoH->getMove();
-//                }
-                if(enemigoH->getBanAttack() == false){
-                    enemigoH->setBanAttack(true);
-                    enemigoH->ataque();
-                }
-            }
-            else{
-//                if(enemigoH->getBanAttack()){
-//                    enemigoH->setBanAttack(false);
-//                    delete enemigoH->getAttack();
-//                }
-
-                if(player1->getPX() < enemigoH->getPx()){
-                    enemigoH->setMove('A');
-                    if(enemigoH->getBanMove() == false){
-                        enemigoH->setBanMove(true);
-                        enemigoH->mover();
-                    }
-                }
-                else if(player1->getPX() > enemigoH->getPx()){
-                    enemigoH->setMove('D');
-                    if(enemigoH->getBanMove() == false){
-                        enemigoH->setBanMove(true);
-                        enemigoH->mover();
-                    }
-                    //qDebug() << "El enemigo se mueve a la derecha" << endl;
-                }
-            }
+    for(int h = 0; h < enemigosH.size(); h++){
+        if(enemigosH.at(h)->getBanDeath()){
+            scene->removeItem(enemigosH.at(h));
+            enemigosH.erase(enemigosH.begin()+h);
+            h -= 1;
+            break;
         }
-        else{
-            if((player1->collidesWithItem(walls.at(i)) || enemigoH->collidesWithItem(walls.at(i))) && (enemigoH->getBanMove() && enemigoH->getBanAttack() == false)){
-//                if(enemigoH->getBanMove()){
-//                    enemigoH->setBanMove(false);
-//                    enemigoH->getMove()->stop();
-//                    delete enemigoH->getMove();
-//                }
-
-                if(enemigoH->collidesWithItem(walls.at(i))){
-                    if((enemigoH->getBanMove()) && (enemigoH->getPx()+65 >= walls.at(i)->getPosX()+walls.at(i)->getWidth())){
-                        enemigoH->setMove('A');
+        if(enemigosH.at(h)->getBanD() && enemigosH.at(h)->getBanIdle() == false){
+            for(int i = 0; i < walls.size(); i++){
+                if(player1->collidesWithItem(walls.at(i)) && enemigosH.at(h)->collidesWithItem(walls.at(i))){
+                    if(abs(player1->getPX()-enemigosH.at(h)->getPx()) <= enemigosH.at(h)->getRango() && enemigosH.at(h)->getType() == 'b'){
+                        if(enemigosH.at(h)->getBanAttack() == false){
+                            enemigosH.at(h)->setBanAttack(true);
+                            enemigosH.at(h)->ataque();
+                        }
                     }
-
-                    if(enemigoH->getPx() <= walls.at(i)->getPosX()){
-                        enemigoH->setMove('D');
+                    else{
+                        if(player1->getPX() < enemigosH.at(h)->getPx()){
+                            enemigosH.at(h)->setMove('A');
+                            if(enemigosH.at(h)->getBanMove() == false){
+                                enemigosH.at(h)->setBanMove(true);
+                                enemigosH.at(h)->mover();
+                            }
+                        }
+                        else if(player1->getPX() > enemigosH.at(h)->getPx()){
+                            enemigosH.at(h)->setMove('D');
+                            if(enemigosH.at(h)->getBanMove() == false){
+                                enemigosH.at(h)->setBanMove(true);
+                                enemigosH.at(h)->mover();
+                            }
+                        }
                     }
                 }
+                else{
+                    if(enemigosH.at(h)->getType() == 'm'){
+                        if(pow(pow(player1->getPX()-enemigosH.at(h)->getPx(),2)+pow(player1->getPX()-enemigosH.at(h)->getPx(),2),0.5) <= enemigosH.at(h)->getRadioHmm() && enemigosH.at(h)->getBanAttack() == false){
+                            if(player1->getPX() < enemigosH.at(h)->getPx()) ataqueHammer.push_back(new hammerattack(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy(), 'A'));
+                            else ataqueHammer.push_back(new hammerattack(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy(), 'D'));
+                            scene->addItem(ataqueHammer.at(ataqueHammer.size()-1));
+                            ataqueHammer.at(ataqueHammer.size()-1)->parabola();
+                            ataqueHammer.at(ataqueHammer.size()-1)->setEnemigo(h);
+                            enemigosH.at(h)->setBanAttack(true);
+                        }
+                    }
+                    if((player1->collidesWithItem(walls.at(i)) || enemigosH.at(h)->collidesWithItem(walls.at(i))) && (enemigosH.at(h)->getBanMove())){
+                        if(enemigosH.at(h)->collidesWithItem(walls.at(i))){
+                            if(enemigosH.at(h)->getPx()+65 >= walls.at(i)->getPosX()+walls.at(i)->getWidth()){
+                                enemigosH.at(h)->setMove('A');
+                            }
 
-
-//                if(enemigoH->getAttack()){
-//                    enemigoH->setBanAttack(false);
-//                    enemigoH->getAttack()->stop();
-//                    delete enemigoH->getAttack();
-//                }
-
-
+                            if(enemigosH.at(h)->getPx() <= walls.at(i)->getPosX()){
+                                enemigosH.at(h)->setMove('D');
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 
-
 void MainWindow::validateAttackGuy()
 {
     if(!ataque.empty()){
+        for(int h = 0; h < enemigosH.size(); h++){
+            for(int it = 0; it < ataque.size(); it++){
+                if(ataque.at(it)->collidesWithItem(enemigosH.at(h))){ //Cuando el jugador ataque al enemigo -> RECORDAR QUE DEPENDE DE LA DIFICULTAD
+                    //Se le resta vida y acorde a la vida se elimina o no
+                    ataque.at(it)->getAguy()->stop();
+                    enemigosH.at(h)->setVidas(enemigosH.at(h)->getVidas()-ataque.at(it)->getDamage());
+                    if(enemigosH.at(h)->getVidas() == 0){
+                        //enemigosH.at(h)->setBanD(false);
+                        if(enemigosH.at(h)->getBanMove()){
+                            enemigosH.at(h)->setBanMove(false);
+                            enemigosH.at(h)->getMove()->stop();
+                            enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
+                            enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
+                            //enemigoH->rebote(15,0);
+                            delete enemigosH.at(h)->getMove();
+                        }
+                        if(enemigosH.at(h)->getBanAttack()){
+                            enemigosH.at(h)->setBanAttack(false);
+                            if(enemigosH.at(h)->getType() == 'b'){
+                                enemigosH.at(h)->getAttack()->stop();
+                                enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
+                                enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
+                                delete enemigosH.at(h)->getAttack();
+                            }
+                            else if(enemigosH.at(h)->getType() == 'm'){
+                                enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
+                                enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
+                            }
+                        }
+                        if(enemigosH.at(h)->getType() == 'b') enemigosH.at(h)->muerte();
+                        else enemigosH.at(h)->setBanDeath(true);
+                    }
+
+                    if(ataque.at(it)->scene() == scene){
+                        scene->removeItem(ataque.at(it));
+                    }
+                    ataque.erase(ataque.begin()+it);
+                    it -= 1;
+                    break;
+                }
+            }
+        }
         for(int it = 0; it < ataque.size(); it++){
             for(int p = 0; p < walls.size(); p++){
                 if((ataque.at(it)->collidesWithItem(walls.at(p))) || (ataque.at(it)->collidesWithItem(lineLeft)) || (ataque.at(it)->collidesWithItem(lineRight))){
@@ -307,20 +366,34 @@ void MainWindow::validatePlayerMove()
         }
 
         if(player1->collidesWithItem(lineDown)){
-            //Cuando toque está linea colocar al jugador en una posición adecuada según el nivel
-            player1->setPX(0);
-            player1->setPY(623); //ORGANIZAR ESTA PARTE EN UNA POSICION ADECUADA A DONDE SE ENCUENTRE EL JUGADOR
-            player1->setPos(0,623);
-            player1->getLeap()->stop();
-            player1->setAy(11);
-            player1->setJump(false);
-            player1->setJumpUp(false);
-            player1->setJumpDown(false);
-            player1->setJumpP(false);
-            delete player1->getLeap();
+            //Se posiciona al jugador según la pantalla de nivele en que se encuentre
+            if(numNivel == 1){
+                if(W == 0){
+                    player1->setPX(0);
+                    player1->setPY(623);
+                    player1->setPos(player1->getPX(),player1->getPY());
+                }
+                else if(W == 1280){
+                    player1->setPX(1458);
+                    player1->setPY(623);
+                    player1->setPos(player1->getPX(),player1->getPY());
+                }
+                else if(W == 2560){
+                    player1->setPX(2648);
+                    player1->setPY(623);
+                    player1->setPos(player1->getPX(),player1->getPY());
+                }
+                player1->getLeap()->stop();
+                player1->setAy(11);
+                player1->setJump(false);
+                player1->setJumpUp(false);
+                player1->setJumpDown(false);
+                player1->setJumpP(false);
+                delete player1->getLeap();
+            }
         }
     }
-    else{ //Revisar lo de caida libre
+    else{ //Parte de la caída libre del personaje
         for(int m = 0; m < walls.size(); m ++){
             if(player1->collidesWithItem(walls.at(m)) == false){
                 if(m+1 == walls.size() && player1->getJumpDown() == false){
@@ -344,11 +417,46 @@ void MainWindow::validatePlayerMove()
     }
 }
 
+void MainWindow::validateBillsMove()
+{
+    if(jefe1->collidesWithItem(lineUp)){
+        jefe1->setVy(20);
+    }
+
+    for(int i = 0; i < walls.size(); i++){
+        if(jefe1->collidesWithItem(walls.at(i))){
+            jefe1->setVy(-20);
+        }
+    }
+}
+
+void MainWindow::validateHammerAttack()
+{
+    if(!ataqueHammer.empty()){
+        for(int a = 0; a < ataqueHammer.size(); a++){
+            for(int w = 0; w < walls.size(); w++){
+                if(ataqueHammer.at(a)->collidesWithItem(lineDown) || ataqueHammer.at(a)->collidesWithItem(walls.at(w)) || ataqueHammer.at(a)->collidesWithItem(player1)){
+                    //cuando toque al jugador le restamos vida -> Muere
+                    ataqueHammer.at(a)->getTiro()->stop();
+                    scene->removeItem(ataqueHammer.at(a));
+                    enemigosH.at(ataqueHammer.at(a)->getEnemigo())->setBanAttack(false);
+                    delete ataqueHammer.at(a)->getTiro();
+                    ataqueHammer.erase(ataqueHammer.begin()+a);
+                    a--;
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void MainWindow::detectC()
 {
     validateAttackGuy();
     validatePlayerMove();
     CollisionEnemy();
+    validateBillsMove();
+    validateHammerAttack();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *i)
@@ -363,9 +471,19 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
 
     if(i->key() == Qt::Key_D || i->key() == Qt::Key_L){
         for(int i = 0; i < walls.size(); i++){
-            if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigoH) == false){
-                player1->cinematica();
-                break;
+            for(int h = 0; h < enemigosH.size(); h++){
+                if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigosH.at(h)) == false){
+                    player1->cinematica();
+                    break;
+                }
+                else{
+                    if(player1->collidesWithItem(enemigosH.at(h))){
+                        player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
+                        player1->setPos(player1->getPX(),player1->getPY());
+                        break;
+                        //player1->rebote(enemigoH->getVx(),0);
+                    }
+                }
             }
         }
         player1->walkPlayer('D');
@@ -374,9 +492,19 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
 
     if(i->key() == Qt::Key_A || i->key() == Qt::Key_J){
         for(int i = 0; i < walls.size(); i++){
-            if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigoH) == false){
-                player1->cinematica();
-                break;
+            for(int h = 0; h < enemigosH.size(); h++){
+                if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigosH.at(h)) == false){
+                    player1->cinematica();
+                    break;
+                }
+                else{
+                    if(player1->collidesWithItem(enemigosH.at(h))){
+                        player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
+                        player1->setPos(player1->getPX(),player1->getPY());
+                        break;
+                        //player1->rebote(enemigoH->getVx(),0);
+                    }
+                }
             }
         }
         player1->walkPlayer('A');
@@ -397,8 +525,12 @@ MainWindow::~MainWindow()
     clean_levels();
     delete ui;
     delete scene;
-    delete player1;
-    delete enemigoH;
+    //delete player1;
     delete collisions;
+    delete lineDown;
+    delete lineLeft;
+    delete lineRight;
+    delete lineUp;
+
 }
 
