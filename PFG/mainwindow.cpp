@@ -11,20 +11,20 @@ MainWindow::MainWindow(QWidget *parent)
     W = 0;
 
     // para el inicio del juego
-    //setup_interfaz();
-    //inicio();
+    setup_interfaz();
+    inicio();
 
-    setup_resorces();
-    player1 = new player('g');
+//    setup_resorces();
+//    player1 = new player('g');
     //player1 = new player('s');
 
-    numNivel = 1;
-    cargar_niveles(numNivel);
+//    numNivel = 1;
+//    cargar_niveles(numNivel);
 
-    collisions = new QTimer(this);
-    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-    collisions->start(1);
-    setup_enemies();
+//    collisions = new QTimer(this);
+//    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+//    collisions->start(1);
+//    setup_enemies();
 }
 
 void MainWindow::setup_interfaz()
@@ -42,14 +42,37 @@ void MainWindow::setup_interfaz()
 void MainWindow::inicio()
 {
     ui->inicio->show();
+
     ui->inicio->setGeometry(80,265,ui->inicio->width(),ui->inicio->height());
+    ui->dificultad->setGeometry(80,265,ui->dificultad->width(),ui->dificultad->height());
+    ui->Partida->setGeometry(80,265,ui->Partida->width(),ui->Partida->height());
+    ui->modojuego->setGeometry(80,265,ui->modojuego->width(),ui->modojuego->height());
+    ui->usuario->setGeometry(80,265,ui->usuario->width(),ui->usuario->height());
+    ui->personaje->setGeometry(80,265,ui->personaje->width(),ui->personaje->height());
+
+
     ui->inicio->setStyleSheet("QGroupBox {border: transparent}");
+    ui->dificultad->setStyleSheet("QGroupBox {border: transparent}");
+    ui->Partida->setStyleSheet("QGroupBox {border: transparent}");
+    ui->modojuego->setStyleSheet("QGroupBox {border: transparent}");
+    ui->usuario->setStyleSheet("QGroupBox {border: transparent}");
+    ui->personaje->setStyleSheet("QGroupBox {border: transparent}");
+
     palette.setColor(ui->iniciarsesion->foregroundRole(), QColor(255,255,255));
     ui->iniciarsesion->setPalette(palette);
     ui->registrarse->setPalette(palette);
+    ui->Partida->setPalette(palette);
+    ui->dificultad->setPalette(palette);
+    ui->modojuego->setPalette(palette);
+    ui->usuario->setPalette(palette);
+    ui->personaje->setPalette(palette);
+
+
     ui->dificultad->hide();
     ui->modojuego->hide();
     ui->Partida->hide();
+    ui->usuario->hide();
+    ui->personaje->hide();
 }
 
 void MainWindow::setup_resorces()
@@ -713,17 +736,73 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
     }
 }
 
+void MainWindow::on_iniciarsesion_clicked()
+{
+    ui->inicio->hide();
+    ui->usuario->show();
+    iniciars = true;
+
+    //leemos del archivo donde tenemos guardados a los usuarios del sistema
+}
+
+void MainWindow::on_registrarse_clicked()
+{
+    ui->inicio->hide();
+    ui->usuario->show();
+    registro = true;
+}
+
+void MainWindow::on_cancelar_clicked()
+{
+    ui->usuario->hide();
+    ui->inicio->show();
+
+    iniciars = false;
+    registro = false;
+}
+
+void MainWindow::on_aceptar_clicked()
+{
+    if(iniciars){
+        //qDebug() << "leer el archivo" << endl;
+        ui->usuario->hide();
+        ui->Partida->show();
+    }
+    else{
+        //qDebug() << "escribir en el archivo" << endl;
+        ui->usuario->hide();
+        ui->Partida->show();
+        ui->cargarpartida->setEnabled(false);
+    }
+}
+
+void MainWindow::on_nuevapartida_clicked()
+{
+    ui->Partida->hide();
+    ui->modojuego->show();
+}
+
+
 MainWindow::~MainWindow()
 {
     clean_levels();
     delete ui;
     delete scene;
-    delete jefe1;
-    delete player1;
-    delete collisions;
-    delete lineDown;
-    delete lineLeft;
-    delete lineRight;
-    delete lineUp;
+//    delete jefe1;
+//    delete player1;
+//    delete collisions;
+//    delete lineDown;
+//    delete lineLeft;
+//    delete lineRight;
+//    delete lineUp;
 }
 
+void MainWindow::on_oneplayer_clicked()
+{
+
+}
+
+void MainWindow::on_multiplayer_clicked()
+{
+
+}
