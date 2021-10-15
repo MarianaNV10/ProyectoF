@@ -52,6 +52,7 @@ void MainWindow::inicio()
     ui->registrarse->setPalette(palette);
     ui->dificultad->hide();
     ui->modojuego->hide();
+    ui->Partida->hide();
 }
 
 void MainWindow::setup_resorces()

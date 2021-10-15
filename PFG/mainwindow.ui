@@ -27,10 +27,10 @@
    <widget class="QGroupBox" name="inicio">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>30</y>
+      <x>430</x>
+      <y>10</y>
       <width>104</width>
-      <height>89</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -40,6 +40,16 @@
      <string/>
     </property>
     <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="0">
+      <widget class="QPushButton" name="registrarse">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
+       </property>
+       <property name="text">
+        <string>Registrarse</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="iniciarsesion">
        <property name="styleSheet">
@@ -54,82 +64,187 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QPushButton" name="registrarse">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="text">
-        <string>Registrarse</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
        </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </widget>
    <widget class="QGroupBox" name="modojuego">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>140</y>
+      <x>430</x>
+      <y>130</y>
       <width>104</width>
-      <height>89</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="title">
-     <string>Modo de Juego</string>
+     <string/>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="0">
       <widget class="QPushButton" name="oneplayer">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
+       </property>
        <property name="text">
         <string>1 Jugador</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QPushButton" name="multiplayer">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
+       </property>
        <property name="text">
         <string>2 Jugadores</string>
        </property>
       </widget>
+     </item>
+     <item row="1" column="0">
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
    <widget class="QGroupBox" name="dificultad">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>240</y>
+      <x>580</x>
+      <y>150</y>
       <width>104</width>
-      <height>116</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="title">
-     <string>Dificultad</string>
+     <string/>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="facil">
-       <property name="text">
-        <string>Fácil</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="0">
       <widget class="QPushButton" name="normal">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
+       </property>
        <property name="text">
         <string>Normal</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="4" column="0">
       <widget class="QPushButton" name="dificil">
        <property name="enabled">
         <bool>true</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
        </property>
        <property name="text">
         <string>Difícil</string>
        </property>
       </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="facil">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
+       </property>
+       <property name="text">
+        <string>Fácil</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <spacer name="verticalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="Partida">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>10</y>
+      <width>104</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <item row="2" column="0">
+      <widget class="QPushButton" name="nuevapartida">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
+       </property>
+       <property name="text">
+        <string>Nueva Partida</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="cargarpartida">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
+       </property>
+       <property name="text">
+        <string>Cargar Partida</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
