@@ -20,10 +20,10 @@ private:
 
     QTimer *mSpown, *mDeath, *mMove, *mAttack;
 
-    int px, py, vy, range = 600, tam = 250;
+    int px, py, vy, range = 900, tam = 250, vida = 25;
     short sprite[4];
     bool pos[4];
-    bool banSpown, banDeath, banMove, banAttack;
+    bool banSpown, banDeath, banMove, banAttack, banDis;
 
 public slots:
 
@@ -44,10 +44,12 @@ public:
     int getRange() const {return range;}
     int getPx() const {return px;}
     int getPy() const {return py;}
+    int getVida() const {return vida;}
     bool getBanSpown() const {return banSpown;}
     bool getBanDeath() const {return banDeath;}
     bool getBanMove() const {return banMove;}
     bool getBanAttack() const {return banAttack;}
+    bool getBanDis() const {return banDis;}
     QTimer *getSpown() const {return mSpown;}
     QTimer *getDeath() const {return mDeath;}
     QTimer *getMove() const {return mMove;}
@@ -58,6 +60,8 @@ public:
     void setBanMove(bool value) {banMove = value;}
     void setBanAttack(bool value) {banAttack = value;}
     void setVy(int value) {vy = value;}
+    void setVida(int value) {vida = value;}
+    void setBanDis(bool value) {banDis = value;}
 };
 
 #endif // BILLS_H

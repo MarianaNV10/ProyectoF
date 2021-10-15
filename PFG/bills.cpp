@@ -10,6 +10,7 @@ bills::bills(int x, int y)
     this->banDeath = false;
     this->banMove = false;
     this->banAttack = false;
+    this->banDis = false;
 
     for(int h = 0; h < 4; h++){
         sprite[h] = 0;
@@ -56,6 +57,9 @@ void bills::billsSpown()
         pos[0] = true;
         mSpown->stop();
         delete mSpown;
+        banSpown = false;
+        banMove = true;
+        movement();
     }
 }
 
@@ -80,6 +84,8 @@ void bills::billsAttack()
     if(sprite[3] == 2){
         sprite[3] = 0;
         mAttack->stop();
+        banAttack = false;
+        movement();
         delete mAttack;
     }
 }
@@ -90,26 +96,8 @@ void bills::billsDeath()
     sprite[1] += (2*pos[1])-1;
     if(sprite[1] == 4){
         sprite[1] = 0;
+        this->banDis = true;
         mDeath->stop();
         delete mDeath;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
