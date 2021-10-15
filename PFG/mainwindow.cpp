@@ -6,30 +6,59 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     H = 708;
     W = 0;
-
-    setup_resorces();
-    player1 = new player('g');
+    //setGeometry(0,0,1283,770); //en general para el juego
+    setup_interfaz();
+    inicio();
+//    palette.setColor(ui->iniciarsesion->foregroundRole(), QColor(21,165,169));
+//    ui->iniciarsesion->setPalette(palette);
+    //ui->iniciarsesion->show();
+    //ui->iniciarsesion->hide(); //es para que se esconda
+    //setup_resorces();
+    //player1 = new player('g');
     //player1 = new player('s');
 
-    numNivel = 1;
-    cargar_niveles(numNivel);
+//    numNivel = 2;
+//    cargar_niveles(numNivel);
 
-    collisions = new QTimer(this);
-    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-    collisions->start(1);
-    setup_enemies();
+//    collisions = new QTimer(this);
+//    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+//    collisions->start(1);
+    //    setup_enemies();
+}
+
+void MainWindow::setup_interfaz()
+{
+    scene = new QGraphicsScene(this);
+    //qgview = new QGraphicsView(this);
+    setMaximumSize(800,600);
+    setMaximumSize(800,600);
+    ui->graphicsView->setGeometry(0,0,800,600);
+    scene->setSceneRect(0,0,ui->graphicsView->width()-3,ui->graphicsView->height()-3);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setBackgroundBrush(QPixmap(":/Imagenes/Interfaz/fondoinicio.jpg"));
+    setWindowTitle("Gehrin");
+}
+
+void MainWindow::inicio()
+{
+    ui->inicio->show();
+    ui->inicio->setGeometry(80,265,ui->inicio->width(),ui->inicio->height());
+    ui->inicio->setStyleSheet("QGroupBox {border: transparent}");
+    palette.setColor(ui->iniciarsesion->foregroundRole(), QColor(255,255,255));
+    ui->iniciarsesion->setPalette(palette);
+    ui->registrarse->setPalette(palette);
+    ui->dificultad->hide();
+    ui->modojuego->hide();
 }
 
 void MainWindow::setup_resorces()
 {
-    scene = new QGraphicsScene(this);
+    ui->graphicsView->setGeometry(0,0,1280,711);
 
-    scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
-    ui->graphicsView->setScene(scene);
-
-    setWindowTitle("Gehrin");
+    scene->setSceneRect(W,0,ui->graphicsView->width()-3,H-3);
 
     //para ponerle color a la letra al menubar
 //    palette.setColor(ui->menubar->foregroundRole(), QColor(21,165,169));
@@ -45,14 +74,36 @@ void MainWindow::setup_resorces()
 
 void MainWindow::setup_enemies()
 {
-    //organizarlo por niveles
-    for(int p = 0; p < walls.size(); p++){
-        if(walls.at(p)->getPosX() != 0){
-            if(walls.at(p)->getWidth() > 100){
-                enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+0.5*walls.at(p)->getWidth(),walls.at(p)->getPosY()-64,'m'));
-                scene->addItem(enemigosH.at(enemigosH.size()-1));
-                if(enemigosH.at(enemigosH.size()-1)->getType() == 'b') enemigosH.at(enemigosH.size()-1)->idle();
-                else{
+    switch (numNivel) {
+    case 1:
+        for(int p = 0; p < walls.size(); p++){
+            if(walls.at(p)->getPosX() != 0){
+                if((walls.at(p)->getPosX() == 779 && walls.at(p)->getPosY() == 348) || (walls.at(p)->getPosX() == 1067 && walls.at(p)->getPosY() == 449) ||
+                    (walls.at(p)->getPosX() == 1780 && walls.at(p)->getPosY() == 372) || (walls.at(p)->getPosX() == 2508 && walls.at(p)->getPosY() == 372) ||
+                    (walls.at(p)->getPosX() == 2032 && walls.at(p)->getPosY() == 224)){
+
+                    if(walls.at(p)->getPosX() == 2032 && walls.at(p)->getPosY() == 224){
+                        enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+81,walls.at(p)->getPosY()-64,'b'));
+                        scene->addItem(enemigosH.at(enemigosH.size()-1));
+                        enemigosH.at(enemigosH.size()-1)->idle();
+                        enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+369,walls.at(p)->getPosY()-64,'m'));
+                        scene->addItem(enemigosH.at(enemigosH.size()-1));
+                        enemigosH.at(enemigosH.size()-1)->setMove('D');
+                        enemigosH.at(enemigosH.size()-1)->setBanMove(true);
+                        enemigosH.at(enemigosH.size()-1)->mover();
+                        enemigosH.at(enemigosH.size()-1)->setBanD(true);
+                    }
+                    else{
+                        enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+0.5*walls.at(p)->getWidth(),walls.at(p)->getPosY()-64,'b'));
+                        scene->addItem(enemigosH.at(enemigosH.size()-1));
+                        enemigosH.at(enemigosH.size()-1)->idle();
+                    }
+                }
+                else if((walls.at(p)->getPosX() == 1139 && walls.at(p)->getPosY() == 200) || (walls.at(p)->getPosX() == 3376 && walls.at(p)->getPosY() == 416) ||
+                        (walls.at(p)->getPosX() == 2032 && walls.at(p)->getPosY() == 224)){
+
+                    enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+0.5*walls.at(p)->getWidth(),walls.at(p)->getPosY()-64,'m'));
+                    scene->addItem(enemigosH.at(enemigosH.size()-1));
                     enemigosH.at(enemigosH.size()-1)->setMove('D');
                     enemigosH.at(enemigosH.size()-1)->setBanMove(true);
                     enemigosH.at(enemigosH.size()-1)->mover();
@@ -60,7 +111,39 @@ void MainWindow::setup_enemies()
                 }
             }
         }
+        break;
+
+    case 2:
+        for(int p = 0; p < walls.size(); p++){
+            if(walls.at(p)->getPosX() != 0){
+                if((walls.at(p)->getPosX() == 0 && walls.at(p)->getPosY() == 622) || (walls.at(p)->getPosX() == 484 && walls.at(p)->getPosY() == 427)){
+                    enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+0.5*walls.at(p)->getWidth(),walls.at(p)->getPosY()-64,'b'));
+                    scene->addItem(enemigosH.at(enemigosH.size()-1));
+                    enemigosH.at(enemigosH.size()-1)->idle();
+                }
+                else if(walls.at(p)->getPosX() == 3455 && walls.at(p)->getPosY() == 240){
+                    enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+96,walls.at(p)->getPosY()-64,'m'));
+                    enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+386,walls.at(p)->getPosY()-64,'m'));
+                    scene->addItem(enemigosH.at(enemigosH.size()-1));
+                    scene->addItem(enemigosH.at(enemigosH.size()-2));
+                    enemigosH.at(enemigosH.size()-1)->setMove('D');
+                    enemigosH.at(enemigosH.size()-2)->setMove('D');
+                    enemigosH.at(enemigosH.size()-1)->setBanMove(true);
+                    enemigosH.at(enemigosH.size()-2)->setBanMove(true);
+                    enemigosH.at(enemigosH.size()-1)->mover();
+                    enemigosH.at(enemigosH.size()-2)->mover();
+                    enemigosH.at(enemigosH.size()-1)->setBanD(true);
+                    enemigosH.at(enemigosH.size()-2)->setBanD(true);
+                }
+            }
+        }
+        break;
+
+    case 3:
+
+        break;
     }
+
 }
 
 void MainWindow::clean_levels()
@@ -156,9 +239,16 @@ void MainWindow::cargar_niveles(int Nivel)
     }
     else if(Nivel == 2){ //Nivel 2
 
-        //posicion del jugador en la escena
-
         scene->setBackgroundBrush(QPixmap(":/Imagenes/Fondos/Nivel2.jpeg"));
+
+        //posicion del jugador en la escena
+        player1->setPX(0);
+        player1->setPY(573);
+        player1->setPos(player1->getPX(),player1->getPY());
+        scene->addItem(player1);
+
+        //Aparición del jugador en la escena
+        player1->getSpown()->start(250); //The Guy
         nivel = LTwo();
 
         for(int i = 0; i < nivel.size(); i++){
@@ -217,7 +307,7 @@ void MainWindow::CollisionEnemy()
         }
         if(enemigosH.at(h)->getBanD() && enemigosH.at(h)->getBanIdle() == false){
             for(int i = 0; i < walls.size(); i++){
-                if(player1->collidesWithItem(walls.at(i)) && enemigosH.at(h)->collidesWithItem(walls.at(i))){
+                if(player1->collidesWithItem(walls.at(i)) && enemigosH.at(h)->collidesWithItem(walls.at(i)) && enemigosH.at(h)->getBanDeath() == false){
                     if(abs(player1->getPX()-enemigosH.at(h)->getPx()) <= enemigosH.at(h)->getRango() && enemigosH.at(h)->getType() == 'b'){
                         if(enemigosH.at(h)->getBanAttack() == false){
                             enemigosH.at(h)->setBanAttack(true);
@@ -279,7 +369,7 @@ void MainWindow::validateAttackGuy()
                     ataque.at(it)->getAguy()->stop();
                     enemigosH.at(h)->setVidas(enemigosH.at(h)->getVidas()-ataque.at(it)->getDamage());
                     if(enemigosH.at(h)->getVidas() == 0){
-                        //enemigosH.at(h)->setBanD(false);
+                        enemigosH.at(h)->setBanD(false);
                         if(enemigosH.at(h)->getBanMove()){
                             enemigosH.at(h)->setBanMove(false);
                             enemigosH.at(h)->getMove()->stop();
@@ -455,7 +545,7 @@ void MainWindow::detectC()
     validateAttackGuy();
     validatePlayerMove();
     CollisionEnemy();
-    validateBillsMove();
+    if(numNivel == 1) validateBillsMove();
     validateHammerAttack();
 }
 
@@ -473,7 +563,10 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
         for(int i = 0; i < walls.size(); i++){
             for(int h = 0; h < enemigosH.size(); h++){
                 if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigosH.at(h)) == false){
-                    player1->cinematica();
+                    QList<QGraphicsItem*> items = player1->collidingItems();
+                    if(items.size() < 2){
+                        player1->cinematica();
+                    }
                     break;
                 }
                 else{
@@ -481,7 +574,6 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
                         player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
                         player1->setPos(player1->getPX(),player1->getPY());
                         break;
-                        //player1->rebote(enemigoH->getVx(),0);
                     }
                 }
             }
@@ -494,7 +586,10 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
         for(int i = 0; i < walls.size(); i++){
             for(int h = 0; h < enemigosH.size(); h++){
                 if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigosH.at(h)) == false){
-                    player1->cinematica();
+                    QList<QGraphicsItem*> items = player1->collidingItems();
+                    if(items.size() < 2){
+                        player1->cinematica();
+                    }
                     break;
                 }
                 else{
@@ -502,7 +597,6 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
                         player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
                         player1->setPos(player1->getPX(),player1->getPY());
                         break;
-                        //player1->rebote(enemigoH->getVx(),0);
                     }
                 }
             }
@@ -525,12 +619,12 @@ MainWindow::~MainWindow()
     clean_levels();
     delete ui;
     delete scene;
+    //delete jefe1;
     //delete player1;
-    delete collisions;
-    delete lineDown;
-    delete lineLeft;
-    delete lineRight;
-    delete lineUp;
-
+    //delete collisions;
+//    delete lineDown;
+//    delete lineLeft;
+//    delete lineRight;
+//    delete lineUp;
 }
 
