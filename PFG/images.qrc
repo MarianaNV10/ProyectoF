@@ -155,5 +155,6 @@
         <file>Imagenes/Hammer/Ataque/martillo.png</file>
         <file>Imagenes/Fondos/Nivel3.jpeg</file>
         <file>Imagenes/Interfaz/fondoinicio.jpg</file>
+        <file>Imagenes/Bills Sprites/Ataque/Ataque4.png</file>
     </qresource>
 </RCC>
