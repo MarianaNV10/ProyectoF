@@ -158,5 +158,14 @@
         <file>Imagenes/Bills_Sprites/Spown/Spown1.png</file>
         <file>Imagenes/Bills_Sprites/Spown/Spown2.png</file>
         <file>Imagenes/Bills_Sprites/Spown/Spown3.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey_Down.png</file>
+        <file>Imagenes/Dj_Sray/DJSprey_Left.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey_Right.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey_Up.png</file>
+        <file>Imagenes/Dj_Sray/VS_Dj_Sray.mp3</file>
+        <file>Imagenes/Audio/Intro.m4a</file>
+        <file>Imagenes/Audio/Nivel1.mp3</file>
+        <file>Imagenes/Audio/Nivel2.mp3</file>
     </qresource>
 </RCC>

@@ -7,6 +7,8 @@
 #include <QTimer>
 #include <QVector>
 #include <QLabel>
+#include <QRandomGenerator>
+#include <QDebug>
 
 class sray: public QObject, public QGraphicsPixmapItem //71 movimientos
 {
@@ -16,23 +18,31 @@ class sray: public QObject, public QGraphicsPixmapItem //71 movimientos
 private:
 
     QString move[5] = {":/Imagenes/Dj_Sray/DjSprey.png",":/Imagenes/Dj_Sray/DjSprey_Down.png",":/Imagenes/Dj_Sray/DJSprey_Left.png",":/Imagenes/Dj_Sray/DjSprey_Right.png",":/Imagenes/Dj_Sray/DjSprey_Up.png"};
-    QString movements[71] = {"Down","Up","Left","Right","Up","Left","Down","Down","Up","Right","Down","Down","Down",
-                                  "Up","Left","Down","Down","Up","Up","Up","Down","Up","Down","Down","Up","Down","Up",
-                                  "Right","Left","Right","Left","Up","Up","Up","Up","Up","Up","Left","Up","Down","Down",
-                                  "Right","Down","Right","Rigth","Up","Right","Left","Left","Down","Left","Up","Up","Up",
-                                  "Down","Down","Down","Left","Left","Left","Right","Right","Right","Up","Left","Right","Down",
-                                  "Up","Down","Left","Right"};
 
     QString secuencias[28] = {"1","1","1","1","4","5","4","2","4","4","4","4","4","4","4","4","3","3","3","3","1","1","1","1",
                               "1","1","1","1"};
 
-    int contM = 0, contS = 0;
-    QTimer *time;
+    QVector<QString> smoves;
+
+    int contM = 0, contS = 0, pos = 0, l = 0;
+    int px, py, tam = 250;
+    int xl, yl, dato;
+    bool bandance = false;
+    QTimer *time, *timeL;
     QLabel *objeto;
+    QString info;
+
+public slots:
+
+    void labelmove();
+    void Atiempo();
 
 public:
     sray(int x, int y, QLabel *obj);
     void label();
+    void tiempo();
+    void baile();
+    ~sray() {delete objeto;}
 };
 
 #endif // SRAY_H
