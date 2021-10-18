@@ -14,7 +14,7 @@ class billsattack: public QObject, public QGraphicsPixmapItem
 
 private:
 
-    QString flama[2] = {":/Imagenes/Bills Sprites/Ataque/Ataque3.png", ":/Imagenes/Bills Sprites/Ataque/Ataque4.png"};
+    QString flama[2] = {":/Imagenes/Bills_Sprites/Ataque/Ataque3.png", ":/Imagenes/Bills_Sprites/Ataque/Ataque4.png"};
 
     QTimer *time;
 

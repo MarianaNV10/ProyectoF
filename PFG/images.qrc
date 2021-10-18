@@ -1,20 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Imagenes/Bills Sprites/Ataque/Ataque1.png</file>
-        <file>Imagenes/Bills Sprites/Ataque/Ataque2.png</file>
-        <file>Imagenes/Bills Sprites/Ataque/Ataque3.png</file>
-        <file>Imagenes/Bills Sprites/batalla/batalla1.png</file>
-        <file>Imagenes/Bills Sprites/batalla/batalla2.png</file>
-        <file>Imagenes/Bills Sprites/batalla/batalla3.png</file>
-        <file>Imagenes/Bills Sprites/batalla/batalla4.png</file>
-        <file>Imagenes/Bills Sprites/batalla/batalla5.png</file>
-        <file>Imagenes/Bills Sprites/Muerte/Muerte1.png</file>
-        <file>Imagenes/Bills Sprites/Muerte/Muerte2.png</file>
-        <file>Imagenes/Bills Sprites/Muerte/Muerte3.png</file>
-        <file>Imagenes/Bills Sprites/Muerte/Muerte4.png</file>
-        <file>Imagenes/Bills Sprites/Spown/Spown1.png</file>
-        <file>Imagenes/Bills Sprites/Spown/Spown2.png</file>
-        <file>Imagenes/Bills Sprites/Spown/Spown3.png</file>
         <file>Imagenes/Fondos/Nivel1.jpeg</file>
         <file>Imagenes/Fondos/Nivel2.jpeg</file>
         <file>Imagenes/Huesos Sprites/Ataque/Ataque1.png</file>
@@ -155,6 +140,23 @@
         <file>Imagenes/Hammer/Ataque/martillo.png</file>
         <file>Imagenes/Fondos/Nivel3.jpeg</file>
         <file>Imagenes/Interfaz/fondoinicio.jpg</file>
-        <file>Imagenes/Bills Sprites/Ataque/Ataque4.png</file>
+        <file>Imagenes/Interfaz/caritaguy.png</file>
+        <file>Imagenes/Interfaz/caritasteven.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque1.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque2.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque3.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque4.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla1.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla2.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla3.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla4.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla5.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte1.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte2.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte3.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte4.png</file>
+        <file>Imagenes/Bills_Sprites/Spown/Spown1.png</file>
+        <file>Imagenes/Bills_Sprites/Spown/Spown2.png</file>
+        <file>Imagenes/Bills_Sprites/Spown/Spown3.png</file>
     </qresource>
 </RCC>
