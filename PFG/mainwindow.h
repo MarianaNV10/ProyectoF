@@ -14,6 +14,9 @@
 #include <vector>
 #include <qdebug.h>
 #include <math.h>
+
+//Librerias propias
+
 #include "levels.h"
 #include "platform.h"
 #include "spike.h"
@@ -23,6 +26,10 @@
 #include "hammerattack.h"
 #include "bills.h"
 #include "billsattack.h"
+
+#include <fstream>
+
+using namespace std;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,13 +47,14 @@ public:
     void setup_resorces();
     void setup_enemies();
     void cargar_niveles(int Nivel);
+    void clean_levels();
     void validateAttackGuy();
     void validatePlayerMove();
     void validateBillsMove();
     void validateHammerAttack();
-    void clean_levels();
-    void CollisionEnemy();
     void validarmovimientosoneplayer(QKeyEvent *i);
+    void CollisionEnemy();
+    void escribirArchivo(QString nom, QString modoj, int nivel, char dif, int x, int y, int Vidas);
     void keyPressEvent(QKeyEvent *i);
     ~MainWindow();
 
@@ -62,16 +70,17 @@ private slots:
     void on_nuevapartida_clicked();
     void on_oneplayer_clicked();
     void on_multiplayer_clicked();
-
     void on_instruccion_clicked();
-
     void on_regresar_clicked();
-
     void on_devolver_clicked();
-
     void on_selectguy_clicked();
-
     void on_selectsteven_clicked();
+
+    void on_facil_clicked();
+
+    void on_normal_clicked();
+
+    void on_dificil_clicked();
 
 private:
 
@@ -96,6 +105,7 @@ private:
 
     QPalette palette;
 
+    char dificultad;
     int H=0, W=0;
     int X, Y, tamX, tamY;
     int numNivel = 0;

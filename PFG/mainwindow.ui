@@ -130,8 +130,8 @@ background-color: rgb(55,175,91);</string>
    <widget class="QGroupBox" name="dificultad">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>150</y>
+      <x>610</x>
+      <y>120</y>
       <width>104</width>
       <height>151</height>
      </rect>
@@ -140,6 +140,16 @@ background-color: rgb(55,175,91);</string>
      <string/>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
+     <item row="2" column="0">
+      <widget class="QPushButton" name="normal">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
+       </property>
+       <property name="text">
+        <string>Normal</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <spacer name="verticalSpacer_4">
        <property name="orientation">
@@ -152,16 +162,6 @@ background-color: rgb(55,175,91);</string>
         </size>
        </property>
       </spacer>
-     </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="normal">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(55, 175, 91);</string>
-       </property>
-       <property name="text">
-        <string>Normal</string>
-       </property>
-      </widget>
      </item>
      <item row="4" column="0">
       <widget class="QPushButton" name="dificil">
@@ -362,7 +362,7 @@ background-color: rgb(55,175,91);</string>
         <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
-        <string>Guy</string>
+        <string>The Guy</string>
        </property>
       </widget>
      </item>
@@ -406,7 +406,7 @@ background-color: rgb(55,175,91);</string>
 </string>
        </property>
        <property name="text">
-        <string>Steve</string>
+        <string>Steven</string>
        </property>
       </widget>
      </item>

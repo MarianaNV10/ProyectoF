@@ -837,6 +837,14 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
     if(onep) validarmovimientosoneplayer(i);
 }
 
+void MainWindow::escribirArchivo(QString nom, QString modoj, int nivel, char dif, int x, int y, int Vidas)
+{
+    ofstream archivo;
+    archivo.open("juego.txt",ios::out | ios::app);
+    archivo << nom.toStdString() << "," << modoj.toStdString() << "," << nivel << "," << dif << "," << x << "," << y << "," << Vidas << endl;
+    archivo.close();
+}
+
 void MainWindow::on_iniciarsesion_clicked()
 {
     ui->inicio->hide();
@@ -923,7 +931,7 @@ void MainWindow::on_nuevapartida_clicked()
 void MainWindow::on_oneplayer_clicked()
 {
     ui->modojuego->hide();
-    ui->personaje->show();
+    ui->dificultad->show();
     this->onep = true;
 }
 
@@ -931,6 +939,7 @@ void MainWindow::on_multiplayer_clicked()
 {
     ui->modojuego->hide();
     ui->instruccion->hide();
+    ui->dificultad->show();
     this->multip = true;
 }
 
@@ -949,9 +958,10 @@ void MainWindow::on_regresar_clicked()
 void MainWindow::on_devolver_clicked()
 {
     ui->personaje->hide();
-    ui->modojuego->show();
-    if(this->onep == true) this->onep = false;
-    if(this->multip == true) this->multip = false;
+    ui->dificultad->show();
+
+    /*if(this->onep == true) this->onep = false;
+    if(this->multip == true) this->multip = false;*/
 }
 
 void MainWindow::on_selectguy_clicked()
@@ -965,6 +975,9 @@ void MainWindow::on_selectguy_clicked()
     setup_resorces();
     cargar_niveles(numNivel);
 
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
+    //else //esta es la parte de multijugador
+
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
     collisions->start(1);
@@ -973,14 +986,17 @@ void MainWindow::on_selectguy_clicked()
 
 void MainWindow::on_selectsteven_clicked()
 {
-    player1 = new player('s');
     ui->personaje->hide();
     ui->instruccion->hide();
-
     delete scene;
+
+    player1 = new player('s');
 
     setup_resorces();
     cargar_niveles(numNivel);
+
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
+    //else //esta es la parte de multijugador
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -988,6 +1004,26 @@ void MainWindow::on_selectsteven_clicked()
     setup_enemies();
 }
 
+void MainWindow::on_facil_clicked()
+{
+    dificultad = 'f';
+    ui->dificultad->hide();
+    ui->personaje->show();
+}
+
+void MainWindow::on_normal_clicked()
+{
+    dificultad = 'n';
+    ui->dificultad->hide();
+    ui->personaje->show();
+}
+
+void MainWindow::on_dificil_clicked()
+{
+    dificultad = 'd';
+    ui->dificultad->hide();
+    ui->personaje->show();
+}
 
 MainWindow::~MainWindow()
 {
