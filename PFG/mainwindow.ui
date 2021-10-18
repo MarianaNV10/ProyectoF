@@ -43,7 +43,7 @@
      <item row="2" column="0">
       <widget class="QPushButton" name="registrarse">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Registrarse</string>
@@ -53,7 +53,8 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="iniciarsesion">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">
+background-color: rgb(55,175,91);</string>
        </property>
        <property name="text">
         <string>Iniciar Sesión</string>
@@ -94,7 +95,7 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="oneplayer">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>1 Jugador</string>
@@ -104,7 +105,7 @@
      <item row="2" column="0">
       <widget class="QPushButton" name="multiplayer">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>2 Jugadores</string>
@@ -155,7 +156,7 @@
      <item row="2" column="0">
       <widget class="QPushButton" name="normal">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Normal</string>
@@ -168,7 +169,7 @@
         <bool>true</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Difícil</string>
@@ -178,7 +179,7 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="facil">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Fácil</string>
@@ -216,7 +217,7 @@
      <item row="2" column="0">
       <widget class="QPushButton" name="nuevapartida">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Nueva Partida</string>
@@ -226,7 +227,7 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="cargarpartida">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Cargar Partida</string>
@@ -264,7 +265,7 @@
      <item row="2" column="2">
       <widget class="QPushButton" name="cancelar">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Cancelar</string>
@@ -272,7 +273,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="nombre">
        <property name="styleSheet">
         <string notr="true">border-color: rgb(255, 0, 0);</string>
        </property>
@@ -284,7 +285,7 @@
      <item row="0" column="2">
       <widget class="QPushButton" name="aceptar">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
        </property>
        <property name="text">
         <string>Aceptar</string>
@@ -309,47 +310,36 @@
    <widget class="QGroupBox" name="personaje">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>370</y>
+      <x>90</x>
+      <y>350</y>
       <width>190</width>
-      <height>101</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="title">
      <string/>
     </property>
     <layout class="QGridLayout" name="gridLayout_6">
-     <item row="0" column="0">
-      <widget class="QLabel" name="guy">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="selectguy">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
-       </property>
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="2">
       <widget class="QLabel" name="steven">
        <property name="text">
         <string/>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 0, 0);</string>
-       </property>
-       <property name="text">
-        <string>PushButton</string>
+       <property name="pixmap">
+        <pixmap resource="images.qrc">:/Imagenes/Interfaz/caritasteven.png</pixmap>
        </property>
       </widget>
      </item>
@@ -366,7 +356,17 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="0">
+      <widget class="QPushButton" name="selectguy">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
+       </property>
+       <property name="text">
+        <string>Guy</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
       <spacer name="verticalSpacer_7">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -378,6 +378,107 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="guy">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="images.qrc">:/Imagenes/Interfaz/caritaguy.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="devolver">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
+       </property>
+       <property name="text">
+        <string>Regresar</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="selectsteven">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(55, 175, 91);
+</string>
+       </property>
+       <property name="text">
+        <string>Steve</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <spacer name="verticalSpacer_8">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="instruccion">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>430</y>
+      <width>121</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background-color: rgb(29, 255, 217);</string>
+    </property>
+    <property name="text">
+     <string>Instrucciones</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="nota">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>530</y>
+      <width>251</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_7">
+     <item row="0" column="0">
+      <widget class="QTextEdit" name="especificar">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The guy se mueve con W, A, S y ataca con E&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Steven se mueve con I, J, L y ataca con O&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="regresar">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(55, 175, 91);</string>
+       </property>
+       <property name="text">
+        <string>Regresar</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -394,6 +495,8 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

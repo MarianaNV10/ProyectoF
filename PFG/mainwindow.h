@@ -7,6 +7,7 @@
 #include <QGraphicsLineItem>
 #include <QDesktopWidget>
 #include <QKeyEvent>
+#include <QMessageBox>
 #include <QString>
 #include <QPalette>
 #include <QImage>
@@ -45,6 +46,7 @@ public:
     void validateHammerAttack();
     void clean_levels();
     void CollisionEnemy();
+    void validarmovimientosoneplayer(QKeyEvent *i);
     void keyPressEvent(QKeyEvent *i);
     ~MainWindow();
 
@@ -54,18 +56,22 @@ public slots:
 
 private slots:
     void on_iniciarsesion_clicked();
-
     void on_registrarse_clicked();
-
     void on_cancelar_clicked();
-
     void on_aceptar_clicked();
-
     void on_nuevapartida_clicked();
-
     void on_oneplayer_clicked();
-
     void on_multiplayer_clicked();
+
+    void on_instruccion_clicked();
+
+    void on_regresar_clicked();
+
+    void on_devolver_clicked();
+
+    void on_selectguy_clicked();
+
+    void on_selectsteven_clicked();
 
 private:
 
@@ -75,6 +81,7 @@ private:
     player *player1;
     bills *jefe1;
     QGraphicsLineItem *lineUp,*lineDown,*lineRight,*lineLeft;
+
 
     QList<platform*> walls;
     QList<spike*> spikes;
@@ -92,6 +99,6 @@ private:
     int H=0, W=0;
     int X, Y, tamX, tamY;
     int numNivel = 0;
-    bool iniciars = false, registro = false;
+    bool iniciars = false, registro = false, onep = false, multip = false;
 };
 #endif // MAINWINDOW_H

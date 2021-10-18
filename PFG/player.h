@@ -81,6 +81,7 @@ public:
     bool getJump() const {return mJump;}
     unsigned int getVidas() const {return mVidas;}
     char getLado() const {return l;}
+    char getKeyplayer() const {return keyplayer;}
     QTimer *getSpown() const {return Spown;}
     QTimer *getDeath() const {return Death;}
     QTimer *getLeap() const {return Jump;}
