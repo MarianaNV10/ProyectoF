@@ -27,7 +27,7 @@ private:
     int contM = 0, contS = 0, pos = 0, l = 0;
     int px, py, tam = 250;
     int xl, yl, dato;
-    bool bandance = false;
+    bool bandance = false, banmove = false;
     QTimer *time, *timeL;
     QLabel *objeto;
     QString info;
@@ -43,6 +43,12 @@ public:
     void tiempo();
     void baile();
     ~sray() {delete objeto;}
+
+    QVector<QString> getSmoves() const {return smoves;}
+    bool getBanmove() const {return banmove;}
+
+    void setBanmove(bool value) {banmove = value;}
+    void setSmoves(const QVector<QString> &value) {smoves = value;}
 };
 
 #endif // SRAY_H

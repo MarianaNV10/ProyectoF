@@ -29,16 +29,20 @@ void sray::tiempo()
 void sray::baile()
 {
     bandance = true;
-    pos = secuencias[contS].toInt();
-    for(int i = 0; i < pos; i++){
-        std::uniform_int_distribution<int> Fila(1,4);
-        dato = Fila(*QRandomGenerator::global());
-        if(dato == 1) smoves.push_back("Up");
-        else if(dato == 2) smoves.push_back("Down");
-        else if(dato == 3) smoves.push_back("Right");
-        else smoves.push_back("Left");
+    if(contS < 28){
+        pos = secuencias[contS].toInt();
+        qDebug() << pos << endl;
+        for(int i = 0; i < pos; i++){
+            std::uniform_int_distribution<int> Fila(1,4);
+            dato = Fila(*QRandomGenerator::global());
+            if(dato == 1) smoves.push_back("Up");
+            else if(dato == 2) smoves.push_back("Down");
+            else if(dato == 3) smoves.push_back("Right");
+            else smoves.push_back("Left");
+        }
     }
-    contS++;
+    contS += 1;
+    pos = 0;
 }
 
 void sray::labelmove()
@@ -65,6 +69,7 @@ void sray::labelmove()
     }
     else{
         bandance = false;
+        banmove = true;
         l = 0;
         timeL->stop();
         delete timeL;

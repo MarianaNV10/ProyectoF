@@ -11,20 +11,24 @@ MainWindow::MainWindow(QWidget *parent)
     W = 0;
 
     // para el inicio del juego
-    setup_interfaz();
-    inicio();
+    //setup_interfaz();
+    //inicio();
 
-    //setup_resorces();
-    //player1 = new player('g');
+    setup_resorces();
+    player1 = new player('g');
     //player1 = new player('s');
 
-//    numNivel = 2;
-//    cargar_niveles(numNivel);
+    numNivel = 3;
+    cargar_niveles(numNivel);
 
-//    collisions = new QTimer(this);
-//    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-//    collisions->start(1);
-//    setup_enemies();
+    audio = new QMediaPlayer();
+    audio->setMedia(QUrl("qrc:/Imagenes/Audio/Nivel2.mp3"));
+    audio->play();
+
+    collisions = new QTimer(this);
+    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+    collisions->start(1);
+    setup_enemies();
 }
 
 void MainWindow::setup_interfaz()
@@ -91,10 +95,19 @@ void MainWindow::setup_resorces()
     scene->setSceneRect(W,0,ui->graphicsView->width()-3,H-3);
     ui->graphicsView->setScene(scene);
 
+//    ui->inicio->hide();
+//    ui->dificultad->hide();
+//    ui->modojuego->hide();
+//    ui->Partida->hide();
     ui->inicio->hide();
     ui->dificultad->hide();
     ui->modojuego->hide();
     ui->Partida->hide();
+    ui->usuario->hide();
+    ui->personaje->hide();
+    ui->instruccion->hide();
+    ui->nota->hide();
+    ui->baile->hide();
 
     //para ponerle color a la letra al menubar
 //    palette.setColor(ui->menubar->foregroundRole(), QColor(21,165,169));
@@ -278,7 +291,6 @@ void MainWindow::cargar_niveles(int Nivel)
 
         scene->setBackgroundBrush(QPixmap(":/Imagenes/Fondos/Nivel2.jpeg"));
 
-
         if(onep){
             if(player1->getKeyplayer() == 'g'){ //The guy
                 //establece las posiciones del jugador dentro del nivel
@@ -338,7 +350,65 @@ void MainWindow::cargar_niveles(int Nivel)
         }
     }
     else{ //Nivel 3
+        scene->setBackgroundBrush(QPixmap(":/Imagenes/Fondos/Nivel3.jpeg"));
 
+        onep = true;
+
+        if(onep){
+            if(player1->getKeyplayer() == 'g'){ //The guy
+                //establece las posiciones del jugador dentro del nivel
+                player1->setPX(0);
+                player1->setPY(607);
+                player1->setPos(player1->getPX(),player1->getPY());
+                scene->addItem(player1);
+
+                //Aparición del jugador en la escena
+                player1->getSpown()->start(250);
+            }
+            else if(player1->getKeyplayer() == 's'){ //Steven
+                player1->stevenA();
+            }
+        }
+
+        jefe2 = new sray(850,406,ui->baile);
+        scene->addItem(jefe2);
+
+        nivel = LThree();
+
+        for(int i = 0; i < nivel.size(); i++){
+            list = nivel[i].split(',');
+            for(int m = 0; m < list.size(); m++){
+                switch (m) {
+                case 0:
+                    posx = list[m];
+                    break;
+
+                case 1:
+                    posy = list[m];
+                    break;
+
+                case 2:
+                    width = list[m];
+                    break;
+
+                case 3:
+                    height = list[m];
+                    break;
+
+                case 4:
+                    WallType = list[m];
+                    break;
+                }
+            }
+
+            X = posx.toInt();
+            Y = posy.toInt();
+            tamX = width.toInt();
+            tamY = height.toInt();
+
+            walls.push_back(new platform(X,Y,tamX,tamY));
+            scene->addItem(walls.back());
+        }
     }
 }
 
@@ -413,12 +483,19 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
         if(i->key() == Qt::Key_W){
             if(player1->getJump() == false){
                 player1->walkPlayer('W');
+                if(numNivel == 3){
+                    if(jefe2->getBanmove()){
+                        if(playermoves.size() < jefe2->getSmoves().size()){
+                            playermoves.push_back("Up");
+                        }
+                    }
+                }
             }
         }
 
         if(i->key() == Qt::Key_D){
             for(int i = 0; i < walls.size(); i++){
-                if(!enemigosH.empty()){
+                if(!enemigosH.empty() && (numNivel == 1 || numNivel == 2)){
                     for(int h = 0; h < enemigosH.size(); h++){
                         if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigosH.at(h)) == false){
                             QList<QGraphicsItem*> items = player1->collidingItems();
@@ -437,6 +514,13 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                     }
                 }
                 else{
+                    if(numNivel == 3){
+                        if(jefe2->getBanmove()){
+                            if(playermoves.size() < jefe2->getSmoves().size()){
+                                playermoves.push_back("Right");
+                            }
+                        }
+                    }
                     if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
                         QList<QGraphicsItem*> items = player1->collidingItems();
                         if(items.size() < 2){
@@ -451,7 +535,7 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
 
         if(i->key() == Qt::Key_A){
             for(int i = 0; i < walls.size(); i++){
-                if(!enemigosH.empty()){
+                if(!enemigosH.empty() && (numNivel == 1 || numNivel == 2)){
                     for(int h = 0; h < enemigosH.size(); h++){
                         if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false && player1->collidesWithItem(enemigosH.at(h)) == false){
                             QList<QGraphicsItem*> items = player1->collidingItems();
@@ -470,6 +554,13 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                     }
                 }
                 else{
+                    if(numNivel == 3){
+                        if(jefe2->getBanmove()){
+                            if(playermoves.size() < jefe2->getSmoves().size()){
+                                playermoves.push_back("Left");
+                            }
+                        }
+                    }
                     if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
                         QList<QGraphicsItem*> items = player1->collidingItems();
                         if(items.size() < 2){
@@ -487,6 +578,16 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
             ataque.push_back(new guyattack(player1->getPX(), player1->getPY(), player1->getLado(),'g'));
             scene->addItem(ataque.at(ataque.size()-1));
             ataque.at(ataque.size()-1)->getAguy()->start(75);
+        }
+
+        if(i->key() == Qt::Key_S){
+            if(numNivel == 3){
+                if(jefe2->getBanmove()){
+                    if(playermoves.size() < jefe2->getSmoves().size()){
+                        playermoves.push_back("Down");
+                    }
+                }
+            }
         }
     }
     else if(player1->getKeyplayer() == 's'){
@@ -569,6 +670,7 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
             scene->addItem(ataque.at(ataque.size()-1));
             ataque.at(ataque.size()-1)->getAguy()->start(75);
         }
+
     }
 }
 
@@ -747,11 +849,13 @@ void MainWindow::validatePlayerMove()
         }
 
         if(player1->collidesWithItem(lineRight)){
-            if(W+1280 < 5120){
-                W += 1280;
-                scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
-                lineRight->setLine(W+1280,0,W+1280,708);
-                lineLeft->setLine(W,0,W,708);
+            if(numNivel == 1 || numNivel == 2){
+                if(W+1280 < 5120){
+                    W += 1280;
+                    scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
+                    lineRight->setLine(W+1280,0,W+1280,708);
+                    lineLeft->setLine(W,0,W,708);
+                }
             }
         }
     }
@@ -823,12 +927,33 @@ void MainWindow::validateHammerAttack()
     }
 }
 
+void MainWindow::validateSrayMove()
+{
+    if(playermoves.size() == jefe2->getSmoves().size() && jefe2->getBanmove()){
+        QVector<QString> jefemoves = jefe2->getSmoves();
+        for(int i = 0; i < playermoves.size(); i++){
+            if(playermoves.at(i) != jefemoves.at(i)){
+                //Activar la música de cuando pierde o la nota de que perdio
+                banDe = true;
+            }
+        }
+        playermoves.clear();
+        if(banDe == false){
+            jefe2->setBanmove(false);
+            jefemoves.clear();
+            jefe2->setSmoves(jefemoves);
+            jefe2->label();
+        }
+    }
+}
+
 void MainWindow::detectC()
 {
     validateAttackGuy();
     validatePlayerMove();
     CollisionEnemy();
     if(numNivel == 1) validateBillsMove();
+    if(numNivel == 3) validateSrayMove();
     validateHammerAttack();
 }
 
@@ -845,7 +970,7 @@ void MainWindow::escribirArchivo(QString nom, QString modoj, char tipo ,int nive
     archivo.close();
 }
 
-void MainWindow::leerArchivo()
+void MainWindow::leerArchivo() //organizar para la posición de la escena
 {
     ifstream tempo;
     char dato[100];
@@ -1121,10 +1246,12 @@ MainWindow::~MainWindow()
     delete ui;
     delete scene;
     delete jefe1;
+    delete jefe2;
     delete player1;
     delete collisions;
     delete lineDown;
     delete lineLeft;
     delete lineRight;
     delete lineUp;
+    delete audio;
 }

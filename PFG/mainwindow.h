@@ -11,12 +11,10 @@
 #include <QString>
 #include <QPalette>
 #include <QImage>
-#include <vector>
 #include <qdebug.h>
-#include <math.h>
+#include <QMediaPlayer>
 
 //Librerias propias
-
 #include "levels.h"
 #include "platform.h"
 #include "spike.h"
@@ -26,6 +24,7 @@
 #include "hammerattack.h"
 #include "bills.h"
 #include "billsattack.h"
+#include "sray.h"
 
 #include <fstream>
 
@@ -52,6 +51,7 @@ public:
     void validatePlayerMove();
     void validateBillsMove();
     void validateHammerAttack();
+    void validateSrayMove();
     void validarmovimientosoneplayer(QKeyEvent *i);
     void CollisionEnemy();
     void escribirArchivo(QString nom, QString modoj, char tipo, int nivel, char dif, int x, int y, int Vidas);
@@ -89,8 +89,12 @@ private:
     QGraphicsScene *scene;
     player *player1;
     bills *jefe1;
+    sray *jefe2;
     QGraphicsLineItem *lineUp,*lineDown,*lineRight,*lineLeft;
 
+    QMediaPlayer *audio;
+
+    QVector<QString> playermoves;
     QList<platform*> walls;
     QList<spike*> spikes;
     QList<guyattack*> ataque;
@@ -109,5 +113,6 @@ private:
     int X, Y, tamX, tamY;
     int numNivel = 0;
     bool iniciars = false, registro = false, onep = false, multip = false, banU = false;
+    bool banDe = false;
 };
 #endif // MAINWINDOW_H
