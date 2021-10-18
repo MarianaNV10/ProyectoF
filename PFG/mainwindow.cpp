@@ -837,12 +837,73 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
     if(onep) validarmovimientosoneplayer(i);
 }
 
-void MainWindow::escribirArchivo(QString nom, QString modoj, int nivel, char dif, int x, int y, int Vidas)
+void MainWindow::escribirArchivo(QString nom, QString modoj, char tipo ,int nivel, char dif, int x, int y, int Vidas)
 {
     ofstream archivo;
     archivo.open("juego.txt",ios::out | ios::app);
-    archivo << nom.toStdString() << "," << modoj.toStdString() << "," << nivel << "," << dif << "," << x << "," << y << "," << Vidas << endl;
+    archivo << nom.toStdString() << "," << modoj.toStdString() <<"," << tipo << "," << nivel << "," << dif << "," << x << "," << y << "," << Vidas << endl;
     archivo.close();
+}
+
+void MainWindow::leerArchivo()
+{
+    ifstream tempo;
+    char dato[100];
+    char *puntero;
+    string info;
+
+    tempo.open("juego.txt", ios::in);
+    tempo.getline(dato, sizeof(dato));
+    while(!tempo.eof() && banU == false){
+        puntero = strtok(dato,",");
+        info = puntero;
+        if(ui->nombre->text() == puntero){
+            banU = true;
+            puntero = strtok(NULL,",");
+            info = puntero;
+            //qDebug() << info.c_str() << endl;
+            if(info == "Onep"){
+                onep = true;
+                puntero = strtok(NULL,",");
+                info = puntero;
+                qDebug() << info.c_str() << endl;
+                if(info == "s") player1 = new player('s');
+                else if(info == "g") player1 = new player('g');
+
+                puntero = strtok(NULL,",");
+                info = puntero;
+                qDebug() << info.c_str() << endl;
+                if(info == "1") numNivel = 1;
+                else if(info == "2") numNivel = 2;
+                else numNivel = 3;
+
+                puntero = strtok(NULL,",");
+                info = puntero;
+                if(info == "f") dificultad = 'f';
+                else if(info == "n") dificultad = 'n';
+                else dificultad = 'd';
+                qDebug() << info.c_str() << endl;
+
+                puntero = strtok(NULL,",");
+                info = puntero;
+                player1->setPX(atoi(puntero));
+                qDebug() << info.c_str() << endl;
+                puntero = strtok(NULL,",");
+                info = puntero;
+                player1->setPY(atoi(puntero));
+                qDebug() << info.c_str() << endl;
+                puntero = strtok(NULL,"\n");
+                info = puntero;
+                player1->setVidas(atoi(puntero));
+                qDebug() << info.c_str() << endl;
+
+            }
+            else if(info == "MultiP") multip = true;
+
+        }
+        tempo.getline(dato, sizeof(dato));
+    }
+    tempo.close();
 }
 
 void MainWindow::on_iniciarsesion_clicked()
@@ -879,8 +940,31 @@ void MainWindow::on_aceptar_clicked()
         //qDebug() << "leer el archivo" << endl;
         if(ui->nombre->isModified()){
             if(ui->nombre->text().length() > 3){
-                ui->usuario->hide();
-                ui->Partida->show();
+
+                ifstream tempo;
+                char dato[100];
+                char *puntero;
+
+                tempo.open("juego.txt", ios::in);
+                tempo.getline(dato, sizeof(dato));
+                while(!tempo.eof() && banU == false){
+                    puntero = strtok(dato,",");
+                    if(ui->nombre->text() == puntero) banU = true;
+                    tempo.getline(dato, sizeof(dato));
+                }
+                tempo.close();
+
+                if(banU){
+                    banU = false;
+                    ui->usuario->hide();
+                    ui->Partida->show();
+                }
+                else{
+                    QMessageBox message;
+                    message.setWindowTitle("Error");
+                    message.setText("No se encontró el nombre de usuario ingresado.");
+                    message.exec();
+                }
             }
             else{
                 QMessageBox message;
@@ -919,6 +1003,12 @@ void MainWindow::on_aceptar_clicked()
         }
     }
 }
+
+void MainWindow::on_cargarpartida_clicked()
+{
+    leerArchivo();
+}
+
 
 void MainWindow::on_nuevapartida_clicked()
 {
@@ -975,7 +1065,7 @@ void MainWindow::on_selectguy_clicked()
     setup_resorces();
     cargar_niveles(numNivel);
 
-    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep", player1->getKeyplayer(),numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
     //else //esta es la parte de multijugador
 
     collisions = new QTimer(this);
@@ -995,7 +1085,7 @@ void MainWindow::on_selectsteven_clicked()
     setup_resorces();
     cargar_niveles(numNivel);
 
-    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep", player1->getKeyplayer(),numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
     //else //esta es la parte de multijugador
 
     collisions = new QTimer(this);

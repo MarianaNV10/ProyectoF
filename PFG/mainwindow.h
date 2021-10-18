@@ -54,7 +54,8 @@ public:
     void validateHammerAttack();
     void validarmovimientosoneplayer(QKeyEvent *i);
     void CollisionEnemy();
-    void escribirArchivo(QString nom, QString modoj, int nivel, char dif, int x, int y, int Vidas);
+    void escribirArchivo(QString nom, QString modoj, char tipo, int nivel, char dif, int x, int y, int Vidas);
+    void leerArchivo();
     void keyPressEvent(QKeyEvent *i);
     ~MainWindow();
 
@@ -63,6 +64,7 @@ public slots:
     void detectC();
 
 private slots:
+
     void on_iniciarsesion_clicked();
     void on_registrarse_clicked();
     void on_cancelar_clicked();
@@ -75,12 +77,10 @@ private slots:
     void on_devolver_clicked();
     void on_selectguy_clicked();
     void on_selectsteven_clicked();
-
     void on_facil_clicked();
-
     void on_normal_clicked();
-
     void on_dificil_clicked();
+    void on_cargarpartida_clicked();
 
 private:
 
@@ -90,7 +90,6 @@ private:
     player *player1;
     bills *jefe1;
     QGraphicsLineItem *lineUp,*lineDown,*lineRight,*lineLeft;
-
 
     QList<platform*> walls;
     QList<spike*> spikes;
@@ -109,6 +108,6 @@ private:
     int H=0, W=0;
     int X, Y, tamX, tamY;
     int numNivel = 0;
-    bool iniciars = false, registro = false, onep = false, multip = false;
+    bool iniciars = false, registro = false, onep = false, multip = false, banU = false;
 };
 #endif // MAINWINDOW_H
