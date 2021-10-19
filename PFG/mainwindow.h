@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsLineItem>
+#include <QRandomGenerator>
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QMessageBox>
@@ -48,12 +49,23 @@ public:
     void cargar_niveles(int Nivel);
     void clean_levels();
     void validateAttackGuy();
+    void validateAttackOneP();
+    void validateAttackMultiP();
     void validatePlayerMove();
+    void validateOnePMove();
+    void validateMultiPMove();
     void validateBillsMove();
+    void validateBMOneP();
+    void validateBMMultiP();
     void validateHammerAttack();
+    void validateHammerOneP();
+    void validateHammerMultiP();
     void validateSrayMove();
     void validarmovimientosoneplayer(QKeyEvent *i);
+    void validarmovimientosMultiP(QKeyEvent *i);
     void CollisionEnemy();
+    void collisionEnemyOneP();
+    void collisionEnemyMultiP();
     void escribirArchivo(QString nom, QString modoj, char tipo, int nivel, char dif, int x, int y, int Vidas);
     void leerArchivo();
     void keyPressEvent(QKeyEvent *i);
@@ -94,13 +106,23 @@ private:
 
     QMediaPlayer *audio;
 
+    //OnePlayer
     QVector<QString> playermoves;
+    QList<guyattack*> ataque;
+
+    //MultiPlayer
+
+    QList<player*> Jugadores;
+    QList<guyattack*> ataque2; //steven
+
+    //Plataformas y Enemigos
     QList<platform*> walls;
     QList<spike*> spikes;
-    QList<guyattack*> ataque;
     QList<enemigos*> enemigosH;
     QList<hammerattack*> ataqueHammer;
     QList<billsattack*> ataquebills;
+
+
     QString posx,posy,width, height, WallType;
     QStringList list;
 

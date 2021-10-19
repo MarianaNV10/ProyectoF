@@ -11,24 +11,28 @@ MainWindow::MainWindow(QWidget *parent)
     W = 0;
 
     // para el inicio del juego
-    //setup_interfaz();
-    //inicio();
+    setup_interfaz();
+    inicio();
 
-    setup_resorces();
-    player1 = new player('g');
+//    audio = new QMediaPlayer();
+//    audio->setMedia(QUrl("qrc:/Imagenes/Audio/Intro.m4a"));
+//    audio->play();
+
+    //setup_resorces();
+    //player1 = new player('g');
     //player1 = new player('s');
 
-    numNivel = 3;
-    cargar_niveles(numNivel);
+//    numNivel = 3;
+//    cargar_niveles(numNivel);
 
-    audio = new QMediaPlayer();
-    audio->setMedia(QUrl("qrc:/Imagenes/Audio/Nivel2.mp3"));
-    audio->play();
+//    audio = new QMediaPlayer();
+//    audio->setMedia(QUrl("qrc:/Imagenes/Audio/Nivel2.mp3"));
+//    audio->play();
 
-    collisions = new QTimer(this);
-    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-    collisions->start(1);
-    setup_enemies();
+//    collisions = new QTimer(this);
+//    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+//    collisions->start(1);
+//    setup_enemies();
 }
 
 void MainWindow::setup_interfaz()
@@ -82,6 +86,7 @@ void MainWindow::inicio()
     ui->personaje->hide();
     ui->instruccion->hide();
     ui->nota->hide();
+    ui->baile->hide();
 }
 
 void MainWindow::setup_resorces()
@@ -182,10 +187,6 @@ void MainWindow::setup_enemies()
             }
         }
         break;
-
-    case 3:
-
-        break;
     }
 
 }
@@ -243,8 +244,29 @@ void MainWindow::cargar_niveles(int Nivel)
                 player1->stevenA();
             }
         }
+        else if(multip){
+            for(int l = 0; l < Jugadores.size(); l++){
+                if(Jugadores.at(l)->getKeyplayer() == 'g'){
+
+                    Jugadores.at(l)->setPX(0);
+                    Jugadores.at(l)->setPY(623);
+                    Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
+                    scene->addItem(Jugadores.at(l));
+                    //Aparición del jugador en la escena
+                    Jugadores.at(l)->getSpown()->start(250);
+                }
+                else if(Jugadores.at(l)->getKeyplayer() == 's'){
+                    Jugadores.at(l)->setPX(100);
+                    Jugadores.at(l)->setPY(623);
+                    Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
+                    scene->addItem(Jugadores.at(l));
+                    Jugadores.at(l)->stevenA();
+                }
+            }
+        }
 
         //Jefe final nivel 1
+
         jefe1 = new bills(370,414); //4799 311   370, 414
         scene->addItem(jefe1);
         jefe1->setBanSpown(true);
@@ -292,18 +314,37 @@ void MainWindow::cargar_niveles(int Nivel)
         scene->setBackgroundBrush(QPixmap(":/Imagenes/Fondos/Nivel2.jpeg"));
 
         if(onep){
+            //establece las posiciones del jugador dentro del nivel
+            player1->setPX(0);
+            player1->setPY(592);
+            player1->setPos(player1->getPX(),player1->getPY());
+            scene->addItem(player1);
             if(player1->getKeyplayer() == 'g'){ //The guy
-                //establece las posiciones del jugador dentro del nivel
-                player1->setPX(0);
-                player1->setPY(592);
-                player1->setPos(player1->getPX(),player1->getPY());
-                scene->addItem(player1);
-
                 //Aparición del jugador en la escena
                 player1->getSpown()->start(250);
             }
             else if(player1->getKeyplayer() == 's'){ //Steven
                 player1->stevenA();
+            }
+        }
+        else if(multip){
+            for(int l = 0; l < Jugadores.size(); l++){
+                if(Jugadores.at(l)->getKeyplayer() == 'g'){
+                    //establece las posiciones del jugador dentro del nivel
+                    Jugadores.at(l)->setPX(0);
+                    Jugadores.at(l)->setPY(592);
+                    Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
+                    scene->addItem(Jugadores.at(l));
+
+                    //Aparición del jugador en la escena
+                    Jugadores.at(l)->getSpown()->start(250);
+                }
+                else if(Jugadores.at(l)->getKeyplayer() == 's'){
+                    Jugadores.at(l)->setPX(100);
+                    Jugadores.at(l)->setPY(592);
+                    Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
+                    scene->addItem(Jugadores.at(l));
+                }
             }
         }
 
@@ -355,13 +396,12 @@ void MainWindow::cargar_niveles(int Nivel)
         onep = true;
 
         if(onep){
+            //establece las posiciones del jugador dentro del nivel
+            player1->setPX(0);
+            player1->setPY(607);
+            player1->setPos(player1->getPX(),player1->getPY());
+            scene->addItem(player1);
             if(player1->getKeyplayer() == 'g'){ //The guy
-                //establece las posiciones del jugador dentro del nivel
-                player1->setPX(0);
-                player1->setPY(607);
-                player1->setPos(player1->getPX(),player1->getPY());
-                scene->addItem(player1);
-
                 //Aparición del jugador en la escena
                 player1->getSpown()->start(250);
             }
@@ -413,6 +453,12 @@ void MainWindow::cargar_niveles(int Nivel)
 }
 
 void MainWindow::CollisionEnemy()
+{
+    if(onep){collisionEnemyOneP();}
+    else if(multip){collisionEnemyMultiP();}
+}
+
+void MainWindow::collisionEnemyOneP()
 {
     for(int h = 0; h < enemigosH.size(); h++){
         if(enemigosH.at(h)->getBanDeath()){
@@ -466,6 +512,72 @@ void MainWindow::CollisionEnemy()
 
                                 if(enemigosH.at(h)->getPx() <= walls.at(i)->getPosX()){
                                     enemigosH.at(h)->setMove('D');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MainWindow::collisionEnemyMultiP()
+{
+    for(int j = 0; j < Jugadores.size(); j++){
+        for(int h = 0; h < enemigosH.size(); h++){
+            if(enemigosH.at(h)->getBanDeath()){
+                scene->removeItem(enemigosH.at(h));
+                enemigosH.erase(enemigosH.begin()+h);
+                h -= 1;
+                break;
+            }
+            else{
+                if(enemigosH.at(h)->getBanD() && enemigosH.at(h)->getBanIdle() == false && !enemigosH.empty()){
+                    for(int i = 0; i < walls.size(); i++){
+                        if(Jugadores.at(j)->collidesWithItem(walls.at(i)) && enemigosH.at(h)->collidesWithItem(walls.at(i)) && enemigosH.at(h)->getBanDeath() == false){
+                            if(abs(Jugadores.at(j)->getPX()-enemigosH.at(h)->getPx()) <= enemigosH.at(h)->getRango() && enemigosH.at(h)->getType() == 'b'){
+                                if(enemigosH.at(h)->getBanAttack() == false){
+                                    enemigosH.at(h)->setBanAttack(true);
+                                    enemigosH.at(h)->ataque();
+                                }
+                            }
+                            else{
+                                if(Jugadores.at(j)->getPX() < enemigosH.at(h)->getPx()){
+                                    enemigosH.at(h)->setMove('A');
+                                    if(enemigosH.at(h)->getBanMove() == false){
+                                        enemigosH.at(h)->setBanMove(true);
+                                        enemigosH.at(h)->mover();
+                                    }
+                                }
+                                else if(Jugadores.at(j)->getPX() > enemigosH.at(h)->getPx()){
+                                    enemigosH.at(h)->setMove('D');
+                                    if(enemigosH.at(h)->getBanMove() == false){
+                                        enemigosH.at(h)->setBanMove(true);
+                                        enemigosH.at(h)->mover();
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            if(enemigosH.at(h)->getType() == 'm'){
+                                if(pow(pow(Jugadores.at(j)->getPX()-enemigosH.at(h)->getPx(),2)+pow(Jugadores.at(j)->getPY()-enemigosH.at(h)->getPy(),2),0.5) <= enemigosH.at(h)->getRadioHmm() && ataqueHammer.empty()){
+                                    if(Jugadores.at(j)->getPX() < enemigosH.at(h)->getPx()) ataqueHammer.push_back(new hammerattack(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy(), 'A'));
+                                    else ataqueHammer.push_back(new hammerattack(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy(), 'D'));
+                                    scene->addItem(ataqueHammer.at(ataqueHammer.size()-1));
+                                    ataqueHammer.at(ataqueHammer.size()-1)->parabola();
+                                    ataqueHammer.at(ataqueHammer.size()-1)->setEnemigo(h);
+                                }
+                            }
+                            if((Jugadores.at(j)->collidesWithItem(walls.at(i)) || enemigosH.at(h)->collidesWithItem(walls.at(i))) && (enemigosH.at(h)->getBanMove())){
+                                if(enemigosH.at(h)->collidesWithItem(walls.at(i))){
+                                    if(enemigosH.at(h)->getPx()+65 >= walls.at(i)->getPosX()+walls.at(i)->getWidth()){
+                                        enemigosH.at(h)->setMove('A');
+                                    }
+
+                                    if(enemigosH.at(h)->getPx() <= walls.at(i)->getPosX()){
+                                        enemigosH.at(h)->setMove('D');
+                                    }
                                 }
                             }
                         }
@@ -671,10 +783,232 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
             ataque.at(ataque.size()-1)->getAguy()->start(75);
         }
 
+        if(i->key() == Qt::Key_K){
+            if(numNivel == 3){
+                if(jefe2->getBanmove()){
+                    if(playermoves.size() < jefe2->getSmoves().size()){
+                        playermoves.push_back("Down");
+                    }
+                }
+            }
+        }
+
+
+    }
+}
+
+void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
+{
+    if(i->key() == Qt::Key_W){
+        if(Jugadores.at(0)->getJump() == false){
+            Jugadores.at(0)->walkPlayer('W');
+            if(numNivel == 3){
+                if(jefe2->getBanmove()){
+                    if(playermoves.size() < jefe2->getSmoves().size()){
+                        playermoves.push_back("Up");
+                    }
+                }
+            }
+        }
+    }
+
+    if(i->key() == Qt::Key_D){
+        for(int i = 0; i < walls.size(); i++){
+            if(!enemigosH.empty() && (numNivel == 1 || numNivel == 2)){
+                for(int h = 0; h < enemigosH.size(); h++){
+                    if(Jugadores.at(0)->collidesWithItem(lineRight) == false && Jugadores.at(0)->collidesWithItem(walls.at(i)) && Jugadores.at(0)->getJump() == false && Jugadores.at(0)->collidesWithItem(enemigosH.at(h)) == false){
+                        QList<QGraphicsItem*> items = Jugadores.at(0)->collidingItems();
+                        if(items.size() < 2){
+                            Jugadores.at(0)->cinematica();
+                        }
+                        break;
+                    }
+                    else{
+                        if(Jugadores.at(0)->collidesWithItem(enemigosH.at(h))){
+                            Jugadores.at(0)->setPX(Jugadores.at(0)->getObjeto()->rebote(Jugadores.at(0)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(0)->getLado()));
+                            Jugadores.at(0)->setPos(Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY());
+                            break;
+                        }
+                    }
+                }
+            }
+            else{
+                if(numNivel == 3){
+                    if(jefe2->getBanmove()){
+                        if(playermoves.size() < jefe2->getSmoves().size()){
+                            playermoves.push_back("Right");
+                        }
+                    }
+                }
+                if(Jugadores.at(0)->collidesWithItem(lineRight) == false && Jugadores.at(0)->collidesWithItem(walls.at(i)) && Jugadores.at(0)->getJump() == false){
+                    QList<QGraphicsItem*> items = Jugadores.at(0)->collidingItems();
+                    if(items.size() < 2){
+                        Jugadores.at(0)->cinematica();
+                    }
+                    break;
+                }
+            }
+        }
+        Jugadores.at(0)->walkPlayer('D');
+    }
+
+    if(i->key() == Qt::Key_A){
+        for(int i = 0; i < walls.size(); i++){
+            if(!enemigosH.empty() && (numNivel == 1 || numNivel == 2)){
+                for(int h = 0; h < enemigosH.size(); h++){
+                    if(Jugadores.at(0)->collidesWithItem(lineLeft) == false && Jugadores.at(0)->collidesWithItem(walls.at(i)) && Jugadores.at(0)->getJump() == false && Jugadores.at(0)->collidesWithItem(enemigosH.at(h)) == false){
+                        QList<QGraphicsItem*> items = Jugadores.at(0)->collidingItems();
+                        if(items.size() < 2){
+                            Jugadores.at(0)->cinematica();
+                        }
+                        break;
+                    }
+                    else{
+                        if(Jugadores.at(0)->collidesWithItem(enemigosH.at(h))){
+                            Jugadores.at(0)->setPX(Jugadores.at(0)->getObjeto()->rebote(Jugadores.at(0)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(0)->getLado()));
+                            Jugadores.at(0)->setPos(Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY());
+                            break;
+                        }
+                    }
+                }
+            }
+            else{
+                if(numNivel == 3){
+                    if(jefe2->getBanmove()){
+                        if(playermoves.size() < jefe2->getSmoves().size()){
+                            playermoves.push_back("Left");
+                        }
+                    }
+                }
+                if(Jugadores.at(0)->collidesWithItem(lineLeft) == false && Jugadores.at(0)->collidesWithItem(walls.at(i)) && Jugadores.at(0)->getJump() == false){
+                    QList<QGraphicsItem*> items = Jugadores.at(0)->collidingItems();
+                    if(items.size() < 2){
+                        Jugadores.at(0)->cinematica();
+                    }
+                    break;
+                }
+            }
+        }
+        Jugadores.at(0)->walkPlayer('A');
+    }
+
+    if(i->key() == Qt::Key_E){
+        Jugadores.at(0)->walkPlayer('T');
+        ataque.push_back(new guyattack(Jugadores.at(0)->getPX(), Jugadores.at(0)->getPY(), Jugadores.at(0)->getLado(),'g'));
+        scene->addItem(ataque.at(ataque.size()-1));
+        ataque.at(ataque.size()-1)->getAguy()->start(75);
+    }
+
+    if(i->key() == Qt::Key_S){
+        if(numNivel == 3){
+            if(jefe2->getBanmove()){
+                if(playermoves.size() < jefe2->getSmoves().size()){
+                    playermoves.push_back("Down");
+                }
+            }
+        }
+    }
+
+    if(i->key() == Qt::Key_I){
+        if(Jugadores.at(1)->getJump() == false){
+            Jugadores.at(1)->walkPlayer('I');
+        }
+    }
+
+    if(i->key() == Qt::Key_L){
+        for(int i = 0; i < walls.size(); i++){
+            if(!enemigosH.empty()){
+                for(int h = 0; h < enemigosH.size(); h++){
+                    if(Jugadores.at(1)->collidesWithItem(lineRight) == false && Jugadores.at(1)->collidesWithItem(walls.at(i)) && Jugadores.at(1)->getJump() == false && Jugadores.at(1)->collidesWithItem(enemigosH.at(h)) == false){
+                        QList<QGraphicsItem*> items = Jugadores.at(1)->collidingItems();
+                        if(items.size() < 2){
+                            Jugadores.at(1)->cinematica();
+                        }
+                        break;
+                    }
+                    else{
+                        if(Jugadores.at(1)->collidesWithItem(enemigosH.at(h))){
+                            Jugadores.at(1)->setPX(Jugadores.at(1)->getObjeto()->rebote(Jugadores.at(1)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(1)->getLado()));
+                            Jugadores.at(1)->setPos(Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY());
+                            break;
+                        }
+                    }
+                }
+            }
+            else{
+                if(Jugadores.at(1)->collidesWithItem(lineRight) == false && Jugadores.at(1)->collidesWithItem(walls.at(i)) && Jugadores.at(1)->getJump() == false){
+                    QList<QGraphicsItem*> items = Jugadores.at(1)->collidingItems();
+                    if(items.size() < 2){
+                        Jugadores.at(1)->cinematica();
+                    }
+                    break;
+                }
+            }
+        }
+        Jugadores.at(1)->walkPlayer('L');
+    }
+
+    if(i->key() == Qt::Key_J){
+        for(int i = 0; i < walls.size(); i++){
+            if(!enemigosH.empty()){
+                for(int h = 0; h < enemigosH.size(); h++){
+                    if(Jugadores.at(1)->collidesWithItem(lineLeft) == false && Jugadores.at(1)->collidesWithItem(walls.at(i)) && Jugadores.at(1)->getJump() == false && Jugadores.at(1)->collidesWithItem(enemigosH.at(h)) == false){
+                        QList<QGraphicsItem*> items = Jugadores.at(1)->collidingItems();
+                        if(items.size() < 2){
+                            Jugadores.at(1)->cinematica();
+                        }
+                        break;
+                    }
+                    else{
+                        if(Jugadores.at(1)->collidesWithItem(enemigosH.at(h))){
+                            Jugadores.at(1)->setPX(Jugadores.at(1)->getObjeto()->rebote(Jugadores.at(1)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(1)->getLado()));
+                            Jugadores.at(1)->setPos(Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY());
+                            break;
+                        }
+                    }
+                }
+            }
+            else{
+                if(Jugadores.at(1)->collidesWithItem(lineLeft) == false && Jugadores.at(1)->collidesWithItem(walls.at(i)) && Jugadores.at(1)->getJump() == false){
+                    QList<QGraphicsItem*> items = Jugadores.at(1)->collidingItems();
+                    if(items.size() < 2){
+                        Jugadores.at(1)->cinematica();
+                    }
+                    break;
+                }
+            }
+        }
+        Jugadores.at(1)->walkPlayer('J');
+    }
+
+    if(i->key() == Qt::Key_O){
+        Jugadores.at(1)->walkPlayer('T');
+        ataque2.push_back(new guyattack(Jugadores.at(1)->getPX(), Jugadores.at(1)->getPY(), Jugadores.at(1)->getLado(),'s'));
+        scene->addItem(ataque2.at(ataque2.size()-1));
+        ataque2.at(ataque2.size()-1)->getAguy()->start(75);
+    }
+
+    if(i->key() == Qt::Key_K){
+        if(numNivel == 3){
+            if(jefe2->getBanmove()){
+                if(playermoves.size() < jefe2->getSmoves().size()){
+                    playermoves.push_back("Down");
+                }
+            }
+        }
     }
 }
 
 void MainWindow::validateAttackGuy()
+{
+    if(onep){validateAttackOneP();}
+    else if(multip){
+        validateAttackOneP();
+        validateAttackMultiP();
+    }
+}
+
+void MainWindow::validateAttackOneP()
 {
     if(!ataque.empty()){
         if(!enemigosH.empty()){
@@ -767,7 +1101,106 @@ void MainWindow::validateAttackGuy()
     }
 }
 
+void MainWindow::validateAttackMultiP()
+{
+    if(!ataque2.empty()){
+        if(!enemigosH.empty()){
+            for(int h = 0; h < enemigosH.size(); h++){
+                for(int it = 0; it < ataque2.size(); it++){
+                    if(numNivel == 1){
+                        if(ataque2.at(it)->collidesWithItem(jefe1) && jefe1->scene() == scene){
+                            ataque2.at(it)->getAguy()->stop();
+                            if(jefe1->getVida() == 0 && jefe1->getBanDeath() == false){
+                                if(jefe1->getBanMove()){
+                                    jefe1->setBanMove(false);
+                                    jefe1->getMove()->stop();
+                                    delete jefe1->getMove();
+                                }
+                                else if(jefe1->getBanAttack()){
+                                    jefe1->setBanAttack(false);
+                                    jefe1->getAttack()->stop();
+                                    delete jefe1->getAttack();
+                                }
+                                jefe1->setBanDeath(true);
+                                jefe1->death();
+                            }
+                            else if(jefe1->getVida() > 0){
+                                jefe1->setVida(jefe1->getVida()-ataque2.at(it)->getDamage());
+                            }
+
+                            if(ataque2.at(it)->scene() == scene){
+                                scene->removeItem(ataque2.at(it));
+                            }
+                            ataque2.erase(ataque2.begin()+it);
+                            it -= 1;
+                            break;
+                        }
+                    }
+
+                    if(ataque2.at(it)->collidesWithItem(enemigosH.at(h))){ //Cuando el jugador ataque2 al enemigo -> RECORDAR QUE DEPENDE DE LA DIFICULTAD
+                        //Se le resta vida y acorde a la vida se elimina o no
+                        ataque2.at(it)->getAguy()->stop();
+                        enemigosH.at(h)->setVidas(enemigosH.at(h)->getVidas()-ataque2.at(it)->getDamage());
+                        if(enemigosH.at(h)->getVidas() == 0){
+                            enemigosH.at(h)->setBanD(false);
+                            if(enemigosH.at(h)->getBanMove()){
+                                enemigosH.at(h)->setBanMove(false);
+                                enemigosH.at(h)->getMove()->stop();
+                                enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
+                                enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
+                                //enemigoH->rebote(15,0);
+                                delete enemigosH.at(h)->getMove();
+                            }
+                            if(enemigosH.at(h)->getBanAttack()){
+                                enemigosH.at(h)->setBanAttack(false);
+                                if(enemigosH.at(h)->getType() == 'b'){
+                                    enemigosH.at(h)->getAttack()->stop();
+                                    enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
+                                    enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
+                                    delete enemigosH.at(h)->getAttack();
+                                }
+                                else if(enemigosH.at(h)->getType() == 'm'){
+                                    enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
+                                    enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
+                                }
+                            }
+                            if(enemigosH.at(h)->getType() == 'b') enemigosH.at(h)->muerte();
+                            else enemigosH.at(h)->setBanDeath(true);
+                        }
+
+                        if(ataque2.at(it)->scene() == scene){
+                            scene->removeItem(ataque2.at(it));
+                        }
+                        ataque2.erase(ataque2.begin()+it);
+                        it -= 1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        for(int it = 0; it < ataque2.size(); it++){
+            for(int p = 0; p < walls.size(); p++){
+                if((ataque2.at(it)->collidesWithItem(walls.at(p))) || (ataque2.at(it)->collidesWithItem(lineLeft)) || (ataque2.at(it)->collidesWithItem(lineRight))){
+                    ataque2.at(it)->getAguy()->stop();
+                    if(ataque2.at(it)->scene() == scene){
+                        scene->removeItem(ataque2.at(it));
+                    }
+                    ataque2.erase(ataque2.begin()+it);
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void MainWindow::validatePlayerMove()
+{
+    if(onep){validateOnePMove();}
+    else if(multip){validateMultiPMove();}
+}
+
+void MainWindow::validateOnePMove()
 {
     if(player1->getJump()){
         for(int m = 0; m < walls.size(); m++){
@@ -840,7 +1273,8 @@ void MainWindow::validatePlayerMove()
             if(player1->collidesWithItem(walls.at(m)) == false){
                 if(m+1 == walls.size() && player1->getJumpDown() == false){
                     player1->setAy(-1);
-                    player1->walkPlayer('W');
+                    if(player1->getKeyplayer() == 'g') player1->walkPlayer('W');
+                    else if(player1->getKeyplayer() == 's') player1->walkPlayer('I');
                 }
             }
             else{
@@ -861,7 +1295,110 @@ void MainWindow::validatePlayerMove()
     }
 }
 
+void MainWindow::validateMultiPMove()
+{
+    for(int s = 0; s < Jugadores.size(); s++){
+        if(Jugadores.at(s)->getJump()){
+
+            for(int m = 0; m < walls.size(); m++){
+                if(Jugadores.at(s)->getJumpUp() && Jugadores.at(s)->collidesWithItem(walls.at(m))){ //Revisar esta parte
+                    Jugadores.at(s)->setAy(-1);
+                }
+
+                if(Jugadores.at(s)->getJumpDown() && Jugadores.at(s)->collidesWithItem(walls.at(m))){
+                    Jugadores.at(s)->getLeap()->stop();
+                    Jugadores.at(s)->setPY(walls.at(m)->getPosY()-49);
+                    Jugadores.at(s)->setPos(Jugadores.at(s)->getPX(),Jugadores.at(s)->getPY());
+                    Jugadores.at(s)->setAy(11);
+                    Jugadores.at(s)->setJump(false);
+                    Jugadores.at(s)->setJumpUp(false);
+                    Jugadores.at(s)->setJumpDown(false);
+                    Jugadores.at(s)->setJumpP(false);
+                    //delete Jugadores.at(s)->getLeap();
+                    break;
+                }
+
+                if(Jugadores.at(s)->collidesWithItem(lineUp)){
+                    Jugadores.at(s)->setAy(-1);
+                }
+            }
+
+            if(Jugadores.at(s)->collidesWithItem(lineLeft)){
+                Jugadores.at(s)->setJumpP(false);
+            }
+
+            if(Jugadores.at(s)->collidesWithItem(lineRight)){
+                if(W+1280 < 5120){
+                    W += 1280;
+                    scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
+                    lineRight->setLine(W+1280,0,W+1280,708);
+                    //lineLeft->setLine(W,0,W,708);
+                }
+            }
+
+            if(Jugadores.at(s)->collidesWithItem(lineDown)){
+                //Se posiciona al jugador según la pantalla de nivele en que se encuentre
+                if(numNivel == 1){
+                    if(W == 0){
+                        Jugadores.at(s)->setPX(0);
+                        Jugadores.at(s)->setPY(623);
+                        Jugadores.at(s)->setPos(Jugadores.at(s)->getPX(),Jugadores.at(s)->getPY());
+                    }
+                    else if(W == 1280){
+                        Jugadores.at(s)->setPX(1458);
+                        Jugadores.at(s)->setPY(623);
+                        Jugadores.at(s)->setPos(Jugadores.at(s)->getPX(),Jugadores.at(s)->getPY());
+                    }
+                    else if(W == 2560){
+                        Jugadores.at(s)->setPX(2648);
+                        Jugadores.at(s)->setPY(623);
+                        Jugadores.at(s)->setPos(Jugadores.at(s)->getPX(),Jugadores.at(s)->getPY());
+                    }
+                    Jugadores.at(s)->getLeap()->stop();
+                    Jugadores.at(s)->setAy(11);
+                    Jugadores.at(s)->setJump(false);
+                    Jugadores.at(s)->setJumpUp(false);
+                    Jugadores.at(s)->setJumpDown(false);
+                    Jugadores.at(s)->setJumpP(false);
+                    delete Jugadores.at(s)->getLeap();
+                }
+            }
+        }
+        else{ //Parte de la caída libre del personaje
+            for(int m = 0; m < walls.size(); m ++){
+                if(Jugadores.at(s)->collidesWithItem(walls.at(m)) == false){
+                    if(m+1 == walls.size() && Jugadores.at(s)->getJumpDown() == false){
+                        Jugadores.at(s)->setAy(-1);
+                        if(Jugadores.at(s)->getKeyplayer() == 'g') Jugadores.at(s)->walkPlayer('W');
+                        else if(Jugadores.at(s)->getKeyplayer() == 's') Jugadores.at(s)->walkPlayer('I');
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+
+            if(Jugadores.at(s)->collidesWithItem(lineRight)){
+                if(numNivel == 1 || numNivel == 2){
+                    if(W+1280 < 5120){
+                        W += 1280;
+                        scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
+                        lineRight->setLine(W+1280,0,W+1280,708);
+                        lineLeft->setLine(W,0,W,708);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void MainWindow::validateBillsMove()
+{
+    if(onep) {validateBMOneP();}
+    else if(multip) {validateBMMultiP();}
+}
+
+void MainWindow::validateBMOneP()
 {
     if(jefe1->scene() == scene){
         if(jefe1->collidesWithItem(lineUp)){
@@ -908,12 +1445,105 @@ void MainWindow::validateBillsMove()
     }
 }
 
+void MainWindow::validateBMMultiP()
+{
+    if(jefe1->scene() == scene){
+        if(jefe1->collidesWithItem(lineUp)){
+            jefe1->setVy(20);
+        }
+
+        for(int i = 0; i < walls.size(); i++){
+            if(jefe1->collidesWithItem(walls.at(i))){
+                jefe1->setVy(-20);
+            }
+        }
+    }
+
+    for(int s = 0; s < Jugadores.size(); s++){
+        if(jefe1->scene() == scene){
+            if(jefe1->getBanDis() == true){
+                if(jefe1->scene() == scene) scene->removeItem(jefe1);
+                //delete jefe1;
+            }
+            else{
+                int alt;
+                std::uniform_int_distribution<int> Alt(1,2);
+                alt = Alt(*QRandomGenerator::global());
+                if(alt == 1){
+                    if(pow(pow(Jugadores.at(0)->getPX()-jefe1->getPx(),2)+pow(Jugadores.at(0)->getPY()-jefe1->getPy(),2),0.5) <= jefe1->getRange()){
+                        if(ataquebills.empty() && jefe1->getBanAttack() == false && jefe1->getBanSpown() == false && jefe1->getBanDeath() == false){
+                            jefe1->getMove()->stop();
+                            delete jefe1->getMove();
+                            jefe1->setBanAttack(true);
+                            jefe1->attack();
+                            ataquebills.push_back(new billsattack(Jugadores.at(0)->getPX(),0));
+                            scene->addItem(ataquebills.at(ataquebills.size()-1));
+                        }
+                    }
+                }
+                else if(alt == 2){
+                    if(pow(pow(Jugadores.at(1)->getPX()-jefe1->getPx(),2)+pow(Jugadores.at(1)->getPY()-jefe1->getPy(),2),0.5) <= jefe1->getRange()){
+                        if(ataquebills.empty() && jefe1->getBanAttack() == false && jefe1->getBanSpown() == false && jefe1->getBanDeath() == false){
+                            jefe1->getMove()->stop();
+                            delete jefe1->getMove();
+                            jefe1->setBanAttack(true);
+                            jefe1->attack();
+                            ataquebills.push_back(new billsattack(Jugadores.at(1)->getPX(),0));
+                            scene->addItem(ataquebills.at(ataquebills.size()-1));
+                        }
+                    }
+                }
+
+                if(!ataquebills.empty() && jefe1->getBanDeath() == false){ //REVISAR ESTA PARTE
+                    for(int b = 0; b < ataquebills.size(); b++){
+                        for(int w = 0; w < walls.size(); w++){
+                            if(ataquebills.at(b)->collidesWithItem(Jugadores.at(s)) || ataquebills.at(b)->collidesWithItem(walls.at(w))){
+                                ataquebills.at(b)->getTime()->stop();
+                                delete ataquebills.at(b)->getTime();
+                                scene->removeItem(ataquebills.at(b));
+                                ataquebills.erase(ataquebills.begin()+b);
+                                b--;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void MainWindow::validateHammerAttack()
+{
+    if(onep){validateHammerOneP();}
+    else if(multip){validateHammerMultiP();}
+}
+
+void MainWindow::validateHammerOneP()
 {
     if(!ataqueHammer.empty()){
         for(int a = 0; a < ataqueHammer.size(); a++){
             for(int w = 0; w < walls.size(); w++){
                 if(ataqueHammer.at(a)->collidesWithItem(lineDown) || ataqueHammer.at(a)->collidesWithItem(walls.at(w)) || ataqueHammer.at(a)->collidesWithItem(player1)){
+                    //cuando toque al jugador le restamos vida -> Muere
+                    ataqueHammer.at(a)->getTiro()->stop();
+                    scene->removeItem(ataqueHammer.at(a));
+                    delete ataqueHammer.at(a)->getTiro();
+                    ataqueHammer.erase(ataqueHammer.begin()+a);
+                    a--;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void MainWindow::validateHammerMultiP()
+{
+    if(!ataqueHammer.empty()){
+        for(int a = 0; a < ataqueHammer.size(); a++){
+            for(int w = 0; w < walls.size(); w++){
+                if(ataqueHammer.at(a)->collidesWithItem(lineDown) || ataqueHammer.at(a)->collidesWithItem(walls.at(w)) || ataqueHammer.at(a)->collidesWithItem(Jugadores.at(0)) || ataqueHammer.at(a)->collidesWithItem(Jugadores.at(1))){
                     //cuando toque al jugador le restamos vida -> Muere
                     ataqueHammer.at(a)->getTiro()->stop();
                     scene->removeItem(ataqueHammer.at(a));
@@ -960,6 +1590,7 @@ void MainWindow::detectC()
 void MainWindow::keyPressEvent(QKeyEvent *i)
 {
     if(onep) validarmovimientosoneplayer(i);
+    else if(multip) validarmovimientosMultiP(i);
 }
 
 void MainWindow::escribirArchivo(QString nom, QString modoj, char tipo ,int nivel, char dif, int x, int y, int Vidas)
@@ -1191,7 +1822,6 @@ void MainWindow::on_selectguy_clicked()
     cargar_niveles(numNivel);
 
     if(onep) escribirArchivo(ui->nombre->text(),"Onep", player1->getKeyplayer(),numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
-    //else //esta es la parte de multijugador
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -1211,7 +1841,6 @@ void MainWindow::on_selectsteven_clicked()
     cargar_niveles(numNivel);
 
     if(onep) escribirArchivo(ui->nombre->text(),"Onep", player1->getKeyplayer(),numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
-    //else //esta es la parte de multijugador
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -1223,21 +1852,72 @@ void MainWindow::on_facil_clicked()
 {
     dificultad = 'f';
     ui->dificultad->hide();
-    ui->personaje->show();
+    if(onep) ui->personaje->show();
+    else if(multip){
+        //creación de los jugadores para la versión de múltijugador
+        ui->instruccion->hide();
+        delete scene;
+        Jugadores.push_back(new player('g'));
+        Jugadores.push_back(new player('s'));
+
+        setup_resorces();
+        cargar_niveles(numNivel);
+
+        //GUARDAR LA INFORMACIÓN EN EL ARCHIVO
+
+        collisions = new QTimer(this);
+        connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+        collisions->start(1);
+        setup_enemies();
+    }
 }
 
 void MainWindow::on_normal_clicked()
 {
     dificultad = 'n';
     ui->dificultad->hide();
-    ui->personaje->show();
+    if(onep) ui->personaje->show();
+    else if(multip){
+        //creación de los jugadores para la versión de múltijugador
+        ui->instruccion->hide();
+        delete scene;
+        Jugadores.push_back(new player('g'));
+        Jugadores.push_back(new player('s'));
+
+        setup_resorces();
+        cargar_niveles(numNivel);
+
+        //GUARDAR LA INFORMACIÓN EN EL ARCHIVO
+
+        collisions = new QTimer(this);
+        connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+        collisions->start(1);
+        setup_enemies();
+    }
 }
 
 void MainWindow::on_dificil_clicked()
 {
     dificultad = 'd';
     ui->dificultad->hide();
-    ui->personaje->show();
+    if(onep) ui->personaje->show();
+    else if(multip){
+        //creación de los jugadores para la versión de múltijugador
+        ui->instruccion->hide();
+        delete scene;
+        Jugadores.push_back(new player('g'));
+        Jugadores.push_back(new player('s'));
+
+        setup_resorces();
+        cargar_niveles(numNivel);
+
+        //GUARDAR LA INFORMACIÓN EN EL ARCHIVO
+
+        collisions = new QTimer(this);
+        connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+        collisions->start(1);
+        setup_enemies();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -1246,12 +1926,18 @@ MainWindow::~MainWindow()
     delete ui;
     delete scene;
     delete jefe1;
-    delete jefe2;
-    delete player1;
+    //delete jefe2;
+    if(onep){delete player1;}
     delete collisions;
     delete lineDown;
     delete lineLeft;
     delete lineRight;
     delete lineUp;
     delete audio;
+    if(multip){
+        for(int i = 0; i < Jugadores.size(); i++){
+            Jugadores.erase(Jugadores.begin()+i);
+            i -= 1;
+        }
+    }
 }

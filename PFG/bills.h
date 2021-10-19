@@ -15,7 +15,7 @@ private:
 
     QString bspown[3] = {":/Imagenes/Bills_Sprites/Spown/Spown1.png",":/Imagenes/Bills_Sprites/Spown/Spown3.png",":/Imagenes/Bills_Sprites/Spown/Spown2.png"};
     QString bdeath[4] = {":/Imagenes/Bills_Sprites/Muerte/Muerte1.png",":/Imagenes/Bills_Sprites/Muerte/Muerte2.png",":/Imagenes/Bills_Sprites/Muerte/Muerte3.png",":/Imagenes/Bills_Sprites/Muerte/Muerte4.png"};
-    QString bmove[5] = {":/Imagenes/Bills_Sprites/batalla/batalla1.png",":/Imagenes/Bills_Spritesbatalla/batalla2.png",":/Imagenes/Bills_Sprites/batalla/batalla3.png",":/Imagenes/Bills_Sprites/batalla/batalla4.png",":/Imagenes/Bills_Sprites/batalla/batalla5.png"};
+    QString bmove[5] = {":/Imagenes/Bills_Sprites/batalla/batalla1.png",":/Imagenes/Bills_Sprites/batalla/batalla2.png",":/Imagenes/Bills_Sprites/batalla/batalla3.png",":/Imagenes/Bills_Sprites/batalla/batalla4.png",":/Imagenes/Bills_Sprites/batalla/batalla5.png"};
     QString battack[2] = {":/Imagenes/Bills_Sprites/Ataque/Ataque1.png",":/Imagenes/Bills_Sprites/Ataque/Ataque2.png"};
 
     QTimer *mSpown, *mDeath, *mMove, *mAttack;
