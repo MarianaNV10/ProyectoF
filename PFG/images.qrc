@@ -167,5 +167,9 @@
         <file>Imagenes/Audio/Intro.m4a</file>
         <file>Imagenes/Audio/Nivel1.mp3</file>
         <file>Imagenes/Audio/Nivel2.mp3</file>
+        <file>Imagenes/Audio/Down.mp3</file>
+        <file>Imagenes/Audio/Left.mp3</file>
+        <file>Imagenes/Audio/Right.mp3</file>
+        <file>Imagenes/Audio/Up.mp3</file>
     </qresource>
 </RCC>

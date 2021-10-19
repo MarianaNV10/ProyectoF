@@ -171,10 +171,20 @@ void MainWindow::setup_enemies()
 
         for(int p = 0; p < walls.size(); p++){
             if((walls.at(p)->getPosX() == 1294 && walls.at(p)->getPosY() == 424) || (walls.at(p)->getPosX() == 1674 && walls.at(p)->getPosY() == 424) ||
-                (walls.at(p)->getPosX() == 2059 && walls.at(p)->getPosY() == 424)){
-                enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+0.5*walls.at(p)->getWidth(),walls.at(p)->getPosY()-64,'b'));
-                scene->addItem(enemigosH.at(enemigosH.size()-1));
-                enemigosH.at(enemigosH.size()-1)->idle();
+                (walls.at(p)->getPosX() == 2059 && walls.at(p)->getPosY() == 424) || (walls.at(p)->getPosX() == 3554 && walls.at(p)->getPosY() == 566)){
+                if(walls.at(p)->getPosX() == 3554 && walls.at(p)->getPosY() == 566){
+                    enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+74,walls.at(p)->getPosY()-64,'b'));
+                    enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+218,walls.at(p)->getPosY()-64,'b'));
+                    scene->addItem(enemigosH.at(enemigosH.size()-1));
+                    scene->addItem(enemigosH.at(enemigosH.size()-2));
+                    enemigosH.at(enemigosH.size()-1)->idle();
+                    enemigosH.at(enemigosH.size()-2)->idle();
+                }
+                else{
+                    enemigosH.push_back(new enemigos(walls.at(p)->getPosX()+0.5*walls.at(p)->getWidth(),walls.at(p)->getPosY()-64,'b'));
+                    scene->addItem(enemigosH.at(enemigosH.size()-1));
+                    enemigosH.at(enemigosH.size()-1)->idle();
+                }
             }
             else if((walls.at(p)->getPosX() == 416 && walls.at(p)->getPosY() == 541) || (walls.at(p)->getPosX() == 2418 && walls.at(p)->getPosY() == 348) ||
                     (walls.at(p)->getPosX() == 3534 && walls.at(p)->getPosY() == 218)){
@@ -397,7 +407,7 @@ void MainWindow::cargar_niveles(int Nivel)
 
         if(onep){
             //establece las posiciones del jugador dentro del nivel
-            player1->setPX(0);
+            player1->setPX(350);
             player1->setPY(607);
             player1->setPos(player1->getPX(),player1->getPY());
             scene->addItem(player1);
@@ -594,7 +604,6 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
     if(player1->getKeyplayer() == 'g'){
         if(i->key() == Qt::Key_W){
             if(player1->getJump() == false){
-                player1->walkPlayer('W');
                 if(numNivel == 3){
                     if(jefe2->getBanmove()){
                         if(playermoves.size() < jefe2->getSmoves().size()){
@@ -602,6 +611,7 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                         }
                     }
                 }
+                else {player1->walkPlayer('W');}
             }
         }
 
@@ -706,7 +716,14 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
 
         if(i->key() == Qt::Key_I){
             if(player1->getJump() == false){
-                player1->walkPlayer('I');
+                if(numNivel == 3){
+                    if(jefe2->getBanmove()){
+                        if(playermoves.size() < jefe2->getSmoves().size()){
+                            playermoves.push_back("Up");
+                        }
+                    }
+                }
+                else {player1->walkPlayer('I');}
             }
         }
 
@@ -731,6 +748,13 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                     }
                 }
                 else{
+                    if(numNivel == 3){
+                        if(jefe2->getBanmove()){
+                            if(playermoves.size() < jefe2->getSmoves().size()){
+                                playermoves.push_back("Right");
+                            }
+                        }
+                    }
                     if(player1->collidesWithItem(lineRight) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
                         QList<QGraphicsItem*> items = player1->collidingItems();
                         if(items.size() < 2){
@@ -764,6 +788,13 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                     }
                 }
                 else{
+                    if(numNivel == 3){
+                        if(jefe2->getBanmove()){
+                            if(playermoves.size() < jefe2->getSmoves().size()){
+                                playermoves.push_back("Left");
+                            }
+                        }
+                    }
                     if(player1->collidesWithItem(lineLeft) == false && player1->collidesWithItem(walls.at(i)) && player1->getJump() == false){
                         QList<QGraphicsItem*> items = player1->collidingItems();
                         if(items.size() < 2){
@@ -1593,11 +1624,16 @@ void MainWindow::keyPressEvent(QKeyEvent *i)
     else if(multip) validarmovimientosMultiP(i);
 }
 
-void MainWindow::escribirArchivo(QString nom, QString modoj, char tipo ,int nivel, char dif, int x, int y, int Vidas)
+void MainWindow::escribirArchivo(QString nom, QString modoj, int nivel, char dif, char tipo, int x, int y, int Vidas, char tipo1 = 'n', int x1 = -1, int y1 = -1, int Vidas1 = -1)
 {
     ofstream archivo;
     archivo.open("juego.txt",ios::out | ios::app);
-    archivo << nom.toStdString() << "," << modoj.toStdString() <<"," << tipo << "," << nivel << "," << dif << "," << x << "," << y << "," << Vidas << endl;
+    if(onep){
+        archivo << nom.toStdString() << "," << modoj.toStdString() <<"," << tipo << "," << nivel << "," << dif << "," << x << "," << y << "," << Vidas << endl;
+    }
+    else if(multip){
+        archivo << nom.toStdString() << "," << modoj.toStdString() <<"," << nivel << "," << dif << "," << tipo << "," << x << "," << y << "," << Vidas << "," << tipo1 << "," << x1 << "," << y1 << "," << Vidas1 << endl;
+    }
     archivo.close();
 }
 
@@ -1617,18 +1653,15 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
             banU = true;
             puntero = strtok(NULL,",");
             info = puntero;
-            //qDebug() << info.c_str() << endl;
             if(info == "Onep"){
                 onep = true;
                 puntero = strtok(NULL,",");
                 info = puntero;
-                qDebug() << info.c_str() << endl;
                 if(info == "s") player1 = new player('s');
                 else if(info == "g") player1 = new player('g');
 
                 puntero = strtok(NULL,",");
                 info = puntero;
-                qDebug() << info.c_str() << endl;
                 if(info == "1") numNivel = 1;
                 else if(info == "2") numNivel = 2;
                 else numNivel = 3;
@@ -1638,23 +1671,47 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
                 if(info == "f") dificultad = 'f';
                 else if(info == "n") dificultad = 'n';
                 else dificultad = 'd';
-                qDebug() << info.c_str() << endl;
 
                 puntero = strtok(NULL,",");
                 info = puntero;
                 player1->setPX(atoi(puntero));
-                qDebug() << info.c_str() << endl;
                 puntero = strtok(NULL,",");
                 info = puntero;
                 player1->setPY(atoi(puntero));
-                qDebug() << info.c_str() << endl;
                 puntero = strtok(NULL,"\n");
                 info = puntero;
                 player1->setVidas(atoi(puntero));
-                qDebug() << info.c_str() << endl;
 
             }
-            else if(info == "MultiP") multip = true;
+            else if(info == "Multip"){
+                multip = true;
+
+                puntero = strtok(NULL,",");
+                info = puntero;
+                if(info == "1") numNivel = 1;
+                else if(info == "2") numNivel = 2;
+                else numNivel = 3;
+
+                puntero = strtok(NULL,",");
+                info = puntero;
+                if(info == "f") dificultad = 'f';
+                else if(info == "n") dificultad = 'n';
+                else dificultad = 'd';
+
+                for(int s = 0; s < 8; s++){
+                    puntero = strtok(NULL,",");
+                    info = puntero;
+                    if(s == 0 || s == 4){
+                        if(info == "g"){Jugadores.push_back(new player('g'));}
+                        else if(info == "s"){Jugadores.push_back(new player('s'));}
+                    }
+                    else if(s == 1 || s == 5) Jugadores.at(Jugadores.size()-1)->setPX(atoi(puntero));
+                    else if(s == 2 || s == 6) Jugadores.at(Jugadores.size()-1)->setPY(atoi(puntero));
+                    else if(s == 3 || s == 7) Jugadores.at(Jugadores.size()-1)->setVidas(atoi(puntero));
+
+                    qDebug() << info.c_str() << endl;
+                }
+            }
 
         }
         tempo.getline(dato, sizeof(dato));
@@ -1821,7 +1878,7 @@ void MainWindow::on_selectguy_clicked()
     setup_resorces();
     cargar_niveles(numNivel);
 
-    if(onep) escribirArchivo(ui->nombre->text(),"Onep", player1->getKeyplayer(),numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(), player1->getPX(),player1->getPY(),player1->getVidas());
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -1840,7 +1897,7 @@ void MainWindow::on_selectsteven_clicked()
     setup_resorces();
     cargar_niveles(numNivel);
 
-    if(onep) escribirArchivo(ui->nombre->text(),"Onep", player1->getKeyplayer(),numNivel,dificultad,player1->getPX(),player1->getPY(),player1->getVidas());
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(), player1->getPX(),player1->getPY(),player1->getVidas());
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -1863,7 +1920,7 @@ void MainWindow::on_facil_clicked()
         setup_resorces();
         cargar_niveles(numNivel);
 
-        //GUARDAR LA INFORMACIÓN EN EL ARCHIVO
+        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'f', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());
 
         collisions = new QTimer(this);
         connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -1887,7 +1944,7 @@ void MainWindow::on_normal_clicked()
         setup_resorces();
         cargar_niveles(numNivel);
 
-        //GUARDAR LA INFORMACIÓN EN EL ARCHIVO
+        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'n', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());
 
         collisions = new QTimer(this);
         connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -1911,7 +1968,7 @@ void MainWindow::on_dificil_clicked()
         setup_resorces();
         cargar_niveles(numNivel);
 
-        //GUARDAR LA INFORMACIÓN EN EL ARCHIVO
+        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'd', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());
 
         collisions = new QTimer(this);
         connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
@@ -1925,8 +1982,8 @@ MainWindow::~MainWindow()
     clean_levels();
     delete ui;
     delete scene;
-    delete jefe1;
-    //delete jefe2;
+    //delete jefe1;
+    delete jefe2;
     if(onep){delete player1;}
     delete collisions;
     delete lineDown;

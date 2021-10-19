@@ -66,7 +66,7 @@ public:
     void CollisionEnemy();
     void collisionEnemyOneP();
     void collisionEnemyMultiP();
-    void escribirArchivo(QString nom, QString modoj, char tipo, int nivel, char dif, int x, int y, int Vidas);
+    void escribirArchivo(QString nom, QString modoj, int nivel, char dif, char tipo, int x, int y, int Vidas, char tipo1, int x1, int y1, int Vidas1);
     void leerArchivo();
     void keyPressEvent(QKeyEvent *i);
     ~MainWindow();
