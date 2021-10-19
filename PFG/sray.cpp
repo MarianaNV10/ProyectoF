@@ -31,7 +31,6 @@ void sray::baile()
     bandance = true;
     if(contS < 28){
         pos = secuencias[contS].toInt();
-        qDebug() << pos << endl;
         for(int i = 0; i < pos; i++){
             std::uniform_int_distribution<int> Fila(1,4);
             dato = Fila(*QRandomGenerator::global());
@@ -60,10 +59,40 @@ void sray::labelmove()
         objeto->setGeometry(xl,yl,objeto->width(),objeto->height());
         tiempo();
 
-        if(smoves.at(l) == "Down") setPixmap(QPixmap(move[1]).scaled(tam,tam));
-        else if(smoves.at(l) == "Up") setPixmap(QPixmap(move[4]).scaled(tam,tam));
-        else if(smoves.at(l) == "Left") setPixmap(QPixmap(move[2]).scaled(tam,tam));
-        else setPixmap(QPixmap(move[3]).scaled(tam,tam));
+        if(banaudio){
+            banaudio = false;
+            audio->pause();
+            delete audio;
+        }
+
+        if(smoves.at(l) == "Down"){
+            audio = new QMediaPlayer();
+            audio->setMedia(QUrl("qrc:/Imagenes/Audio/Down.mp3"));
+            audio->play();
+            banaudio = true;
+            setPixmap(QPixmap(move[1]).scaled(tam,tam));
+        }
+        else if(smoves.at(l) == "Up"){
+            audio = new QMediaPlayer();
+            audio->setMedia(QUrl("qrc:/Imagenes/Audio/Up.mp3"));
+            audio->play();
+            banaudio = true;
+            setPixmap(QPixmap(move[4]).scaled(tam,tam));
+        }
+        else if(smoves.at(l) == "Left"){
+            audio = new QMediaPlayer();
+            audio->setMedia(QUrl("qrc:/Imagenes/Audio/Left.mp3"));
+            audio->play();
+            banaudio = true;
+            setPixmap(QPixmap(move[2]).scaled(tam,tam));
+        }
+        else{
+            banaudio = true;
+            audio = new QMediaPlayer();
+            audio->setMedia(QUrl("qrc:/Imagenes/Audio/Right.mp3"));
+            audio->play();
+            setPixmap(QPixmap(move[3]).scaled(tam,tam));
+        }
 
         l += 1;
     }
@@ -85,6 +114,7 @@ void sray::Atiempo()
         delete time;
     }
     else{
+
         xl += 10;
         yl -= 20;
         objeto->setGeometry(xl,yl,objeto->width(),objeto->height());

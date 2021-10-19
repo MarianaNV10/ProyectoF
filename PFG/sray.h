@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QRandomGenerator>
 #include <QDebug>
+#include <QMediaPlayer>
 
 class sray: public QObject, public QGraphicsPixmapItem //71 movimientos
 {
@@ -23,11 +24,12 @@ private:
                               "1","1","1","1"};
 
     QVector<QString> smoves;
+    QMediaPlayer *audio;
 
     int contM = 0, contS = 0, pos = 0, l = 0;
     int px, py, tam = 250;
     int xl, yl, dato;
-    bool bandance = false, banmove = false;
+    bool bandance = false, banmove = false, banaudio = false;
     QTimer *time, *timeL;
     QLabel *objeto;
     QString info;
@@ -42,7 +44,7 @@ public:
     void label();
     void tiempo();
     void baile();
-    ~sray() {delete objeto;}
+    ~sray() {delete objeto; delete audio;}
 
     QVector<QString> getSmoves() const {return smoves;}
     bool getBanmove() const {return banmove;}
