@@ -106,8 +106,8 @@ void MainWindow::setup_resorces()
     //Lineas de la escena
     lineUp = new QGraphicsLineItem(0,0,5120,0);
     lineDown = new QGraphicsLineItem(0,708,5120,708);
-    lineRight = new QGraphicsLineItem(1280,0,1280,708);
-    lineLeft = new QGraphicsLineItem(0,0,0,708);
+    lineRight = new QGraphicsLineItem(W+1280,0,W+1280,708);
+    lineLeft = new QGraphicsLineItem(W,0,W,708);
 }
 
 void MainWindow::setup_enemies()
@@ -1834,12 +1834,15 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
                             else if(info == "n") dificultad = 'n';
                             else dificultad = 'd';
                         }
-                        else if(o == 3){player1->setPX(atoi(puntero));}
+                        else if(o == 3){
+                            player1->setPX(atoi(puntero));
+                            if(atoi(puntero) >= 0 && atoi(puntero) < 1280) {W = 0;}
+                            else if(atoi(puntero) >= 1280 && atoi(puntero) < 2560) {W = 1280;}
+                            else if(atoi(puntero) >= 2560 && atoi(puntero) < 3840) {W = 2560;}
+                            else {W = 3840;}
+                        }
                         else if(o == 4){player1->setPY(atoi(puntero));}
                     }
-
-                    qDebug() << puntero << endl;
-
                 }
             }
             else if(info == "Multip"){
@@ -1863,11 +1866,15 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
                         if(info == "g"){Jugadores.push_back(new player('g'));}
                         else if(info == "s"){Jugadores.push_back(new player('s'));}
                     }
-                    else if(s == 1 || s == 5) Jugadores.at(Jugadores.size()-1)->setPX(atoi(puntero));
+                    else if(s == 1 || s == 5){
+                        Jugadores.at(Jugadores.size()-1)->setPX(atoi(puntero));
+                        if(atoi(puntero) >= 0 && atoi(puntero) < 1280) {W = 0;}
+                        else if(atoi(puntero) >= 1280 && atoi(puntero) < 2560) {W = 1280;}
+                        else if(atoi(puntero) >= 2560 && atoi(puntero) < 3840) {W = 2560;}
+                        else {W = 3840;}
+                    }
                     else if(s == 2 || s == 6) Jugadores.at(Jugadores.size()-1)->setPY(atoi(puntero));
                     else if(s == 3 || s == 7) Jugadores.at(Jugadores.size()-1)->setVidas(atoi(puntero));
-
-                    qDebug() << info.c_str() << endl;
                 }
             }
 
@@ -2213,8 +2220,8 @@ MainWindow::~MainWindow()
     clean_levels();
     delete ui;
     delete scene;
-    //delete jefe1;
-    //delete jefe2;
+    delete jefe1;
+    if(numNivel == 3) delete jefe2;
     if(onep){delete player1;}
     delete reproducir;
     delete collisions;
