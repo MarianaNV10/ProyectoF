@@ -1800,8 +1800,6 @@ void MainWindow::on_iniciarsesion_clicked()
     ui->inicio->hide();
     ui->usuario->show();
     iniciars = true;
-
-    //leemos del archivo donde tenemos guardados a los usuarios del sistema
 }
 
 void MainWindow::on_registrarse_clicked()
@@ -1826,7 +1824,6 @@ void MainWindow::on_cancelar_clicked()
 void MainWindow::on_aceptar_clicked()
 {
     if(iniciars){
-        //qDebug() << "leer el archivo" << endl;
         if(ui->nombre->isModified()){
             if(ui->nombre->text().length() > 3){
 
@@ -1850,6 +1847,7 @@ void MainWindow::on_aceptar_clicked()
                     banU = false;
                     ui->usuario->hide();
                     ui->Partida->show();
+                    ui->instruccion->show();
                 }
                 else{
                     QMessageBox message;
@@ -1873,7 +1871,6 @@ void MainWindow::on_aceptar_clicked()
         }
     }
     else{
-        //qDebug() << "escribir en el archivo" << endl;
         if(ui->nombre->isModified()){
             if(ui->nombre->text().length() > 3){
                 ui->usuario->hide();
@@ -1899,7 +1896,14 @@ void MainWindow::on_aceptar_clicked()
 void MainWindow::on_cargarpartida_clicked()
 {
     leerArchivo();
-    //llamamos el inicio del juego
+
+    setup_resorces();
+    cargar_niveles(numNivel);
+
+    collisions = new QTimer(this);
+    connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+    collisions->start(1);
+    setup_enemies();
 }
 
 
@@ -1911,6 +1915,7 @@ void MainWindow::on_nuevapartida_clicked()
     if(banUsuarioViejo == false) numNivel = 3;
     else if(banUsuarioViejo){
         ActualizarArchivo();
+        numNivel = 1;
     }
 }
 
