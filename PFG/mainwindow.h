@@ -14,6 +14,7 @@
 #include <QImage>
 #include <qdebug.h>
 #include <QMediaPlayer>
+#include <QSound>
 
 //Librerias propias
 #include "levels.h"
@@ -68,6 +69,7 @@ public:
     void collisionEnemyMultiP();
     void escribirArchivo(QString nom, QString modoj, int nivel, char dif, char tipo, int x, int y, int Vidas, char tipo1, int x1, int y1, int Vidas1);
     void leerArchivo();
+    void ActualizarArchivo();
     void keyPressEvent(QKeyEvent *i);
     ~MainWindow();
 
@@ -105,6 +107,7 @@ private:
     QGraphicsLineItem *lineUp,*lineDown,*lineRight,*lineLeft;
 
     QMediaPlayer *audio;
+    QSound *reproducir;
 
     //OnePlayer
     QVector<QString> playermoves;
@@ -114,6 +117,7 @@ private:
 
     QList<player*> Jugadores;
     QList<guyattack*> ataque2; //steven
+    QVector<QString> playermoves2;
 
     //Plataformas y Enemigos
     QList<platform*> walls;
@@ -135,6 +139,6 @@ private:
     int X, Y, tamX, tamY;
     int numNivel = 0;
     bool iniciars = false, registro = false, onep = false, multip = false, banU = false;
-    bool banDe = false;
+    bool banDe = false, banDe2 = false, banUsuarioViejo = false;;
 };
 #endif // MAINWINDOW_H

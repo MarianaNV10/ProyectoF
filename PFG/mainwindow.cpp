@@ -15,8 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
     inicio();
 
 //    audio = new QMediaPlayer();
-//    audio->setMedia(QUrl("qrc:/Imagenes/Audio/Intro.m4a"));
+//    audio->setMedia(QUrl("qrc:/Imagenes/Dj_Sray/VS_Dj_Sray.mp3"));
 //    audio->play();
+
+//    reproducir = new QSound(":/Imagenes/Dj_Sray/VS_Dj_Sray.wav");
+//    reproducir->play();
+//    reproducir->setLoops(QSound::Infinite);
 
     //setup_resorces();
     //player1 = new player('g');
@@ -942,7 +946,14 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
 
     if(i->key() == Qt::Key_I){
         if(Jugadores.at(1)->getJump() == false){
-            Jugadores.at(1)->walkPlayer('I');
+            if(numNivel == 3){
+                if(jefe2->getBanmove()){
+                    if(playermoves2.size() < jefe2->getSmoves().size()){
+                        playermoves2.push_back("Up");
+                    }
+                }
+            }
+            else{Jugadores.at(1)->walkPlayer('I');}
         }
     }
 
@@ -967,6 +978,13 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
                 }
             }
             else{
+                if(numNivel == 3){
+                    if(jefe2->getBanmove()){
+                        if(playermoves2.size() < jefe2->getSmoves().size()){
+                            playermoves2.push_back("Right");
+                        }
+                    }
+                }
                 if(Jugadores.at(1)->collidesWithItem(lineRight) == false && Jugadores.at(1)->collidesWithItem(walls.at(i)) && Jugadores.at(1)->getJump() == false){
                     QList<QGraphicsItem*> items = Jugadores.at(1)->collidingItems();
                     if(items.size() < 2){
@@ -1000,6 +1018,13 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
                 }
             }
             else{
+                if(numNivel == 3){
+                    if(jefe2->getBanmove()){
+                        if(playermoves2.size() < jefe2->getSmoves().size()){
+                            playermoves2.push_back("Left");
+                        }
+                    }
+                }
                 if(Jugadores.at(1)->collidesWithItem(lineLeft) == false && Jugadores.at(1)->collidesWithItem(walls.at(i)) && Jugadores.at(1)->getJump() == false){
                     QList<QGraphicsItem*> items = Jugadores.at(1)->collidingItems();
                     if(items.size() < 2){
@@ -1022,8 +1047,8 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
     if(i->key() == Qt::Key_K){
         if(numNivel == 3){
             if(jefe2->getBanmove()){
-                if(playermoves.size() < jefe2->getSmoves().size()){
-                    playermoves.push_back("Down");
+                if(playermoves2.size() < jefe2->getSmoves().size()){
+                    playermoves2.push_back("Down");
                 }
             }
         }
@@ -1590,22 +1615,47 @@ void MainWindow::validateHammerMultiP()
 
 void MainWindow::validateSrayMove()
 {
-    if(playermoves.size() == jefe2->getSmoves().size() && jefe2->getBanmove()){
-        QVector<QString> jefemoves = jefe2->getSmoves();
-        for(int i = 0; i < playermoves.size(); i++){
-            if(playermoves.at(i) != jefemoves.at(i)){
-                //Activar la música de cuando pierde o la nota de que perdio
-                banDe = true;
+    if(onep){
+        if(playermoves.size() == jefe2->getSmoves().size() && jefe2->getBanmove()){
+            QVector<QString> jefemoves = jefe2->getSmoves();
+            for(int i = 0; i < playermoves.size(); i++){
+                if(playermoves.at(i) != jefemoves.at(i)){
+                    //Activar la música de cuando pierde o la nota de que perdio
+                    banDe = true;
+                }
+            }
+            playermoves.clear();
+            if(banDe == false){
+                jefe2->setBanmove(false);
+                jefemoves.clear();
+                jefe2->setSmoves(jefemoves);
+                jefe2->label();
             }
         }
-        playermoves.clear();
-        if(banDe == false){
-            jefe2->setBanmove(false);
-            jefemoves.clear();
-            jefe2->setSmoves(jefemoves);
-            jefe2->label();
+    }
+    else if(multip){
+        if(playermoves.size() == jefe2->getSmoves().size() && jefe2->getBanmove() && playermoves2.size() == jefe2->getSmoves().size()){
+            QVector<QString> jefemoves = jefe2->getSmoves();
+            for(int i = 0; i < playermoves.size(); i++){
+                if(playermoves.at(i) != jefemoves.at(i)){
+                    //Activar la música de cuando pierde o la nota de que perdio o restarle vida al jugador
+                    banDe = true;
+                }
+                if(playermoves2.at(i) != jefemoves.at(i)){
+                    //Activar la música de cuando pierde o la nota de que perdio o restarle vida al jugador
+                    banDe2 = true;
+                }
+            }
+            playermoves.clear();
+            if(banDe == false || banDe2 == false){
+                jefe2->setBanmove(false);
+                jefemoves.clear();
+                jefe2->setSmoves(jefemoves);
+                jefe2->label();
+            }
         }
     }
+
 }
 
 void MainWindow::detectC()
@@ -1708,8 +1758,6 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
                     else if(s == 1 || s == 5) Jugadores.at(Jugadores.size()-1)->setPX(atoi(puntero));
                     else if(s == 2 || s == 6) Jugadores.at(Jugadores.size()-1)->setPY(atoi(puntero));
                     else if(s == 3 || s == 7) Jugadores.at(Jugadores.size()-1)->setVidas(atoi(puntero));
-
-                    qDebug() << info.c_str() << endl;
                 }
             }
 
@@ -1717,6 +1765,34 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
         tempo.getline(dato, sizeof(dato));
     }
     tempo.close();
+}
+
+void MainWindow::ActualizarArchivo()
+{
+    ifstream original;
+    ofstream temporal;
+    char linea[1000];
+    char *puntero;
+    string datos;
+
+    original.open("juego.txt", ios::in);
+    temporal.open("temporal.txt", ios::out);
+    original.getline(linea,sizeof (linea));
+    while(!original.eof()){
+        datos = strtok(linea,"\n");
+        puntero = strtok(linea,",");
+        if(ui->nombre->text() != puntero){
+            temporal << datos << endl;
+        }
+        original.getline(linea,sizeof (linea));
+    }
+
+    original.close();
+    temporal.close();
+
+    remove("juego.txt");
+    rename("temporal.txt", "juego.txt");
+
 }
 
 void MainWindow::on_iniciarsesion_clicked()
@@ -1762,7 +1838,10 @@ void MainWindow::on_aceptar_clicked()
                 tempo.getline(dato, sizeof(dato));
                 while(!tempo.eof() && banU == false){
                     puntero = strtok(dato,",");
-                    if(ui->nombre->text() == puntero) banU = true;
+                    if(ui->nombre->text() == puntero){
+                        banU = true;
+                        banUsuarioViejo = true;
+                    }
                     tempo.getline(dato, sizeof(dato));
                 }
                 tempo.close();
@@ -1820,6 +1899,7 @@ void MainWindow::on_aceptar_clicked()
 void MainWindow::on_cargarpartida_clicked()
 {
     leerArchivo();
+    //llamamos el inicio del juego
 }
 
 
@@ -1828,7 +1908,10 @@ void MainWindow::on_nuevapartida_clicked()
     ui->Partida->hide();
     ui->modojuego->show();
     ui->instruccion->show();
-    numNivel = 1;
+    if(banUsuarioViejo == false) numNivel = 3;
+    else if(banUsuarioViejo){
+        ActualizarArchivo();
+    }
 }
 
 void MainWindow::on_oneplayer_clicked()
@@ -1982,7 +2065,7 @@ MainWindow::~MainWindow()
     clean_levels();
     delete ui;
     delete scene;
-    //delete jefe1;
+    delete jefe1;
     delete jefe2;
     if(onep){delete player1;}
     delete collisions;
@@ -1990,7 +2073,7 @@ MainWindow::~MainWindow()
     delete lineLeft;
     delete lineRight;
     delete lineUp;
-    delete audio;
+    //delete reproducir;
     if(multip){
         for(int i = 0; i < Jugadores.size(); i++){
             Jugadores.erase(Jugadores.begin()+i);
