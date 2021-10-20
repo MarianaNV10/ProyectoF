@@ -245,8 +245,10 @@ void MainWindow::cargar_niveles(int Nivel)
         scene->setBackgroundBrush(QPixmap(":/Imagenes/Fondos/Nivel1.jpeg"));
 
         if(onep){
-            player1->setPX(0);
-            player1->setPY(623);
+            if(banCargarP == false){
+                player1->setPX(0);
+                player1->setPY(623);
+            }
             player1->setPos(player1->getPX(),player1->getPY());
             scene->addItem(player1);
 
@@ -261,17 +263,20 @@ void MainWindow::cargar_niveles(int Nivel)
         else if(multip){
             for(int l = 0; l < Jugadores.size(); l++){
                 if(Jugadores.at(l)->getKeyplayer() == 'g'){
-
-                    Jugadores.at(l)->setPX(0);
-                    Jugadores.at(l)->setPY(623);
+                    if(banCargarP == false){
+                        Jugadores.at(l)->setPX(0);
+                        Jugadores.at(l)->setPY(623);
+                    }
                     Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
                     scene->addItem(Jugadores.at(l));
                     //Aparición del jugador en la escena
                     Jugadores.at(l)->getSpown()->start(250);
                 }
                 else if(Jugadores.at(l)->getKeyplayer() == 's'){
-                    Jugadores.at(l)->setPX(100);
-                    Jugadores.at(l)->setPY(623);
+                    if(banCargarP == false){
+                        Jugadores.at(l)->setPX(100);
+                        Jugadores.at(l)->setPY(623);
+                    }
                     Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
                     scene->addItem(Jugadores.at(l));
                     Jugadores.at(l)->stevenA();
@@ -329,8 +334,10 @@ void MainWindow::cargar_niveles(int Nivel)
 
         if(onep){
             //establece las posiciones del jugador dentro del nivel
-            player1->setPX(0);
-            player1->setPY(592);
+            if(banCargarP){
+                player1->setPX(0);
+                player1->setPY(592);
+            }
             player1->setPos(player1->getPX(),player1->getPY());
             scene->addItem(player1);
             if(player1->getKeyplayer() == 'g'){ //The guy
@@ -344,9 +351,11 @@ void MainWindow::cargar_niveles(int Nivel)
         else if(multip){
             for(int l = 0; l < Jugadores.size(); l++){
                 if(Jugadores.at(l)->getKeyplayer() == 'g'){
+                    if(banCargarP){
+                        Jugadores.at(l)->setPX(0);
+                        Jugadores.at(l)->setPY(592);
+                    }
                     //establece las posiciones del jugador dentro del nivel
-                    Jugadores.at(l)->setPX(0);
-                    Jugadores.at(l)->setPY(592);
                     Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
                     scene->addItem(Jugadores.at(l));
 
@@ -354,8 +363,10 @@ void MainWindow::cargar_niveles(int Nivel)
                     Jugadores.at(l)->getSpown()->start(250);
                 }
                 else if(Jugadores.at(l)->getKeyplayer() == 's'){
-                    Jugadores.at(l)->setPX(100);
-                    Jugadores.at(l)->setPY(592);
+                    if(banCargarP){
+                        Jugadores.at(l)->setPX(100);
+                        Jugadores.at(l)->setPY(592);
+                    }
                     Jugadores.at(l)->setPos(Jugadores.at(l)->getPX(),Jugadores.at(l)->getPY());
                     scene->addItem(Jugadores.at(l));
                 }
@@ -411,8 +422,10 @@ void MainWindow::cargar_niveles(int Nivel)
 
         if(onep){
             //establece las posiciones del jugador dentro del nivel
-            player1->setPX(350);
-            player1->setPY(607);
+            if(banCargarP == false){
+                player1->setPX(350);
+                player1->setPY(607);
+            }
             player1->setPos(player1->getPX(),player1->getPY());
             scene->addItem(player1);
             if(player1->getKeyplayer() == 'g'){ //The guy
@@ -464,6 +477,8 @@ void MainWindow::cargar_niveles(int Nivel)
             scene->addItem(walls.back());
         }
     }
+
+    if(banCargarP) banCargarP = false;
 }
 
 void MainWindow::CollisionEnemy()
@@ -1700,9 +1715,11 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
         puntero = strtok(dato,",");
         info = puntero;
         if(ui->nombre->text() == puntero){
+
             banU = true;
             puntero = strtok(NULL,",");
             info = puntero;
+
             if(info == "Onep"){
                 onep = true;
                 puntero = strtok(NULL,",");
@@ -1735,7 +1752,6 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
             }
             else if(info == "Multip"){
                 multip = true;
-
                 puntero = strtok(NULL,",");
                 info = puntero;
                 if(info == "1") numNivel = 1;
@@ -1793,6 +1809,11 @@ void MainWindow::ActualizarArchivo()
     remove("juego.txt");
     rename("temporal.txt", "juego.txt");
 
+    if(Guardar){
+        if(onep){escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(),player1->getPX(),player1->getPY(),player1->getVidas());}
+        else if(multip){escribirArchivo(ui->nombre->text(), "Multip", numNivel, dificultad, 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());}
+        Guardar = false;
+    }
 }
 
 void MainWindow::on_iniciarsesion_clicked()
@@ -1896,6 +1917,7 @@ void MainWindow::on_aceptar_clicked()
 void MainWindow::on_cargarpartida_clicked()
 {
     leerArchivo();
+    banCargarP = true;
 
     setup_resorces();
     cargar_niveles(numNivel);
@@ -1912,7 +1934,7 @@ void MainWindow::on_nuevapartida_clicked()
     ui->Partida->hide();
     ui->modojuego->show();
     ui->instruccion->show();
-    if(banUsuarioViejo == false) numNivel = 3;
+    if(banUsuarioViejo == false) numNivel = 1;
     else if(banUsuarioViejo){
         ActualizarArchivo();
         numNivel = 1;
@@ -2065,6 +2087,32 @@ void MainWindow::on_dificil_clicked()
     }
 }
 
+void MainWindow::on_actionGuardar_Partida_triggered()
+{
+    Guardar = true;
+    ActualizarArchivo();
+}
+
+void MainWindow::on_actionPausar_triggered()
+{
+
+}
+
+void MainWindow::on_actionReanudar_triggered()
+{
+
+}
+
+void MainWindow::on_actionSalir_triggered()
+{
+
+}
+
+void MainWindow::on_actionInstrucciones_triggered()
+{
+
+}
+
 MainWindow::~MainWindow()
 {
     clean_levels();
@@ -2086,3 +2134,4 @@ MainWindow::~MainWindow()
         }
     }
 }
+

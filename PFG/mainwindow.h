@@ -95,6 +95,11 @@ private slots:
     void on_normal_clicked();
     void on_dificil_clicked();
     void on_cargarpartida_clicked();
+    void on_actionGuardar_Partida_triggered();
+    void on_actionPausar_triggered();
+    void on_actionReanudar_triggered();
+    void on_actionSalir_triggered();
+    void on_actionInstrucciones_triggered();
 
 private:
 
@@ -139,6 +144,7 @@ private:
     int X, Y, tamX, tamY;
     int numNivel = 0;
     bool iniciars = false, registro = false, onep = false, multip = false, banU = false;
-    bool banDe = false, banDe2 = false, banUsuarioViejo = false;;
+    bool banDe = false, banDe2 = false, banUsuarioViejo = false, Guardar = false;
+    bool banCargarP = false;
 };
 #endif // MAINWINDOW_H
