@@ -20,7 +20,7 @@ private:
 
     QTimer *mSpown, *mDeath, *mMove, *mAttack;
 
-    int px, py, vy, range = 900, tam = 250, vida = 25;
+    int px, py, vy, range = 900, tam = 250, vida = 110;
     short sprite[4];
     bool pos[4];
     bool banSpown, banDeath, banMove, banAttack, banDis;

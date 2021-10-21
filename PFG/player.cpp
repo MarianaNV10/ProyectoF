@@ -24,6 +24,7 @@ player::player(char k)
         connect(Spown, SIGNAL(timeout()), this, SLOT(updateSpown()));
     }
     else if(keyplayer == 's'){ //keyplayer = 's'
+        ban = true;
         for(int f = 0; f < 8; f++){
             mMoveS[f] = 0;
             mPosS[f] = true;
@@ -45,7 +46,7 @@ void player::walkPlayer(short a)
     }
 }
 
-void player::walkGuy(short a) //se va a mover con W,A,D -> salta con C (modificarlo)
+void player::walkGuy(short a) //se va a mover con W,A,D -> salta con E
 {
     if(ban){
         switch(a){
@@ -126,83 +127,84 @@ void player::walkGuy(short a) //se va a mover con W,A,D -> salta con C (modifica
 
 void player::walkSteven(short a) //Va a moverse con I,J,L -> salta con B
 {
-    switch(a){
+    if(ban){
+        switch(a){
 
-    case 'I':
+        case 'I':
 
-        if(mJump == false){
-            mJump = true;
-            Jump = new QTimer();
-            connect(Jump,SIGNAL(timeout()),this,SLOT(jump()));
-            Jump->start(80); //cambiar el tiempo
-        }
-
-        break;
-
-    case 'J':
-
-        if(l == 'L'){
-            ant = l;
-            if(mJump){
-                if(mJumpUp) mJumpUp = false;
-                if(mJumpDown) mJumpDown = false;
+            if(mJump == false){
+                mJump = true;
+                Jump = new QTimer();
+                connect(Jump,SIGNAL(timeout()),this,SLOT(jump()));
+                Jump->start(80); //cambiar el tiempo
             }
-        }
 
-        l = 'J';
+            break;
 
-        if(mJump == false){
-            if(mMoveS[1] == 2){
-                mPosS[1] = false;
+        case 'J':
+
+            if(l == 'L'){
+                ant = l;
+                if(mJump){
+                    if(mJumpUp) mJumpUp = false;
+                    if(mJumpDown) mJumpDown = false;
+                }
             }
-            else if(mMoveS[1] == 0){
-                mPosS[1] = true;
+
+            l = 'J';
+
+            if(mJump == false){
+                if(mMoveS[1] == 2){
+                    mPosS[1] = false;
+                }
+                else if(mMoveS[1] == 0){
+                    mPosS[1] = true;
+                }
+                mMoveS[1] += (2*mPosS[1])-1;
+                setPixmap(QPixmap(mSMoveLeft[mMoveS[1]]).scaled(tam,tam));
             }
-            mMoveS[1] += (2*mPosS[1])-1;
-            setPixmap(QPixmap(mSMoveLeft[mMoveS[1]]).scaled(tam,tam));
-        }
-        else if(mJumpP == false) mJumpP = true;
+            else if(mJumpP == false) mJumpP = true;
 
-        break;
+            break;
 
-    case 'L':
+        case 'L':
 
-        if(l == 'J'){
-            ant = l;
-            if(mJump){
-                if(mJumpUp) mJumpUp = false;
-                if(mJumpDown) mJumpDown = false;
+            if(l == 'J'){
+                ant = l;
+                if(mJump){
+                    if(mJumpUp) mJumpUp = false;
+                    if(mJumpDown) mJumpDown = false;
+                }
             }
-        }
 
-        l = 'L';
+            l = 'L';
 
-        if(mJump == false){
-            if(mMoveS[0] == 2){
-                mPosS[0] = false;
+            if(mJump == false){
+                if(mMoveS[0] == 2){
+                    mPosS[0] = false;
+                }
+                else if(mMoveS[0] == 0){
+                    mPosS[0] = true;
+                }
+                mMoveS[0] += (2*mPosS[0])-1;
+                setPixmap(QPixmap(mSMoveRight[mMoveS[0]]).scaled(tam,tam));
             }
-            else if(mMoveS[0] == 0){
-                mPosS[0] = true;
-            }
-            mMoveS[0] += (2*mPosS[0])-1;
-            setPixmap(QPixmap(mSMoveRight[mMoveS[0]]).scaled(tam,tam));
-        }
-        else if(mJumpP == false) mJumpP = true;
-        break;
+            else if(mJumpP == false) mJumpP = true;
+            break;
 
-    case 'T':
-        if(this->banAttack == false){
-            this->banAttack = true;
-            Attack = new QTimer(this);
-            connect(Attack, SIGNAL(timeout()), this, SLOT(updateAttack()));
-            Attack->start(100);
+        case 'T':
+            if(this->banAttack == false){
+                this->banAttack = true;
+                Attack = new QTimer(this);
+                connect(Attack, SIGNAL(timeout()), this, SLOT(updateAttack()));
+                Attack->start(100);
+            }
+            break;
         }
-        break;
     }
 }
 
-void player::stevenA()
-{
+void player::stevenA(){
     setPixmap(QPixmap(mSMoveRight[mMoveS[0]]).scaled(tam,tam));
 }
 
@@ -242,22 +244,6 @@ void player::cinematica()
        setPos(pX,pY);
 }
 
-void player::rebote(float V1x, float V1xp) //Terminarlo
-{
-    float V2xp = 0;
-    V2xp = Vx-(V1xp-k*(V1x-Vx));
-    //V2xp = 10;
-    if(this->l == 'D' || this->l == 'L'){
-        this->pX -= abs(V2xp);
-    }
-
-    if(this->l == 'A' || this->l == 'J'){
-        this->pX += abs(V2xp);
-    }
-
-    setPos(pX,pY);
-}
-
 void player::updateSpown()
 {
     setPixmap(QPixmap(mGSpown[mMoveG[8]]).scaled(tam,tam));
@@ -272,7 +258,7 @@ void player::updateSpown()
 
 void player::updateDeath()
 {
-
+    ban = false;
     switch (keyplayer) {
     case 'g':
         if(l == 'D'){
@@ -280,6 +266,8 @@ void player::updateDeath()
 
             if(mMoveG[4] == 4){
                 Death->stop();
+                mDeath = true;
+                delete Death;
             }
 
             mMoveG[4] += (2*mPosG[4])-1;
@@ -290,6 +278,8 @@ void player::updateDeath()
 
             if(mMoveG[5] == 4){
                 Death->stop();
+                mDeath = true;
+                delete Death;
             }
 
             mMoveG[5] += (2*mPosG[5])-1;
@@ -303,6 +293,8 @@ void player::updateDeath()
 
             if(mMoveS[4] == 4){
                 Death->stop();
+                mDeath = true;
+                delete Death;
             }
 
             mMoveS[4] += (2*mPosS[4])-1;
@@ -313,8 +305,9 @@ void player::updateDeath()
 
             if(mMoveS[5] == 4){
                 Death->stop();
+                mDeath = true;
+                delete Death;
             }
-
             mMoveS[5] += (2*mPosS[5])-1;
         }
         break;
@@ -411,7 +404,7 @@ void player::jump()
         }
         break;
 
-    case 's': //Organizar esta parte del salto para steven
+    case 's':
 
         if(l == 'L'){
             if(Ay > 0 && mJumpUp == false){
@@ -446,9 +439,7 @@ void player::jump()
 
 player::~player()
 {
-    //delete Spown; //quitarlo de aqui
     delete Death;
-    //delete Jump;
     delete objeto;
 }
 

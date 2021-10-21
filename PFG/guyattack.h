@@ -17,6 +17,7 @@ private:
     QTimer *aguy;
     char side, keyplayer = 'n';
     int range = 100, px,py, spt, tam = 25, cont = 0, vel = 15;
+    int damage = 5;
     bool pos, ban;
 
 public slots:
@@ -27,9 +28,9 @@ public:
     guyattack(int _x, int _y, char lado, char k);
     QTimer *getAguy() const {return aguy;}
     bool getBan() const {return ban;}
+    int getDamage() const {return damage;}
     void setBan(bool value) {ban = value;}
     ~guyattack();
-
 };
 
 #endif // GUYATTACK_H

@@ -2,7 +2,7 @@
 
 guyattack::guyattack(int _x, int _y, char lado, char k)
 {
-    aguy = new QTimer(this);
+    aguy = new QTimer();
 
     keyplayer = k;
     side = lado;
@@ -12,6 +12,9 @@ guyattack::guyattack(int _x, int _y, char lado, char k)
     pos = true;
     ban = false;
     connect(aguy,SIGNAL(timeout()),this,SLOT(sprites()));
+    aguy->stop();
+    setPixmap(QPixmap(Attack[spt]).scaled(tam,tam));
+    setPos(px,py);
 }
 
 void guyattack::sprites()

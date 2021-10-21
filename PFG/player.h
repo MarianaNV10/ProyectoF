@@ -49,7 +49,7 @@ private:
 
     float Vx, Ay, Vy, k = 0.7;
     int pX,pY;
-    unsigned int mVidas = 0;
+    int mMuerte = 0;
     short mMoveG[9], mMoveS[8], cont = 0;
     char l = 'n', ant, keyplayer = 'n';
     bool mPosG[9], mPosS[8], mJump, mDeath, ban, banAttack;
@@ -69,7 +69,6 @@ public:
     void walkSteven(short a);
     void stevenA();
     void cinematica();
-    void rebote(float V1x, float V1xp);
     ~player();
 
     int getPX() const {return pX;}
@@ -79,7 +78,8 @@ public:
     bool getJumpUp() const {return mJumpUp;}
     bool getJumpDown() const {return mJumpDown;}
     bool getJump() const {return mJump;}
-    unsigned int getVidas() const {return mVidas;}
+    bool getmDeath() const {return mDeath;}
+    int getMuerte() const {return mMuerte;}
     char getLado() const {return l;}
     char getKeyplayer() const {return keyplayer;}
     QTimer *getSpown() const {return Spown;}
@@ -96,7 +96,8 @@ public:
     void setJumpUp(bool jumpUp) {mJumpUp = jumpUp;}
     void setJumpDown(bool jumpDown) {mJumpDown = jumpDown;}
     void setJumpP(bool jumpP) {mJumpP = jumpP;}
-    void setVidas(unsigned int vidas) {mVidas = vidas;}
+    void setMuerte(int muerte) {mMuerte = muerte;}
+    void setBan(bool value) {ban = value;}
 };
 
 #endif // PLAYER_H

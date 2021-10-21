@@ -9,7 +9,29 @@ sray::sray(int x, int y, QLabel *obj)
 
     objeto = obj;
 
-    label();
+    time = new QTimer(this);
+    connect(time, SIGNAL(timeout()), this, SLOT(spown()));
+    time->start(100);
+}
+
+void sray::spown()
+{
+    setPixmap(QPixmap(move[contS]).scaled(tam,tam));
+    if(contS == 4){
+        if(contM == 2){
+            contS = 0;
+            contM = 0;
+            time->stop();
+            delete time;
+            label();
+        }else{
+            contS = 0;
+            contM++;
+        }
+    }
+    else{
+        contS++;
+    }
 }
 
 void sray::label()
@@ -61,7 +83,7 @@ void sray::labelmove()
 
         if(banaudio){
             banaudio = false;
-            audio->pause();
+            audio->stop();
             delete audio;
         }
 
@@ -69,6 +91,7 @@ void sray::labelmove()
             audio = new QMediaPlayer();
             audio->setMedia(QUrl("qrc:/Imagenes/Audio/Down.mp3"));
             audio->play();
+            audio->setVolume(1000);
             banaudio = true;
             setPixmap(QPixmap(move[1]).scaled(tam,tam));
         }
@@ -76,6 +99,7 @@ void sray::labelmove()
             audio = new QMediaPlayer();
             audio->setMedia(QUrl("qrc:/Imagenes/Audio/Up.mp3"));
             audio->play();
+            audio->setVolume(300);
             banaudio = true;
             setPixmap(QPixmap(move[4]).scaled(tam,tam));
         }
@@ -83,6 +107,7 @@ void sray::labelmove()
             audio = new QMediaPlayer();
             audio->setMedia(QUrl("qrc:/Imagenes/Audio/Left.mp3"));
             audio->play();
+            audio->setVolume(500);
             banaudio = true;
             setPixmap(QPixmap(move[2]).scaled(tam,tam));
         }
@@ -91,6 +116,7 @@ void sray::labelmove()
             audio = new QMediaPlayer();
             audio->setMedia(QUrl("qrc:/Imagenes/Audio/Right.mp3"));
             audio->play();
+            audio->setVolume(300);
             setPixmap(QPixmap(move[3]).scaled(tam,tam));
         }
 

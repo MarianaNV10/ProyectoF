@@ -42,7 +42,7 @@ void MainWindow::inicio()
     ui->usuario->setGeometry(80,300,ui->usuario->width(),ui->usuario->height());
     ui->personaje->setGeometry(80,300,ui->personaje->width(),ui->personaje->height());
     ui->instruccion->setGeometry(610,300,ui->instruccion->width(),ui->instruccion->height());
-    ui->nota->setGeometry(550,300,ui->nota->width(),ui->nota->height());
+    ui->Muertes->setGeometry(40,0,ui->Muertes->width(),ui->Muertes->height());
 
     ui->inicio->setStyleSheet("QGroupBox {border: transparent}");
     ui->dificultad->setStyleSheet("QGroupBox {border: transparent}");
@@ -51,6 +51,7 @@ void MainWindow::inicio()
     ui->usuario->setStyleSheet("QGroupBox {border: transparent}");
     ui->personaje->setStyleSheet("QGroupBox {border: transparent}");
     ui->nota->setStyleSheet("QGroupBox {border: transparent}");
+    ui->Muertes->setStyleSheet("QGroupBox {border: transparent}");
 
     palette.setColor(ui->iniciarsesion->foregroundRole(), QColor(0,0,0));
     ui->iniciarsesion->setPalette(palette);
@@ -71,14 +72,15 @@ void MainWindow::inicio()
     ui->instruccion->hide();
     ui->nota->hide();
     ui->baile->hide();
+    ui->Muertes->hide();
 }
 
 void MainWindow::setup_resorces()
 {
-    scene = new QGraphicsScene(this);
+    if(cambionivel == false){scene = new QGraphicsScene(this);}
     setMinimumSize(1283,750);
     setMaximumSize(1283,750);
-    setGeometry(30,30,1283,750); //en general para el juego
+    setGeometry(30,30,1283,750); //en general para el juego //1283
     ui->graphicsView->setGeometry(0,0,1280,711);
 
     scene->setSceneRect(W,0,ui->graphicsView->width()-3,H-3);
@@ -185,6 +187,15 @@ void MainWindow::setup_enemies()
 
 }
 
+void MainWindow::Dificultad()
+{
+    for(int e = 0; e < enemigosH.size(); e++){
+        if(dificultad == 'f'){enemigosH.at(e)->setVidas(10);}
+        else if(dificultad == 'n'){enemigosH.at(e)->setVidas(20);}
+        else{enemigosH.at(e)->setVidas(30);}
+    }
+}
+
 void MainWindow::clean_levels()
 {
     for(int m = 0; m < walls.size(); m++){
@@ -198,20 +209,179 @@ void MainWindow::clean_levels()
         f -= 1;
     }
     for(int b = 0; b < ataque.size(); b++){
+        scene->removeItem(ataque.at(b));
         ataque.erase(ataque.begin()+b);
         b--;
     }
+    for(int b = 0; b < ataque2.size(); b++){
+        scene->removeItem(ataque2.at(b));
+        ataque2.erase(ataque2.begin()+b);
+        b--;
+    }
     for(int h = 0; h < enemigosH.size(); h++){
+        scene->removeItem(enemigosH.at(h));
         enemigosH.erase(enemigosH.begin()+h);
         h--;
     }
     for(int hm = 0; hm < ataqueHammer.size();hm++){
+        scene->removeItem(ataqueHammer.at(hm));
         ataqueHammer.erase(ataqueHammer.begin()+hm);
         hm--;
+    }
+    for(int ab = 0; ab < ataquebills.size(); ab++){
+        scene->removeItem(ataquebills.at(ab));
+        ataquebills.erase(ataquebills.begin()+ab);
+        ab--;
     }
     walls.clear();
     spikes.clear();
     ataque.clear();
+    ataque2.clear();
+    enemigosH.clear();
+    ataqueHammer.clear();
+    ataquebills.clear();
+}
+
+void MainWindow::changeLevel() //Función para cambiar de niveles
+{
+    if(numNivel == 1){
+        if(jefe1->getVida() == 0){
+            cambionivel = true;
+
+            if(jefe1->scene() == scene){scene->removeItem(jefe1);}
+            ui->Muertes->hide();
+
+            collisions->stop();
+            delete collisions;
+            delete lineDown;
+            delete lineLeft;
+            delete lineRight;
+            delete lineUp;
+
+            W = 0;
+            numNivel = 2;
+
+            if(onep){
+                char tipo;
+                tipo = player1->getKeyplayer();
+                int muerte = player1->getMuerte();
+                if(player1->getKeyplayer() == 'g'){
+                    ui->Muertes->show();
+                    ui->muertesguy->display(player1->getMuerte());
+                    ui->muertessteven->hide();
+                    ui->msteven->hide();
+                }
+                else{
+                    ui->Muertes->show();
+                    ui->muertessteven->display(player1->getMuerte());
+                    ui->mguy->hide();
+                    ui->muertesguy->hide();
+                }
+                delete player1;
+                player1 = new player(tipo);
+                player1->setMuerte(muerte);
+            }
+            else{
+                int muertes, muertes2;
+                ui->Muertes->show();
+                ui->muertesguy->display(Jugadores.at(0)->getMuerte());
+                ui->muertessteven->display(Jugadores.at(1)->getMuerte());
+                muertes = Jugadores.at(0)->getMuerte();
+                muertes2 = Jugadores.at(1)->getMuerte();
+
+                for(int j = 0; j < Jugadores.size(); j++){
+                    scene->removeItem(Jugadores.at(j));
+                    Jugadores.erase(Jugadores.begin()+j);
+                    j--;
+                }
+                Jugadores.push_back(new player('g'));
+                Jugadores.at(Jugadores.size()-1)->setMuerte(muertes);
+                Jugadores.push_back(new player('s'));
+                Jugadores.at(Jugadores.size()-1)->setMuerte(muertes2);
+            }
+
+            setup_resorces();
+            cargar_niveles(numNivel);
+            Guardar = true;
+            ActualizarArchivo();
+
+            collisions = new QTimer(this);
+            connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+            collisions->start(50);
+            setup_enemies();
+            Dificultad();
+            cambionivel = false;
+        }
+    }
+    else if(numNivel == 2){
+        if(onep){
+            if(player1->getPX() >= 4937 && player1->getPX() < 5120){
+                cambionivel = true;
+                ui->Muertes->hide();
+
+                collisions->stop();
+                delete collisions;
+                delete lineDown;
+                delete lineLeft;
+                delete lineRight;
+                delete lineUp;
+
+                W = 0;
+                numNivel = 3;
+
+                if(onep){
+                    char tipo;
+                    tipo = player1->getKeyplayer();
+                    int muerte = player1->getMuerte();
+                    if(player1->getKeyplayer() == 'g'){
+                        ui->Muertes->show();
+                        ui->muertesguy->display(player1->getMuerte());
+                        ui->muertessteven->hide();
+                        ui->msteven->hide();
+                    }
+                    else{
+                        ui->Muertes->show();
+                        ui->muertessteven->display(player1->getMuerte());
+                        ui->mguy->hide();
+                        ui->muertesguy->hide();
+                    }
+                    delete player1;
+                    player1 = new player(tipo);
+                    player1->setMuerte(muerte);
+                }
+                else{
+                    int muertes, muertes2;
+                    ui->Muertes->show();
+                    ui->muertesguy->display(Jugadores.at(0)->getMuerte());
+                    ui->muertessteven->display(Jugadores.at(1)->getMuerte());
+                    muertes = Jugadores.at(0)->getMuerte();
+                    muertes2 = Jugadores.at(1)->getMuerte();
+
+                    for(int j = 0; j < Jugadores.size(); j++){
+                        scene->removeItem(Jugadores.at(j));
+                        Jugadores.erase(Jugadores.begin()+j);
+                        j--;
+                    }
+                    Jugadores.push_back(new player('g'));
+                    Jugadores.at(Jugadores.size()-1)->setMuerte(muertes);
+                    Jugadores.push_back(new player('s'));
+                    Jugadores.at(Jugadores.size()-1)->setMuerte(muertes2);
+                }
+
+                setup_resorces();
+                cargar_niveles(numNivel);
+                Guardar = true;
+                ActualizarArchivo();
+
+                collisions = new QTimer(this);
+                connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
+                collisions->start(50);
+                setup_enemies();
+                Dificultad();
+                cambionivel = false;
+            }
+        }
+    }
 }
 
 void MainWindow::cargar_niveles(int Nivel)
@@ -270,8 +440,7 @@ void MainWindow::cargar_niveles(int Nivel)
         }
 
         //Jefe final nivel 1
-
-        jefe1 = new bills(370,414); //4799 311   370, 414
+        jefe1 = new bills(4799,311); //4799 311   370, 414
         scene->addItem(jefe1);
         jefe1->setBanSpown(true);
         jefe1->spown();
@@ -515,6 +684,13 @@ void MainWindow::collisionEnemyOneP()
                 for(int i = 0; i < walls.size(); i++){
                     if(player1->collidesWithItem(walls.at(i)) && enemigosH.at(h)->collidesWithItem(walls.at(i)) && enemigosH.at(h)->getBanDeath() == false){
                         if(abs(player1->getPX()-enemigosH.at(h)->getPx()) <= enemigosH.at(h)->getRango() && enemigosH.at(h)->getType() == 'b'){
+                            if(player1->collidesWithItem(enemigosH.at(h))){
+                                player1->setMuerte(player1->getMuerte()+1);
+                                if(player1->getKeyplayer() == 'g'){ui->muertesguy->display(player1->getMuerte());}
+                                else{ui->muertessteven->display(player1->getMuerte());}
+                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),100,player1->getLado()));
+                                player1->setPos(player1->getPX(),player1->getPY());
+                            }
                             if(enemigosH.at(h)->getBanAttack() == false){
                                 enemigosH.at(h)->setBanAttack(true);
                                 enemigosH.at(h)->ataque();
@@ -580,6 +756,13 @@ void MainWindow::collisionEnemyMultiP()
                     for(int i = 0; i < walls.size(); i++){
                         if(Jugadores.at(j)->collidesWithItem(walls.at(i)) && enemigosH.at(h)->collidesWithItem(walls.at(i)) && enemigosH.at(h)->getBanDeath() == false){
                             if(abs(Jugadores.at(j)->getPX()-enemigosH.at(h)->getPx()) <= enemigosH.at(h)->getRango() && enemigosH.at(h)->getType() == 'b'){
+                                if(Jugadores.at(j)->collidesWithItem(enemigosH.at(h))){
+                                    Jugadores.at(j)->setMuerte(Jugadores.at(j)->getMuerte()+1);
+                                    if(Jugadores.at(j)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(j)->getMuerte());}
+                                    else{ui->muertessteven->display(Jugadores.at(j)->getMuerte());}
+                                    Jugadores.at(j)->setPX(Jugadores.at(j)->getObjeto()->rebote(Jugadores.at(j)->getPX(),enemigosH.at(h)->getVx(),100,Jugadores.at(j)->getLado()));
+                                    Jugadores.at(j)->setPos(Jugadores.at(j)->getPX(),Jugadores.at(j)->getPY());
+                                }
                                 if(enemigosH.at(h)->getBanAttack() == false){
                                     enemigosH.at(h)->setBanAttack(true);
                                     enemigosH.at(h)->ataque();
@@ -661,7 +844,7 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                         }
                         else{
                             if(player1->collidesWithItem(enemigosH.at(h))){
-                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
+                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),10,player1->getLado()));
                                 player1->setPos(player1->getPX(),player1->getPY());
                                 break;
                             }
@@ -701,7 +884,7 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                         }
                         else{
                             if(player1->collidesWithItem(enemigosH.at(h))){
-                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
+                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),10,player1->getLado()));
                                 player1->setPos(player1->getPX(),player1->getPY());
                                 break;
                             }
@@ -773,7 +956,7 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                         }
                         else{
                             if(player1->collidesWithItem(enemigosH.at(h))){
-                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
+                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),10,player1->getLado()));
                                 player1->setPos(player1->getPX(),player1->getPY());
                                 break;
                             }
@@ -813,7 +996,7 @@ void MainWindow::validarmovimientosoneplayer(QKeyEvent *i)
                         }
                         else{
                             if(player1->collidesWithItem(enemigosH.at(h))){
-                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),0,player1->getLado()));
+                                player1->setPX(player1->getObjeto()->rebote(player1->getPX(),enemigosH.at(h)->getVx(),10,player1->getLado()));
                                 player1->setPos(player1->getPX(),player1->getPY());
                                 break;
                             }
@@ -891,7 +1074,7 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
                     }
                     else{
                         if(Jugadores.at(0)->collidesWithItem(enemigosH.at(h))){
-                            Jugadores.at(0)->setPX(Jugadores.at(0)->getObjeto()->rebote(Jugadores.at(0)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(0)->getLado()));
+                            Jugadores.at(0)->setPX(Jugadores.at(0)->getObjeto()->rebote(Jugadores.at(0)->getPX(),enemigosH.at(h)->getVx(),10,Jugadores.at(0)->getLado()));
                             Jugadores.at(0)->setPos(Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY());
                             break;
                         }
@@ -931,7 +1114,7 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
                     }
                     else{
                         if(Jugadores.at(0)->collidesWithItem(enemigosH.at(h))){
-                            Jugadores.at(0)->setPX(Jugadores.at(0)->getObjeto()->rebote(Jugadores.at(0)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(0)->getLado()));
+                            Jugadores.at(0)->setPX(Jugadores.at(0)->getObjeto()->rebote(Jugadores.at(0)->getPX(),enemigosH.at(h)->getVx(),10,Jugadores.at(0)->getLado()));
                             Jugadores.at(0)->setPos(Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY());
                             break;
                         }
@@ -1001,7 +1184,7 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
                     }
                     else{
                         if(Jugadores.at(1)->collidesWithItem(enemigosH.at(h))){
-                            Jugadores.at(1)->setPX(Jugadores.at(1)->getObjeto()->rebote(Jugadores.at(1)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(1)->getLado()));
+                            Jugadores.at(1)->setPX(Jugadores.at(1)->getObjeto()->rebote(Jugadores.at(1)->getPX(),enemigosH.at(h)->getVx(),10,Jugadores.at(1)->getLado()));
                             Jugadores.at(1)->setPos(Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY());
                             break;
                         }
@@ -1041,7 +1224,7 @@ void MainWindow::validarmovimientosMultiP(QKeyEvent *i)
                     }
                     else{
                         if(Jugadores.at(1)->collidesWithItem(enemigosH.at(h))){
-                            Jugadores.at(1)->setPX(Jugadores.at(1)->getObjeto()->rebote(Jugadores.at(1)->getPX(),enemigosH.at(h)->getVx(),0,Jugadores.at(1)->getLado()));
+                            Jugadores.at(1)->setPX(Jugadores.at(1)->getObjeto()->rebote(Jugadores.at(1)->getPX(),enemigosH.at(h)->getVx(),10,Jugadores.at(1)->getLado()));
                             Jugadores.at(1)->setPos(Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY());
                             break;
                         }
@@ -1101,38 +1284,8 @@ void MainWindow::validateAttackOneP()
         if(!enemigosH.empty()){
             for(int h = 0; h < enemigosH.size(); h++){
                 for(int it = 0; it < ataque.size(); it++){
-                    if(numNivel == 1){
-                        if(ataque.at(it)->collidesWithItem(jefe1) && jefe1->scene() == scene){
-                            ataque.at(it)->getAguy()->stop();
-                            if(jefe1->getVida() == 0 && jefe1->getBanDeath() == false){
-                                if(jefe1->getBanMove()){
-                                    jefe1->setBanMove(false);
-                                    jefe1->getMove()->stop();
-                                    delete jefe1->getMove();
-                                }
-                                else if(jefe1->getBanAttack()){
-                                    jefe1->setBanAttack(false);
-                                    jefe1->getAttack()->stop();
-                                    delete jefe1->getAttack();
-                                }
-                                jefe1->setBanDeath(true);
-                                jefe1->death();
-                            }
-                            else if(jefe1->getVida() > 0){
-                                jefe1->setVida(jefe1->getVida()-ataque.at(it)->getDamage());
-                            }
 
-                            if(ataque.at(it)->scene() == scene){
-                                scene->removeItem(ataque.at(it));
-                            }
-                            ataque.erase(ataque.begin()+it);
-                            it -= 1;
-                            break;
-                        }
-                    }
-
-                    if(ataque.at(it)->collidesWithItem(enemigosH.at(h))){ //Cuando el jugador ataque al enemigo -> RECORDAR QUE DEPENDE DE LA DIFICULTAD
-                        //Se le resta vida y acorde a la vida se elimina o no
+                    if(ataque.at(it)->collidesWithItem(enemigosH.at(h))){
                         ataque.at(it)->getAguy()->stop();
                         enemigosH.at(h)->setVidas(enemigosH.at(h)->getVidas()-ataque.at(it)->getDamage());
                         if(enemigosH.at(h)->getVidas() == 0){
@@ -1142,7 +1295,6 @@ void MainWindow::validateAttackOneP()
                                 enemigosH.at(h)->getMove()->stop();
                                 enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
                                 enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
-                                //enemigoH->rebote(15,0);
                                 delete enemigosH.at(h)->getMove();
                             }
                             if(enemigosH.at(h)->getBanAttack()){
@@ -1174,6 +1326,35 @@ void MainWindow::validateAttackOneP()
         }
 
         for(int it = 0; it < ataque.size(); it++){
+            if(numNivel == 1){
+                if(ataque.at(it)->collidesWithItem(jefe1) && jefe1->scene() == scene){
+                    ataque.at(it)->getAguy()->stop();
+                    if(jefe1->getVida() == 0 && jefe1->getBanDeath() == false){
+                        if(jefe1->getBanMove()){
+                            jefe1->setBanMove(false);
+                            jefe1->getMove()->stop();
+                            delete jefe1->getMove();
+                        }
+                        else if(jefe1->getBanAttack()){
+                            jefe1->setBanAttack(false);
+                            jefe1->getAttack()->stop();
+                            delete jefe1->getAttack();
+                        }
+                        jefe1->setBanDeath(true);
+                        jefe1->death();
+                    }
+                    else if(jefe1->getVida() > 0){
+                        jefe1->setVida(jefe1->getVida()-ataque.at(it)->getDamage());
+                    }
+
+                    if(ataque.at(it)->scene() == scene){
+                        scene->removeItem(ataque.at(it));
+                    }
+                    ataque.erase(ataque.begin()+it);
+                    it -= 1;
+                    break;
+                }
+            }
             for(int p = 0; p < walls.size(); p++){
                 if((ataque.at(it)->collidesWithItem(walls.at(p))) || (ataque.at(it)->collidesWithItem(lineLeft)) || (ataque.at(it)->collidesWithItem(lineRight))){
                     ataque.at(it)->getAguy()->stop();
@@ -1194,36 +1375,6 @@ void MainWindow::validateAttackMultiP()
         if(!enemigosH.empty()){
             for(int h = 0; h < enemigosH.size(); h++){
                 for(int it = 0; it < ataque2.size(); it++){
-                    if(numNivel == 1){
-                        if(ataque2.at(it)->collidesWithItem(jefe1) && jefe1->scene() == scene){
-                            ataque2.at(it)->getAguy()->stop();
-                            if(jefe1->getVida() == 0 && jefe1->getBanDeath() == false){
-                                if(jefe1->getBanMove()){
-                                    jefe1->setBanMove(false);
-                                    jefe1->getMove()->stop();
-                                    delete jefe1->getMove();
-                                }
-                                else if(jefe1->getBanAttack()){
-                                    jefe1->setBanAttack(false);
-                                    jefe1->getAttack()->stop();
-                                    delete jefe1->getAttack();
-                                }
-                                jefe1->setBanDeath(true);
-                                jefe1->death();
-                            }
-                            else if(jefe1->getVida() > 0){
-                                jefe1->setVida(jefe1->getVida()-ataque2.at(it)->getDamage());
-                            }
-
-                            if(ataque2.at(it)->scene() == scene){
-                                scene->removeItem(ataque2.at(it));
-                            }
-                            ataque2.erase(ataque2.begin()+it);
-                            it -= 1;
-                            break;
-                        }
-                    }
-
                     if(ataque2.at(it)->collidesWithItem(enemigosH.at(h))){ //Cuando el jugador ataque2 al enemigo -> RECORDAR QUE DEPENDE DE LA DIFICULTAD
                         //Se le resta vida y acorde a la vida se elimina o no
                         ataque2.at(it)->getAguy()->stop();
@@ -1235,7 +1386,6 @@ void MainWindow::validateAttackMultiP()
                                 enemigosH.at(h)->getMove()->stop();
                                 enemigosH.at(h)->setPx(enemigosH.at(h)->getObjeto()->rebote(enemigosH.at(h)->getPx(),enemigosH.at(h)->getVx(),0,enemigosH.at(h)->getmMove()));
                                 enemigosH.at(h)->setPos(enemigosH.at(h)->getPx(),enemigosH.at(h)->getPy());
-                                //enemigoH->rebote(15,0);
                                 delete enemigosH.at(h)->getMove();
                             }
                             if(enemigosH.at(h)->getBanAttack()){
@@ -1267,6 +1417,36 @@ void MainWindow::validateAttackMultiP()
         }
 
         for(int it = 0; it < ataque2.size(); it++){
+            if(numNivel == 1){
+                if(ataque2.at(it)->collidesWithItem(jefe1) && jefe1->scene() == scene){
+                    ataque2.at(it)->getAguy()->stop();
+                    if(jefe1->getVida() == 0 && jefe1->getBanDeath() == false){
+                        if(jefe1->getBanMove()){
+                            jefe1->setBanMove(false);
+                            jefe1->getMove()->stop();
+                            delete jefe1->getMove();
+                        }
+                        else if(jefe1->getBanAttack()){
+                            jefe1->setBanAttack(false);
+                            jefe1->getAttack()->stop();
+                            delete jefe1->getAttack();
+                        }
+                        jefe1->setBanDeath(true);
+                        jefe1->death();
+                    }
+                    else if(jefe1->getVida() > 0){
+                        jefe1->setVida(jefe1->getVida()-ataque2.at(it)->getDamage());
+                    }
+
+                    if(ataque2.at(it)->scene() == scene){
+                        scene->removeItem(ataque2.at(it));
+                    }
+                    ataque2.erase(ataque2.begin()+it);
+                    it -= 1;
+                    break;
+                }
+            }
+
             for(int p = 0; p < walls.size(); p++){
                 if((ataque2.at(it)->collidesWithItem(walls.at(p))) || (ataque2.at(it)->collidesWithItem(lineLeft)) || (ataque2.at(it)->collidesWithItem(lineRight))){
                     ataque2.at(it)->getAguy()->stop();
@@ -1317,8 +1497,10 @@ void MainWindow::validateOnePMove()
         if(numNivel == 2){
             for(int p = 0; p < spikes.size(); p++){
                 if(player1->collidesWithItem(spikes.at(p))){
+                    player1->setMuerte(player1->getMuerte()+1);
+                    if(player1->getKeyplayer() == 'g'){ui->muertesguy->display(player1->getMuerte());}
+                    else{ui->muertessteven->display(player1->getMuerte());}
 
-                    //Resta vida del jugador
                     player1->setPX(player1->getPX()-100);
                     player1->setPos(player1->getPX(),player1->getPY());
                 }
@@ -1339,7 +1521,10 @@ void MainWindow::validateOnePMove()
         }
 
         if(player1->collidesWithItem(lineDown)){
-            //Se posiciona al jugador según la pantalla de nivele en que se encuentre
+            player1->setMuerte(player1->getMuerte()+1);
+            if(player1->getKeyplayer() == 'g'){ui->muertesguy->display(player1->getMuerte());}
+            else{ui->muertessteven->display(player1->getMuerte());}
+
             if(numNivel == 1){
                 if(W == 0){
                     player1->setPX(0);
@@ -1383,8 +1568,9 @@ void MainWindow::validateOnePMove()
         if(numNivel == 2){
             for(int p = 0; p < spikes.size(); p++){
                 if(player1->collidesWithItem(spikes.at(p))){
-
-                    //Resta vida del jugador
+                    player1->setMuerte(player1->getMuerte()+1);
+                    if(player1->getKeyplayer() == 'g'){ui->muertesguy->display(player1->getMuerte());}
+                    else{ui->muertessteven->display(player1->getMuerte());}
                     player1->setPX(player1->getPX()-100);
                     player1->setPos(player1->getPX(),player1->getPY());
                 }
@@ -1436,6 +1622,9 @@ void MainWindow::validateMultiPMove()
             if(numNivel == 2){
                 for(int p = 0; p < spikes.size(); p++){
                     if(Jugadores.at(0)->collidesWithItem(spikes.at(p))){
+                        Jugadores.at(0)->setMuerte(Jugadores.at(0)->getMuerte()+1);
+                        if(Jugadores.at(0)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(0)->getMuerte());}
+                        else{ui->muertessteven->display(Jugadores.at(0)->getMuerte());}
                         if(spikes.at(p)->getPosX() == 1128){
                             Jugadores.at(0)->setPX(1089);
                             Jugadores.at(0)->setPY(427);
@@ -1448,6 +1637,9 @@ void MainWindow::validateMultiPMove()
                     }
 
                     if(Jugadores.at(1)->collidesWithItem(spikes.at(p))){
+                        Jugadores.at(1)->setMuerte(Jugadores.at(1)->getMuerte()+1);
+                        if(Jugadores.at(1)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(1)->getMuerte());}
+                        else{ui->muertessteven->display(Jugadores.at(1)->getMuerte());}
                         if(spikes.at(p)->getPosX() == 1128){
                             Jugadores.at(1)->setPX(1089);
                             Jugadores.at(1)->setPY(427);
@@ -1474,8 +1666,10 @@ void MainWindow::validateMultiPMove()
             }
 
             if(Jugadores.at(s)->collidesWithItem(lineDown)){
-                //Se posiciona al jugador según la pantalla de nivele en que se encuentre
                 if(numNivel == 1){
+                    Jugadores.at(s)->setMuerte(Jugadores.at(s)->getMuerte()+1);
+                    if(Jugadores.at(s)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(s)->getMuerte());}
+                    else{ui->muertessteven->display(Jugadores.at(s)->getMuerte());}
                     if(W == 0){
                         Jugadores.at(s)->setPX(0);
                         Jugadores.at(s)->setPY(623);
@@ -1518,6 +1712,7 @@ void MainWindow::validateMultiPMove()
             if(numNivel == 2){
                 for(int p = 0; p < spikes.size(); p++){
                     if(Jugadores.at(0)->collidesWithItem(spikes.at(p))){
+                        Jugadores.at(0)->setMuerte(Jugadores.at(0)->getMuerte()+1);
                         if(spikes.at(p)->getPosX() == 1128){
                             Jugadores.at(0)->setPX(1089);
                             Jugadores.at(0)->setPY(427);
@@ -1530,6 +1725,7 @@ void MainWindow::validateMultiPMove()
                     }
 
                     if(Jugadores.at(1)->collidesWithItem(spikes.at(p))){
+                        Jugadores.at(1)->setMuerte(Jugadores.at(1)->getMuerte()+1);
                         if(spikes.at(p)->getPosX() == 1128){
                             Jugadores.at(1)->setPX(1089);
                             Jugadores.at(1)->setPY(427);
@@ -1576,7 +1772,6 @@ void MainWindow::validateBMOneP()
 
         if(jefe1->getBanDis() == true){
             if(jefe1->scene() == scene) scene->removeItem(jefe1);
-            //delete jefe1;
         }
         else{
             if(pow(pow(player1->getPX()-jefe1->getPx(),2)+pow(player1->getPY()-jefe1->getPy(),2),0.5) <= jefe1->getRange()){
@@ -1594,6 +1789,11 @@ void MainWindow::validateBMOneP()
                 for(int b = 0; b < ataquebills.size(); b++){
                     for(int w = 0; w < walls.size(); w++){
                         if(ataquebills.at(b)->collidesWithItem(player1) || ataquebills.at(b)->collidesWithItem(walls.at(w))){
+                            if(ataquebills.at(b)->collidesWithItem(player1)){
+                                player1->setMuerte(player1->getMuerte()+1);
+                                if(player1->getKeyplayer() == 'g'){ui->muertesguy->display(player1->getMuerte());}
+                                else{ui->muertessteven->display(player1->getMuerte());}
+                            }
                             ataquebills.at(b)->getTime()->stop();
                             delete ataquebills.at(b)->getTime();
                             scene->removeItem(ataquebills.at(b));
@@ -1657,10 +1857,15 @@ void MainWindow::validateBMMultiP()
                     }
                 }
 
-                if(!ataquebills.empty() && jefe1->getBanDeath() == false){ //REVISAR ESTA PARTE
+                if(!ataquebills.empty() && jefe1->getBanDeath() == false){
                     for(int b = 0; b < ataquebills.size(); b++){
                         for(int w = 0; w < walls.size(); w++){
                             if(ataquebills.at(b)->collidesWithItem(Jugadores.at(s)) || ataquebills.at(b)->collidesWithItem(walls.at(w))){
+                                if(ataquebills.at(b)->collidesWithItem(Jugadores.at(s))){
+                                    Jugadores.at(s)->setMuerte(Jugadores.at(s)->getMuerte()+1);
+                                    if(Jugadores.at(s)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(s)->getMuerte());}
+                                    else{ui->muertessteven->display(Jugadores.at(s)->getMuerte());}
+                                }
                                 ataquebills.at(b)->getTime()->stop();
                                 delete ataquebills.at(b)->getTime();
                                 scene->removeItem(ataquebills.at(b));
@@ -1688,7 +1893,11 @@ void MainWindow::validateHammerOneP()
         for(int a = 0; a < ataqueHammer.size(); a++){
             for(int w = 0; w < walls.size(); w++){
                 if(ataqueHammer.at(a)->collidesWithItem(lineDown) || ataqueHammer.at(a)->collidesWithItem(walls.at(w)) || ataqueHammer.at(a)->collidesWithItem(player1)){
-                    //cuando toque al jugador le restamos vida -> Muere
+                    if(ataqueHammer.at(a)->collidesWithItem(player1)){
+                        player1->setMuerte(player1->getMuerte()+1);
+                        if(player1->getKeyplayer() == 'g'){ui->muertesguy->display(player1->getMuerte());}
+                        else{ui->muertessteven->display(player1->getMuerte());}
+                    }
                     ataqueHammer.at(a)->getTiro()->stop();
                     scene->removeItem(ataqueHammer.at(a));
                     delete ataqueHammer.at(a)->getTiro();
@@ -1707,7 +1916,16 @@ void MainWindow::validateHammerMultiP()
         for(int a = 0; a < ataqueHammer.size(); a++){
             for(int w = 0; w < walls.size(); w++){
                 if(ataqueHammer.at(a)->collidesWithItem(lineDown) || ataqueHammer.at(a)->collidesWithItem(walls.at(w)) || ataqueHammer.at(a)->collidesWithItem(Jugadores.at(0)) || ataqueHammer.at(a)->collidesWithItem(Jugadores.at(1))){
-                    //cuando toque al jugador le restamos vida -> Muere
+                    if(ataqueHammer.at(a)->collidesWithItem(Jugadores.at(0))){
+                        Jugadores.at(0)->setMuerte(Jugadores.at(0)->getMuerte()+1);
+                        if(Jugadores.at(0)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(0)->getMuerte());}
+                        else{ui->muertessteven->display(Jugadores.at(0)->getMuerte());}
+                    }
+                    if(ataqueHammer.at(a)->collidesWithItem(Jugadores.at(1))){
+                        Jugadores.at(1)->setMuerte(Jugadores.at(1)->getMuerte()+1);
+                        if(Jugadores.at(1)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(1)->getMuerte());}
+                        else{ui->muertessteven->display(Jugadores.at(1)->getMuerte());}
+                    }
                     ataqueHammer.at(a)->getTiro()->stop();
                     scene->removeItem(ataqueHammer.at(a));
                     delete ataqueHammer.at(a)->getTiro();
@@ -1720,24 +1938,28 @@ void MainWindow::validateHammerMultiP()
     }
 }
 
-void MainWindow::validateSrayMove()
+void MainWindow::validateSrayMove() //Función para las validaciones para los movimientos del nivel 3
 {
     if(onep){
         if(playermoves.size() == jefe2->getSmoves().size() && jefe2->getBanmove()){
             QVector<QString> jefemoves = jefe2->getSmoves();
             for(int i = 0; i < playermoves.size(); i++){
                 if(playermoves.at(i) != jefemoves.at(i)){
-                    //Activar la música de cuando pierde o la nota de que perdio
+                    player1->setMuerte(player1->getMuerte()+1);
+                    if(player1->getKeyplayer() == 'g'){ui->muertesguy->display(player1->getMuerte());}
+                    else{ui->muertessteven->display(player1->getMuerte());}
                     banDe = true;
                 }
             }
             playermoves.clear();
-            if(banDe == false){
-                jefe2->setBanmove(false);
-                jefemoves.clear();
-                jefe2->setSmoves(jefemoves);
-                jefe2->label();
+            if(banDe){
+                jefe2->setContS(0);
+                banDe = false;
             }
+            jefe2->setBanmove(false);
+            jefemoves.clear();
+            jefe2->setSmoves(jefemoves);
+            jefe2->label();
         }
     }
     else if(multip){
@@ -1745,21 +1967,28 @@ void MainWindow::validateSrayMove()
             QVector<QString> jefemoves = jefe2->getSmoves();
             for(int i = 0; i < playermoves.size(); i++){
                 if(playermoves.at(i) != jefemoves.at(i)){
-                    //Activar la música de cuando pierde o la nota de que perdio o restarle vida al jugador
+                    Jugadores.at(i)->setMuerte(Jugadores.at(i)->getMuerte()+1);
+                    if(Jugadores.at(i)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(i)->getMuerte());}
+                    else{ui->muertessteven->display(Jugadores.at(i)->getMuerte());}
                     banDe = true;
                 }
                 if(playermoves2.at(i) != jefemoves.at(i)){
-                    //Activar la música de cuando pierde o la nota de que perdio o restarle vida al jugador
+                    Jugadores.at(i)->setMuerte(Jugadores.at(i)->getMuerte()+1);
+                    if(Jugadores.at(i)->getKeyplayer() == 'g'){ui->muertesguy->display(Jugadores.at(i)->getMuerte());}
+                    else{ui->muertessteven->display(Jugadores.at(i)->getMuerte());}
                     banDe2 = true;
                 }
             }
             playermoves.clear();
-            if(banDe == false || banDe2 == false){
-                jefe2->setBanmove(false);
-                jefemoves.clear();
-                jefe2->setSmoves(jefemoves);
-                jefe2->label();
+            if(banDe || banDe2){
+                jefe2->setContS(0);
+                banDe = false;
+                banDe2 = false;
             }
+            jefe2->setBanmove(false);
+            jefemoves.clear();
+            jefe2->setSmoves(jefemoves);
+            jefe2->label();
         }
     }
 
@@ -1773,6 +2002,7 @@ void MainWindow::detectC()
     if(numNivel == 1) validateBillsMove();
     if(numNivel == 3) validateSrayMove();
     validateHammerAttack();
+    changeLevel();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *i)
@@ -1815,14 +2045,14 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
                 for(int o = 0; o < 6; o++){
                     if(o == 5){
                         puntero = strtok(NULL,"\n");
-                        player1->setVidas(atoi(puntero));
+                        player1->setMuerte(atoi(puntero));
                     }
                     else{
                         puntero = strtok(NULL,",");
                         info = puntero;
                         if(o == 0){
-                            if(info == "s") player1 = new player('s');
-                            else if(info == "g") player1 = new player('g');
+                            if(*info.c_str() == 's') player1 = new player('s');
+                            else if(*info.c_str() == 'g') player1 = new player('g');
                         }
                         else if(o == 1){
                             if(info == "1") numNivel = 1;
@@ -1874,7 +2104,7 @@ void MainWindow::leerArchivo() //organizar para la posición de la escena
                         else {W = 3840;}
                     }
                     else if(s == 2 || s == 6) Jugadores.at(Jugadores.size()-1)->setPY(atoi(puntero));
-                    else if(s == 3 || s == 7) Jugadores.at(Jugadores.size()-1)->setVidas(atoi(puntero));
+                    else if(s == 3 || s == 7) Jugadores.at(Jugadores.size()-1)->setMuerte(atoi(puntero));
                 }
             }
 
@@ -1911,8 +2141,8 @@ void MainWindow::ActualizarArchivo()
     rename("temporal.txt", "juego.txt");
 
     if(Guardar){
-        if(onep){escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(),player1->getPX(),player1->getPY(),player1->getVidas());}
-        else if(multip){escribirArchivo(ui->nombre->text(), "Multip", numNivel, dificultad, 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());}
+        if(onep){escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(),player1->getPX(),player1->getPY(),player1->getMuerte());}
+        else if(multip){escribirArchivo(ui->nombre->text(), "Multip", numNivel, dificultad, 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getMuerte(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getMuerte());}
         Guardar = false;
     }
 }
@@ -1995,9 +2225,32 @@ void MainWindow::on_aceptar_clicked()
     else{
         if(ui->nombre->isModified()){
             if(ui->nombre->text().length() > 3){
-                ui->usuario->hide();
-                ui->Partida->show();
-                ui->cargarpartida->setEnabled(false);
+                ifstream tempo;
+                char dato[100];
+                char *puntero;
+
+                tempo.open("juego.txt", ios::in);
+                tempo.getline(dato, sizeof(dato));
+                while(!tempo.eof() && banU == false){
+                    puntero = strtok(dato,",");
+                    if(ui->nombre->text() == puntero){
+                        banU = true;
+                    }
+                    tempo.getline(dato, sizeof(dato));
+                }
+                tempo.close();
+
+                if(banU){
+                    banU = false;
+                    QMessageBox message;
+                    message.setWindowTitle("Error");
+                    message.setText("El nombre ya se encuentra registrado. Intente con uno nuevo.");
+                    message.exec();
+                }else{
+                    ui->usuario->hide();
+                    ui->Partida->show();
+                    ui->cargarpartida->setEnabled(false);
+                }
             }
             else{
                 QMessageBox message;
@@ -2020,13 +2273,34 @@ void MainWindow::on_cargarpartida_clicked()
     leerArchivo();
     banCargarP = true;
 
+    if(onep){
+        if(player1->getKeyplayer() == 'g'){
+            ui->Muertes->show();
+            ui->muertesguy->display(player1->getMuerte());
+            ui->muertessteven->hide();
+            ui->msteven->hide();
+        }
+        else{
+            ui->Muertes->show();
+            ui->muertessteven->display(player1->getMuerte());
+            ui->mguy->hide();
+            ui->muertesguy->hide();
+        }
+    }
+    else{
+        ui->Muertes->show();
+        ui->muertesguy->display(Jugadores.at(0)->getMuerte());
+        ui->muertessteven->display(Jugadores.at(1)->getMuerte());
+    }
+
     setup_resorces();
     cargar_niveles(numNivel);
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-    collisions->start(1);
+    collisions->start(50);
     setup_enemies();
+    Dificultad();
 }
 
 
@@ -2035,7 +2309,7 @@ void MainWindow::on_nuevapartida_clicked()
     ui->Partida->hide();
     ui->modojuego->show();
     ui->instruccion->show();
-    if(banUsuarioViejo == false) numNivel = 2;
+    if(banUsuarioViejo == false) numNivel = 1;
     else if(banUsuarioViejo){
         ActualizarArchivo();
         numNivel = 1;
@@ -2083,18 +2357,22 @@ void MainWindow::on_selectguy_clicked()
     player1 = new player('g');
     ui->personaje->hide();
     ui->instruccion->hide();
-
     delete scene;
 
     setup_resorces();
     cargar_niveles(numNivel);
 
-    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(), player1->getPX(),player1->getPY(),player1->getVidas());
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(), player1->getPX(),player1->getPY(),player1->getMuerte());
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-    collisions->start(1);
+    collisions->start(50);
     setup_enemies();
+    Dificultad();
+    ui->Muertes->show();
+    ui->muertesguy->display(player1->getMuerte());
+    ui->muertessteven->hide();
+    ui->msteven->hide();
 }
 
 void MainWindow::on_selectsteven_clicked()
@@ -2108,12 +2386,17 @@ void MainWindow::on_selectsteven_clicked()
     setup_resorces();
     cargar_niveles(numNivel);
 
-    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(), player1->getPX(),player1->getPY(),player1->getVidas());
+    if(onep) escribirArchivo(ui->nombre->text(),"Onep",numNivel,dificultad,player1->getKeyplayer(), player1->getPX(),player1->getPY(),player1->getMuerte());
 
     collisions = new QTimer(this);
     connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-    collisions->start(1);
+    collisions->start(50);
     setup_enemies();
+    Dificultad();
+    ui->Muertes->show();
+    ui->muertessteven->display(player1->getMuerte());
+    ui->mguy->hide();
+    ui->muertesguy->hide();
 }
 
 void MainWindow::on_facil_clicked()
@@ -2122,7 +2405,6 @@ void MainWindow::on_facil_clicked()
     ui->dificultad->hide();
     if(onep) ui->personaje->show();
     else if(multip){
-        //creación de los jugadores para la versión de múltijugador
         ui->instruccion->hide();
         delete scene;
         Jugadores.push_back(new player('g'));
@@ -2131,12 +2413,16 @@ void MainWindow::on_facil_clicked()
         setup_resorces();
         cargar_niveles(numNivel);
 
-        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'f', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());
+        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'f', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getMuerte(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getMuerte());
 
         collisions = new QTimer(this);
         connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-        collisions->start(1);
+        collisions->start(50);
         setup_enemies();
+        Dificultad();
+        ui->Muertes->show();
+        ui->muertesguy->display(Jugadores.at(0)->getMuerte());
+        ui->muertessteven->display(Jugadores.at(1)->getMuerte());
     }
 }
 
@@ -2146,7 +2432,6 @@ void MainWindow::on_normal_clicked()
     ui->dificultad->hide();
     if(onep) ui->personaje->show();
     else if(multip){
-        //creación de los jugadores para la versión de múltijugador
         ui->instruccion->hide();
         delete scene;
         Jugadores.push_back(new player('g'));
@@ -2155,12 +2440,16 @@ void MainWindow::on_normal_clicked()
         setup_resorces();
         cargar_niveles(numNivel);
 
-        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'n', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());
+        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'n', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getMuerte(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getMuerte());
 
         collisions = new QTimer(this);
         connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-        collisions->start(1);
+        collisions->start(50);
         setup_enemies();
+        Dificultad();
+        ui->Muertes->show();
+        ui->muertesguy->display(Jugadores.at(0)->getMuerte());
+        ui->muertessteven->display(Jugadores.at(1)->getMuerte());
     }
 }
 
@@ -2170,7 +2459,6 @@ void MainWindow::on_dificil_clicked()
     ui->dificultad->hide();
     if(onep) ui->personaje->show();
     else if(multip){
-        //creación de los jugadores para la versión de múltijugador
         ui->instruccion->hide();
         delete scene;
         Jugadores.push_back(new player('g'));
@@ -2179,12 +2467,16 @@ void MainWindow::on_dificil_clicked()
         setup_resorces();
         cargar_niveles(numNivel);
 
-        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'd', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getVidas(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getVidas());
+        escribirArchivo(ui->nombre->text(), "Multip", numNivel, 'd', 'g', Jugadores.at(0)->getPX(),Jugadores.at(0)->getPY(), Jugadores.at(0)->getMuerte(),'s',Jugadores.at(1)->getPX(),Jugadores.at(1)->getPY(), Jugadores.at(0)->getMuerte());
 
         collisions = new QTimer(this);
         connect(collisions, SIGNAL(timeout()), this, SLOT(detectC()));
-        collisions->start(1);
+        collisions->start(50);
         setup_enemies();
+        Dificultad();
+        ui->Muertes->show();
+        ui->muertesguy->display(Jugadores.at(0)->getMuerte());
+        ui->muertessteven->display(Jugadores.at(1)->getMuerte());
     }
 }
 
@@ -2220,7 +2512,6 @@ MainWindow::~MainWindow()
     clean_levels();
     delete ui;
     delete scene;
-    delete jefe1;
     if(numNivel == 3) delete jefe2;
     if(onep){delete player1;}
     delete reproducir;

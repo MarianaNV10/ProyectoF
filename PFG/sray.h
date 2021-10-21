@@ -38,6 +38,7 @@ public slots:
 
     void labelmove();
     void Atiempo();
+    void spown();
 
 public:
     sray(int x, int y, QLabel *obj);
@@ -51,6 +52,7 @@ public:
 
     void setBanmove(bool value) {banmove = value;}
     void setSmoves(const QVector<QString> &value) {smoves = value;}
+    void setContS(int value) {contS = value;}
 };
 
 #endif // SRAY_H

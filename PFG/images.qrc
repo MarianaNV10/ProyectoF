@@ -163,13 +163,13 @@
         <file>Imagenes/Dj_Sray/DJSprey_Left.png</file>
         <file>Imagenes/Dj_Sray/DjSprey_Right.png</file>
         <file>Imagenes/Dj_Sray/DjSprey_Up.png</file>
-        <file>Imagenes/Dj_Sray/VS_Dj_Sray.mp3</file>
-        <file>Imagenes/Audio/Intro.m4a</file>
-        <file>Imagenes/Audio/Nivel1.mp3</file>
-        <file>Imagenes/Audio/Nivel2.mp3</file>
         <file>Imagenes/Audio/Down.mp3</file>
         <file>Imagenes/Audio/Left.mp3</file>
         <file>Imagenes/Audio/Right.mp3</file>
         <file>Imagenes/Audio/Up.mp3</file>
+        <file>Imagenes/Audio/Intro.wav</file>
+        <file>Imagenes/Audio/Nivel1.wav</file>
+        <file>Imagenes/Audio/Nivel2.wav</file>
+        <file>Imagenes/Audio/VS_Dj_Sray.wav</file>
     </qresource>
 </RCC>

@@ -130,7 +130,7 @@ background-color: rgb(55,175,91);</string>
    <widget class="QGroupBox" name="dificultad">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>600</x>
       <y>120</y>
       <width>104</width>
       <height>151</height>
@@ -500,6 +500,47 @@ color: rgb(255, 255, 255);
      <string>BAILE</string>
     </property>
    </widget>
+   <widget class="QGroupBox" name="Muertes">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>510</y>
+      <width>171</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_8">
+     <item row="0" column="0">
+      <widget class="QLabel" name="mguy">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="images.qrc">:/Imagenes/Interfaz/caritaguy.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLCDNumber" name="muertesguy"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="msteven">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="images.qrc">:/Imagenes/Interfaz/caritasteven.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLCDNumber" name="muertessteven"/>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -510,8 +551,45 @@ color: rgb(255, 255, 255);
      <height>20</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuOpciones">
+    <property name="title">
+     <string>Opciones</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionInstrucciones"/>
+    <addaction name="actionGuardar_Partida"/>
+    <addaction name="actionPausar"/>
+    <addaction name="actionReanudar"/>
+    <addaction name="actionSalir"/>
+   </widget>
+   <addaction name="menuOpciones"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGuardar_Partida">
+   <property name="text">
+    <string>Guardar Partida</string>
+   </property>
+  </action>
+  <action name="actionPausar">
+   <property name="text">
+    <string>Pausar</string>
+   </property>
+  </action>
+  <action name="actionReanudar">
+   <property name="text">
+    <string>Reanudar</string>
+   </property>
+  </action>
+  <action name="actionSalir">
+   <property name="text">
+    <string>Salir</string>
+   </property>
+  </action>
+  <action name="actionInstrucciones">
+   <property name="text">
+    <string>Instrucciones</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="images.qrc"/>
