@@ -1,0 +1,155 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Imagenes/Fondos/Nivel1.jpeg</file>
+        <file>Imagenes/Fondos/Nivel2.jpeg</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque1.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque2.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque3.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque4.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque5.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque6.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque_derecha.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque_derecha2.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque_derecha3.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque_derecha4.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque_izquierda2.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque_izquierda3.png</file>
+        <file>Imagenes/Huesos Sprites/Ataque/Ataque_izquierda4.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_derecha.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_derecha2.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_derecha3.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_derecha4.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_derecha5.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_izquierda.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_izquierda2.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_izquierda3.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_izquierda4.png</file>
+        <file>Imagenes/Huesos Sprites/Caminar/Caminar_izquierda5.png</file>
+        <file>Imagenes/Huesos Sprites/Frente/Frente1.png</file>
+        <file>Imagenes/Huesos Sprites/Frente/Frente2.png</file>
+        <file>Imagenes/Huesos Sprites/Frente/Frente3.png</file>
+        <file>Imagenes/Huesos Sprites/Frente/Frente4.png</file>
+        <file>Imagenes/Huesos Sprites/Muerte/Muerte1.png</file>
+        <file>Imagenes/Huesos Sprites/Muerte/Muerte2.png</file>
+        <file>Imagenes/Huesos Sprites/Muerte/Muerte3.png</file>
+        <file>Imagenes/Huesos Sprites/Muerte/Muerte4.png</file>
+        <file>Imagenes/Huesos Sprites/Muerte/Muerte5.png</file>
+        <file>Imagenes/Huesos Sprites/Muerte/Muerte6.png</file>
+        <file>Imagenes/Huesos Sprites/Muerte/Muerte7.png</file>
+        <file>Imagenes/Huesos Sprites/Win/win1.png</file>
+        <file>Imagenes/Huesos Sprites/Win/win2.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque1.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque2.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque3.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque_derecha1.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque_derecha2.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque_derecha3.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque_izquierda1.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque_izquierda2.png</file>
+        <file>Imagenes/Steven Sprites/Ataque/Ataque_izquierda3.png</file>
+        <file>Imagenes/Steven Sprites/Movimiento/stevenU.png</file>
+        <file>Imagenes/Steven Sprites/Movimiento/stevenU_derecha2.png</file>
+        <file>Imagenes/Steven Sprites/Movimiento/stevenU_derecha3.png</file>
+        <file>Imagenes/Steven Sprites/Movimiento/stevenU_izquierda2.png</file>
+        <file>Imagenes/Steven Sprites/Movimiento/stevenU_izquierda3.png</file>
+        <file>Imagenes/Steven Sprites/Movimiento/stevenU_izquierdas.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_derecha1.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_derecha2.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_derecha3.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_derecha4.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_derecha5.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_izquierda1.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_izquierda2.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_izquierda3.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_izquierda4.png</file>
+        <file>Imagenes/Steven Sprites/Salto/salto_izquierda5.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque_derecha1.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque_derecha2.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque_izquierda1.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque_izquierda2.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Derecha1.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Derecha2.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Derecha3.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Derecha4.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Izquierda1.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Izquierda2.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Izquierda3.png</file>
+        <file>Imagenes/The guy sprites/Movimiento/Izquierda4.png</file>
+        <file>Imagenes/The guy sprites/Salto/Salto_derecha1.png</file>
+        <file>Imagenes/The guy sprites/Salto/Salto_derecha2.png</file>
+        <file>Imagenes/The guy sprites/Salto/Salto_derecha3.png</file>
+        <file>Imagenes/The guy sprites/Salto/Salto_izquierda1.png</file>
+        <file>Imagenes/The guy sprites/Salto/Salto_izquierda2.png</file>
+        <file>Imagenes/The guy sprites/Salto/Salto_izquierda3.png</file>
+        <file>Imagenes/The guy sprites/Spown/Spown1.png</file>
+        <file>Imagenes/The guy sprites/Spown/Spown2.png</file>
+        <file>Imagenes/The guy sprites/Spown/Spown3.png</file>
+        <file>Imagenes/The guy sprites/Spown/Spown4.png</file>
+        <file>Imagenes/The guy sprites/Spown/Spown5.png</file>
+        <file>Imagenes/The guy sprites/Spown/Spown6.png</file>
+        <file>Imagenes/The guy sprites/the_guy.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque1.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque2.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque3.png</file>
+        <file>Imagenes/The guy sprites/Ataque/Ataque4.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der1.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der2.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der3.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der4.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der5.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der6.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der7.png</file>
+        <file>Imagenes/Hammer/Ataque/hammer_bro_ataque_der8.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der1.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der2.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der3.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der4.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der5.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der6.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der7.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_der8.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq2.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq3.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq4.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq5.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq6.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq7.png</file>
+        <file>Imagenes/Hammer/Movimiento/hammer_bro_izq8.png</file>
+        <file>Imagenes/Hammer/Ataque/martillo.png</file>
+        <file>Imagenes/Fondos/Nivel3.jpeg</file>
+        <file>Imagenes/Interfaz/fondoinicio.jpg</file>
+        <file>Imagenes/Interfaz/caritaguy.png</file>
+        <file>Imagenes/Interfaz/caritasteven.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque1.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque2.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque3.png</file>
+        <file>Imagenes/Bills_Sprites/Ataque/Ataque4.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla1.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla2.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla3.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla4.png</file>
+        <file>Imagenes/Bills_Sprites/batalla/batalla5.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte1.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte2.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte3.png</file>
+        <file>Imagenes/Bills_Sprites/Muerte/Muerte4.png</file>
+        <file>Imagenes/Bills_Sprites/Spown/Spown1.png</file>
+        <file>Imagenes/Bills_Sprites/Spown/Spown2.png</file>
+        <file>Imagenes/Bills_Sprites/Spown/Spown3.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey_Down.png</file>
+        <file>Imagenes/Dj_Sray/DJSprey_Left.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey_Right.png</file>
+        <file>Imagenes/Dj_Sray/DjSprey_Up.png</file>
+        <file>Imagenes/Audio/Down.mp3</file>
+        <file>Imagenes/Audio/Left.mp3</file>
+        <file>Imagenes/Audio/Right.mp3</file>
+        <file>Imagenes/Audio/Up.mp3</file>
+        <file>Imagenes/Audio/Intro.wav</file>
+        <file>Imagenes/Audio/Nivel1.wav</file>
+        <file>Imagenes/Audio/Nivel2.wav</file>
+        <file>Imagenes/Audio/VS_Dj_Sray.wav</file>
+    </qresource>
+</RCC>
