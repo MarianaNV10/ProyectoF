@@ -1473,6 +1473,10 @@ void MainWindow::validateOnePMove() //Función para validar los movimientos del 
             }
 
             if(player1->getJumpDown() && player1->collidesWithItem(walls.at(m))){
+                if(banleft){
+                    banleft = false;
+                    lineLeft->setLine(W,0,W,708);
+                }
                 player1->getLeap()->stop();
                 player1->setPY(walls.at(m)->getPosY()-49);
                 player1->setPos(player1->getPX(),player1->getPY());
@@ -1512,7 +1516,7 @@ void MainWindow::validateOnePMove() //Función para validar los movimientos del 
                 W += 1280;
                 scene->setSceneRect(W,0,ui->graphicsView->width()-3,H);
                 lineRight->setLine(W+1280,0,W+1280,708);
-                //lineLeft->setLine(W,0,W,708);
+                banleft = true;
             }
         }
 

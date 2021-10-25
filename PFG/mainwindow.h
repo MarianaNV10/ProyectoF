@@ -144,6 +144,6 @@ private:
     int numNivel = 0;
     bool iniciars = false, registro = false, onep = false, multip = false, banU = false;
     bool banDe = false, banDe2 = false, banUsuarioViejo = false, Guardar = false;
-    bool banCargarP = false, cambionivel = false;
+    bool banCargarP = false, cambionivel = false, banleft = false;
 };
 #endif // MAINWINDOW_H
